@@ -1,0 +1,254 @@
+{
+  "questions": [
+    {
+      "questionText": "What is Jetpack Compose?",
+      "options": ["A database library", "A modern toolkit for building native UI", "A networking library", "A dependency injection framework"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which function is used to define a UI component in Jetpack Compose?",
+      "options": ["@Layout", "@Widget", "@Composable", "@View"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "How do you maintain state across recompositions in Compose?",
+      "options": ["val state = stateOf()", "val state = remember { mutableStateOf() }", "val state = persistentOf()", "val state = SaveState()"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "What is 'Recomposition' in Jetpack Compose?",
+      "options": ["Restarting the app", "Re-running composable functions when data changes", "Compiling the code again", "Updating the database"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which layout is used to stack elements vertically?",
+      "options": ["Row", "Box", "Column", "Stack"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Which layout is used to stack elements horizontally?",
+      "options": ["Row", "Box", "Column", "Linear"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "What is the purpose of a 'Modifier'?",
+      "options": ["To store data", "To decorate or augment composables", "To manage networking", "To handle navigation"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which composable is used to display text?",
+      "options": ["Label", "TextView", "Text", "String"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "How do you display an image in Compose?",
+      "options": ["ImageView()", "Image()", "Bitmap()", "Painter()"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which composable allows stacking elements on top of each other?",
+      "options": ["Column", "Row", "Box", "Layer"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "What does 'remember' do in Compose?",
+      "options": ["Caches a value in the Composition", "Saves data to SharedPreferences", "Remembers the user login", "Keeps the screen on"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Which function is used to create a scrollable list of items?",
+      "options": ["ScrollView", "LazyColumn", "ListView", "RecyclerColumn"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "What is the equivalent of 'RecyclerView' in Jetpack Compose?",
+      "options": ["LazyColumn / LazyRow", "ScrollableColumn", "ListCompose", "Repeater"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "How do you apply padding to a composable?",
+      "options": ["Modifier.padding()", "Modifier.margin()", "composable(padding = 8.dp)", "Padding(8.dp)"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "What is the primary way to handle clicks on a composable?",
+      "options": ["onClick {} parameter", "Modifier.clickable {}", "setOnClickListener {}", "GestureDetector"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "What is 'State Hoisting'?",
+      "options": ["Moving state to a lower level", "Moving state to a caller to make a composable stateless", "Storing state in a database", "Hiding state from other functions"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which tool allows you to see UI changes without running the app on a device?",
+      "options": ["Logcat", "Inspector", "@Preview", "Debugger"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "How do you specify the size of a composable?",
+      "options": ["Modifier.size()", "Modifier.width().height()", "Both A and B", "Layout.params"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "What is 'CompositionLocal' used for?",
+      "options": ["Local database storage", "Passing data through the composition tree implicitly", "Defining local variables", "Managing local threads"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which composable is used for a Material Design top app bar?",
+      "options": ["Header", "TopAppBar", "ActionBar", "ToolBar"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "How do you handle animations for visibility in Compose?",
+      "options": ["AnimatedVisibility", "VisibilityManager", "AnimateShowHide", "FadeIn"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Which effect is used to run a block of code when a composable enters the composition?",
+      "options": ["LaunchedEffect", "SideEffect", "DisposableEffect", "InitEffect"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "What is the purpose of 'rememberSaveable'?",
+      "options": ["To save state across configuration changes (like rotation)", "To save data to a file", "To remember data only during recomposition", "To secure data"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Which modifier makes a composable fill the entire available width?",
+      "options": ["fillWidth()", "matchParentWidth()", "fillMaxWidth()", "expandWidth()"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "How do you create a button in Compose?",
+      "options": ["Button { Text('Click') }", "Clickable { 'Click' }", "TextButton { ... }", "Both A and C"],
+      "correctAnswerIndex": 3
+    },
+    {
+      "questionText": "What is a 'Scaffold' in Jetpack Compose?",
+      "options": ["A testing tool", "A layout that provides a structure for Material Design components", "A dependency manager", "A build script"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which composable is used for inputting text?",
+      "options": ["InputText", "TextField", "EditText", "TextEntry"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "What is the purpose of 'derivedStateOf'?",
+      "options": ["To create a new state from other states only when needed", "To copy a state", "To delete a state", "To share state with Java code"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "How do you load a vector graphic as an Icon?",
+      "options": ["Icon(painterResource(id), ...)", "Icon(imageVector = Icons.Default.Add, ...)", "Both A and B", "Icon(Bitmap)"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Which scope function is used to run suspend functions in response to state changes?",
+      "options": ["LaunchedEffect", "SideEffect", "CoroutineScope", "runBlocking"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "What is 'MaterialTheme' used for?",
+      "options": ["Setting the app icon", "Defining colors, typography, and shapes for the app", "Managing database themes", "Handling dark mode manually"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which composable is used to create a circular progress indicator?",
+      "options": ["LoadingCircle", "CircularProgressIndicator", "ProgressBar", "CircleLoader"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "How do you align a child inside a Box to the center?",
+      "options": ["Modifier.align(Alignment.Center)", "Box(gravity = center)", "Modifier.center()", "Modifier.gravity(Center)"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "What is the 'slot' pattern in Compose?",
+      "options": ["A way to save memory", "Leaving space in a composable for other composables (lambdas)", "A type of list", "A database feature"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which effect is used for cleanup when a composable leaves the composition?",
+      "options": ["LaunchedEffect", "SideEffect", "DisposableEffect", "CleanupEffect"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "How do you define spacing between items in a LazyColumn?",
+      "options": ["contentPadding", "verticalArrangement = Arrangement.spacedBy()", "Modifier.margin()", "Both A and B"],
+      "correctAnswerIndex": 3
+    },
+    {
+      "questionText": "Which library is commonly used for navigation in Compose?",
+      "options": ["Navigation Component", "Compose Navigation", "Jetpack Nav", "All of the above"],
+      "correctAnswerIndex": 3
+    },
+    {
+      "questionText": "What is a 'Surface' in Compose?",
+      "options": ["A drawing canvas", "A Material Design container that sets background color and elevation", "The phone screen", "A transparent layer"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "How do you handle back button presses in Compose?",
+      "options": ["onBackPressed()", "BackHandler { ... }", "Modifier.back()", "System.exit()"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which composable is used for a floating action button?",
+      "options": ["FAB", "FloatingActionButton", "ActionButton", "RoundButton"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "What is 'rememberCoroutineScope'?",
+      "options": ["A way to launch coroutines from non-composable callbacks", "A global scope for all composables", "A scope that never cancels", "A scope for networking only"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "How do you change the background color of a composable?",
+      "options": ["Modifier.background(Color.Red)", "Modifier.color(Color.Red)", "composable(color = Red)", "Modifier.fill(Color.Red)"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Which composable is used for a simple 'dialog'?",
+      "options": ["Dialog", "AlertDialog", "Popup", "Both A and B"],
+      "correctAnswerIndex": 3
+    },
+    {
+      "questionText": "What is 'ConstraintLayout' in Compose?",
+      "options": ["The only way to build UI", "A layout that positions children relative to each other", "A legacy layout", "A layout for images only"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "How do you make a Text bold?",
+      "options": ["Modifier.bold()", "TextStyle(fontWeight = FontWeight.Bold)", "Text(bold = true)", "Font.BOLD"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which composable is used for a horizontal divider?",
+      "options": ["Line", "Divider / HorizontalDivider", "Separator", "Space"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "What is 'recomposition skipping'?",
+      "options": ["An error", "The ability to avoid re-executing a composable if its inputs haven't changed", "Manually stopping a UI update", "Using Java views in Compose"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which composable is used for a single-choice selection (Material Design)?",
+      "options": ["RadioButton", "Checkbox", "Switch", "Toggle"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "How do you define a preview with a specific device frame?",
+      "options": ["@Preview(showSystemUi = true)", "@Preview(device = Devices.PIXEL_4)", "Both A and B", "@Preview(frame = true)"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Is Jetpack Compose compatible with existing XML-based Views?",
+      "options": ["No", "Yes, using AndroidView", "Only if you convert everything", "Only for fragments"],
+      "correctAnswerIndex": 1
+    }
+  ]
+}

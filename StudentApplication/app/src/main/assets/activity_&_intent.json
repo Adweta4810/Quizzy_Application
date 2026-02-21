@@ -1,0 +1,204 @@
+{
+  "questions": [
+    {
+      "questionText": "Which callback is the first to be called when an Activity is created?",
+      "options": ["onStart()", "onResume()", "onCreate()", "onInit()"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Which class is used to launch another activity in Android?",
+      "options": ["Intent", "Launcher", "Navigator", "Context"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "What is an 'Explicit Intent'?",
+      "options": [
+        "An intent that specifies the exact component to be started",
+        "An intent that asks the system to find a suitable component",
+        "An intent used for broadcasting only",
+        "An intent that doesn't require a context"
+      ],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "How do you pass data between activities using an Intent?",
+      "options": [
+        "Using intent.setData()",
+        "Using intent.putExtra()",
+        "Using intent.addFlags()",
+        "Using intent.setBundle()"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which callback is called just before the user starts interacting with the activity?",
+      "options": ["onStart()", "onResume()", "onRestart()", "onFocus()"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "What is an 'Implicit Intent'?",
+      "options": [
+        "An intent that specifies the target class name",
+        "An intent that declares a general action to perform",
+        "An intent that can only be used within the same app",
+        "An intent that carries no data"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which file must all activities be declared in?",
+      "options": ["build.gradle", "settings.gradle", "AndroidManifest.xml", "MainActivity.kt"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "What does the 'onRestart()' callback do?",
+      "options": [
+        "Called after the activity has been stopped, prior to it being started again",
+        "Called when the activity is first created",
+        "Called when the app is updated",
+        "Called when the device reboots"
+      ],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Which flag is used to ensure an activity is not kept in the history stack?",
+      "options": [
+        "FLAG_ACTIVITY_NEW_TASK",
+        "FLAG_ACTIVITY_CLEAR_TOP",
+        "FLAG_ACTIVITY_NO_HISTORY",
+        "FLAG_ACTIVITY_SINGLE_TOP"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "How do you retrieve a String extra from an Intent?",
+      "options": [
+        "intent.getString()",
+        "intent.getStringExtra()",
+        "intent.fetchString()",
+        "intent.data.toString()"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "What is the purpose of an 'Intent Filter'?",
+      "options": [
+        "To block malicious intents",
+        "To specify the types of intents that a component can respond to",
+        "To compress intent data",
+        "To log all outgoing intents"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which method is used to start an activity and expect a result back?",
+      "options": [
+        "startActivity()",
+        "startActivityForResult() (deprecated) / Activity Result API",
+        "launchActivity()",
+        "startIntent()"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "What is the 'Back Stack' in Android?",
+      "options": [
+        "A list of background services",
+        "A set of activities arranged in the order in which they were opened",
+        "The undo history in a text editor",
+        "The list of installed apps"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "How can you close an activity programmatically?",
+      "options": ["stop()", "close()", "finish()", "exit()"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Which Intent action is used to open a web page in a browser?",
+      "options": ["ACTION_BROWSE", "ACTION_VIEW", "ACTION_SEND", "ACTION_OPEN"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which launch mode creates a new instance of the activity only if it doesn't already exist at the top of the stack?",
+      "options": ["standard", "singleTop", "singleTask", "singleInstance"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "What does 'onSaveInstanceState()' do?",
+      "options": [
+        "Saves data to a permanent database",
+        "Saves temporary UI state before the activity is destroyed by the system",
+        "Saves the user's password",
+        "Prevents the activity from being destroyed"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which method of Intent is used to set the MIME type of data?",
+      "options": ["setType()", "setMime()", "setDataAndType()", "Both A and C"],
+      "correctAnswerIndex": 3
+    },
+    {
+      "questionText": "What happens to an Activity when the screen is rotated (by default)?",
+      "options": [
+        "Nothing happens",
+        "It is paused and resumed",
+        "It is destroyed and recreated",
+        "It is moved to the background"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Which callback is the final call received before an activity is destroyed?",
+      "options": ["onStop()", "onFinish()", "onDestroy()", "onTerminate()"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "What is the 'context' in the 'new Intent(context, Class)' constructor?",
+      "options": [
+        "The theme of the app",
+        "The current state of the application/object",
+        "A string identifier",
+        "The database connection"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which Intent flag is used to clear all activities on top of the target activity?",
+      "options": [
+        "FLAG_ACTIVITY_CLEAR_TOP",
+        "FLAG_ACTIVITY_NEW_TASK",
+        "FLAG_ACTIVITY_SINGLE_TOP",
+        "FLAG_ACTIVITY_REORDER_TO_FRONT"
+      ],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "What is a 'PendingIntent'?",
+      "options": [
+        "An intent that has failed",
+        "A token that you give to another application, which allows it to execute an Intent as if it were your app",
+        "An intent that is waiting for a network connection",
+        "An intent used for animations"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which method is used to get the Intent that started the activity?",
+      "options": ["getIntent()", "getStartingIntent()", "fetchIntent()", "parentIntent"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Can an Activity exist without a UI?",
+      "options": [
+        "Yes, but it's rare",
+        "No, an activity must always have a layout",
+        "Yes, if it's a 'Transparent' activity",
+        "Both A and C"
+      ],
+      "correctAnswerIndex": 3
+    }
+  ]
+}

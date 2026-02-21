@@ -1,0 +1,254 @@
+{
+  "questions": [
+    {
+      "questionText": "Who developed the Kotlin programming language?",
+      "options": ["Google", "JetBrains", "Oracle", "Microsoft"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which keyword is used to declare a read-only variable in Kotlin?",
+      "options": ["var", "const", "val", "let"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "How do you declare a nullable variable in Kotlin?",
+      "options": ["String?", "String!", "String*", "String?"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "What is the entry point of a Kotlin program?",
+      "options": ["start()", "init()", "main()", "void main()"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Which operator is used for safe calls in Kotlin?",
+      "options": ["!!", "?.", "?:", "->"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "What is a 'data class' in Kotlin mainly used for?",
+      "options": ["Logic storage", "Holding data", "Defining interfaces", "Multithreading"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which keyword is used to inherit a class in Kotlin?",
+      "options": ["extends", "implements", ":", "inherits"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "What is the default visibility modifier in Kotlin?",
+      "options": ["private", "protected", "public", "internal"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "How do you define a function in Kotlin?",
+      "options": ["func", "function", "void", "fun"],
+      "correctAnswerIndex": 3
+    },
+    {
+      "questionText": "Which of these is the 'Elvis operator'?",
+      "options": ["?.", "!!", "?:", "->"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "What does the 'init' block do in Kotlin?",
+      "options": ["Initializes a variable", "Executes code during object creation", "Starts a loop", "Destroys an object"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which keyword is used to define a constant in Kotlin (outside a class)?",
+      "options": ["const val", "static val", "final val", "immutable"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "How do you check for the type of an object in Kotlin?",
+      "options": ["instanceof", "is", "typeof", "as"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "What is the equivalent of 'switch' in Kotlin?",
+      "options": ["case", "match", "when", "choose"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Which keyword is used to create a singleton in Kotlin?",
+      "options": ["singleton", "static", "object", "instance"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "What does the 'lazy' property delegate do?",
+      "options": ["Delays initialization until accessed", "Runs code in a background thread", "Makes a variable null", "Speeds up compilation"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Which of these is used for string interpolation in Kotlin?",
+      "options": ["%", "{}", "$", "@"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "What is the superclass of all classes in Kotlin?",
+      "options": ["Object", "Base", "Any", "Root"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "How do you create a range from 1 to 10 in Kotlin?",
+      "options": ["1-10", "1..10", "range(1, 10)", "1 to 10"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "What is the purpose of 'companion object' in Kotlin?",
+      "options": ["Inheritance", "Defining static-like members", "Creating inner classes", "Object cloning"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which keyword is used to declare a variable that can be reassigned?",
+      "options": ["val", "var", "const", "mut"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "How can you mark a class so it can be inherited?",
+      "options": ["public", "abstract", "open", "base"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "What is the return type of a function that returns nothing useful?",
+      "options": ["void", "Null", "Unit", "Empty"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Which operator is used for the 'not-null assertion'?",
+      "options": ["?.", "!!", "?:", "!?"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "How do you create an empty list in Kotlin?",
+      "options": ["newList()", "emptyList()", "List()", "createList()"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "What is a 'sealed class' in Kotlin?",
+      "options": ["A class that cannot be instantiated", "A class with a restricted hierarchy", "A class for data storage", "A private class"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which collection type is immutable by default in Kotlin?",
+      "options": ["ArrayList", "HashMap", "List", "MutableList"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "What does 'lateinit' do?",
+      "options": ["Initializes a variable lazily", "Allows non-null variable to be initialized later", "Makes a variable nullable", "Delays function execution"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "How do you perform a multi-line comment in Kotlin?",
+      "options": ["//", "/* */", "--", "#"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which scope function returns the result of the lambda?",
+      "options": ["also", "apply", "let", "with"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Which keyword allows a function to be called using infix notation?",
+      "options": ["infix", "operator", "extension", "inline"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "What is an 'extension function' in Kotlin?",
+      "options": ["A function inside a class", "Adding new functions to existing classes", "A function that extends another function", "A high-order function"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "How do you declare an array in Kotlin?",
+      "options": ["int[]", "Array<Int>", "arrayOf()", "Both B and C"],
+      "correctAnswerIndex": 3
+    },
+    {
+      "questionText": "What is 'Nothing' in Kotlin?",
+      "options": ["A null value", "A type that has no values", "An empty class", "A keyword for void"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which of these is used for asynchronous programming in Kotlin?",
+      "options": ["Threads", "Coroutines", "Callbacks", "Signals"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "How do you define a primary constructor in Kotlin?",
+      "options": ["constructor() block", "In the class header", "init() block", "setup() function"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "What is the use of 'inline' functions?",
+      "options": ["To make code readable", "To reduce overhead of lambdas", "To allow recursion", "To make functions private"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which keyword is used for smart casting?",
+      "options": ["as", "is", "cast", "convert"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "What is the 'it' keyword in Kotlin lambdas?",
+      "options": ["The current object", "The default name for a single parameter", "A loop iterator", "A null check"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "How do you declare a property with a custom getter?",
+      "options": ["get() = ...", "getter = ...", "function get()", "val get = ..."],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "What does 'tailrec' do?",
+      "options": ["Optimizes recursive functions", "Marks a function as private", "Allows tail calling", "Increases stack size"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Which function is used to iterate over a collection?",
+      "options": ["for", "forEach", "loop", "Both A and B"],
+      "correctAnswerIndex": 3
+    },
+    {
+      "questionText": "What is a 'secondary constructor'?",
+      "options": ["A constructor for subclasses", "An additional constructor defined using 'constructor'", "The main constructor", "A static factory method"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "How do you handle exceptions in Kotlin?",
+      "options": ["try-catch", "throw", "finally", "All of the above"],
+      "correctAnswerIndex": 3
+    },
+    {
+      "questionText": "What is the 'by' keyword used for?",
+      "options": ["Inheritance", "Delegation", "Loops", "Type casting"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which keyword is used to import a package?",
+      "options": ["include", "use", "import", "package"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "How do you specify a return type for a function?",
+      "options": ["fun name() : Type", "fun Type name()", "fun name() -> Type", "Type fun name()"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "What is 'String' in Kotlin?",
+      "options": ["A primitive type", "A class", "A struct", "An interface"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which operator is used for range checking?",
+      "options": ["in", "has", "contains", "within"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Is Kotlin 100% interoperable with Java?",
+      "options": ["No", "Yes", "Only for Android", "Partially"],
+      "correctAnswerIndex": 1
+    }
+  ]
+}

@@ -1,0 +1,304 @@
+{
+  "questions": [
+    {
+      "questionText": "What is the primary purpose of a ViewModel?",
+      "options": [
+        "To handle network requests directly",
+        "To store and manage UI-related data in a lifecycle-conscious way",
+        "To define the database schema",
+        "To manage activity transitions"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which library is used as an abstraction layer over SQLite in Android?",
+      "options": [
+        "Retrofit",
+        "Room",
+        "Glide",
+        "Hilt"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "How does a ViewModel survive configuration changes like screen rotation?",
+      "options": [
+        "By saving data to SharedPreferences",
+        "It is tied to the application context instead of the activity",
+        "The ViewModelStore retains it during the configuration change",
+        "It doesn't; you must manually save state"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Which annotation is used to define a table in Room?",
+      "options": [
+        "@Table",
+        "@Entity",
+        "@Database",
+        "@Row"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "What does DAO stand for in Room?",
+      "options": [
+        "Data Access Object",
+        "Direct Access Operation",
+        "Database Android Object",
+        "Data Async Operator"
+      ],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Which annotation is used to mark a method in a DAO as a query?",
+      "options": [
+        "@Select",
+        "@Get",
+        "@Query",
+        "@Fetch"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Why should you avoid passing Activity or View references to a ViewModel?",
+      "options": [
+        "It causes compile-time errors",
+        "It leads to memory leaks because the ViewModel outlives the Activity",
+        "It makes the ViewModel too large",
+        "ViewModels can only hold primitive types"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which Room annotation is used to mark a field as a primary key?",
+      "options": [
+        "@Key",
+        "@Id",
+        "@PrimaryKey",
+        "@MainKey"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "What is the role of LiveData or StateFlow when used with ViewModel?",
+      "options": [
+        "To encrypt database data",
+        "To allow the UI to observe data changes automatically",
+        "To handle multi-threading in the Repository",
+        "To delete old data from the cache"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which class is responsible for creating a Room database instance?",
+      "options": [
+        "Room.databaseBuilder()",
+        "SQLiteOpenHelper",
+        "DatabaseFactory",
+        "RoomManager"
+      ],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "What is a 'TypeConverter' used for in Room?",
+      "options": [
+        "To convert SQL to Kotlin code",
+        "To map custom objects to types Room can store (like Long or String)",
+        "To change the database version",
+        "To migrate from XML to JSON"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which annotation marks the main entry point for the Room database?",
+      "options": [
+        "@RoomDatabase",
+        "@Schema",
+        "@Database",
+        "@AppDatabase"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "How can you run Room queries on a background thread using Kotlin?",
+      "options": [
+        "Using 'suspend' functions in the DAO",
+        "Using 'async' keyword in the Activity",
+        "Room runs everything on the main thread by default",
+        "By calling .execute() on the query"
+      ],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "What happens if you try to perform a Room database operation on the main thread?",
+      "options": [
+        "The app crashes with an IllegalStateException",
+        "The app slows down but works",
+        "Room automatically moves it to the background",
+        "The query returns null"
+      ],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Which ViewModel subclass should be used if you need access to the Application context?",
+      "options": [
+        "BaseViewModel",
+        "AndroidViewModel",
+        "ContextViewModel",
+        "GlobalViewModel"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "What is the purpose of the Repository pattern?",
+      "options": [
+        "To replace the ViewModel",
+        "To provide a clean API for data access to the rest of the app",
+        "To handle UI animations",
+        "To manage the Activity lifecycle"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which annotation is used for inserting data into a Room table?",
+      "options": [
+        "@Put",
+        "@Save",
+        "@Insert",
+        "@Add"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "What is a 'Migration' in Room?",
+      "options": [
+        "Moving data to a different server",
+        "Preserving data when changing the database schema version",
+        "Converting Java code to Kotlin",
+        "Moving the app to a different device"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which function is used to get a ViewModel instance in a Composable (using the compose-viewmodel library)?",
+      "options": [
+        "getViewModel()",
+        "viewModel()",
+        "createViewModel()",
+        "initViewModel()"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "In Room, what does 'onConflict = OnConflictStrategy.REPLACE' do?",
+      "options": [
+        "Deletes the entire table",
+        "Replaces the old data with new data if the primary keys match",
+        "Ignores the new data",
+        "Throws an exception"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which Room annotation is used to create a relationship between two entities?",
+      "options": [
+        "@Relation",
+        "@ForeignKey",
+        "@Join",
+        "Both @Relation and @ForeignKey"
+      ],
+      "correctAnswerIndex": 3
+    },
+    {
+      "questionText": "What is the benefit of returning Flow<List<Entity>> from a Room DAO?",
+      "options": [
+        "It makes the data read-only",
+        "It provides a stream of data that updates automatically when the database changes",
+        "It encrypts the list",
+        "It allows the list to be edited in the UI directly"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "When is a ViewModel's 'onCleared()' method called?",
+      "options": [
+        "When the screen is rotated",
+        "When the associated Activity or Fragment is permanently destroyed",
+        "Every time the app goes to the background",
+        "When the user clicks a button"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which component in Room defines the list of entities and the version?",
+      "options": [
+        "DAO",
+        "Database class (annotated with @Database)",
+        "Repository",
+        "Entity class"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "What is 'SavedStateHandle' used for in a ViewModel?",
+      "options": [
+        "To save database passwords",
+        "To persist state across system-initiated process death",
+        "To handle network timeouts",
+        "To share data between two different apps"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which annotation is used to delete a record in Room?",
+      "options": [
+        "@Remove",
+        "@Delete",
+        "@Clear",
+        "@Drop"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "How do you specify the database name in Room?",
+      "options": [
+        "Inside the @Entity annotation",
+        "As a parameter in Room.databaseBuilder()",
+        "In the AndroidManifest.xml",
+        "In the build.gradle file"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "What is the recommended way to expose state from a ViewModel to a Composable?",
+      "options": [
+        "As a public var",
+        "As a StateFlow or LiveData",
+        "As a list of strings",
+        "By passing the ViewModel's 'this' reference"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which Room annotation is used to ignore a specific field so it isn't saved in the database?",
+      "options": [
+        "@Skip",
+        "@Ignore",
+        "@Transient",
+        "@Exclude"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "What is the 'exportSchema' parameter in the @Database annotation used for?",
+      "options": [
+        "To export data to CSV",
+        "To generate a JSON file representing the database schema for version history",
+        "To upload the database to the cloud",
+        "To share the schema with other apps"
+      ],
+      "correctAnswerIndex": 1
+    }
+  ]
+}
