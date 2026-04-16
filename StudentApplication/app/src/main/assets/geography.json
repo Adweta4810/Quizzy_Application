@@ -1,0 +1,204 @@
+{
+  "questions": [
+    {
+      "questionText": "Which three geographical regions is Nepal divided into from north to south?",
+      "options": [
+        "Mountain, Hill, and Terai",
+        "Mountain, Desert, and Plain",
+        "Hill, Valley, and Coast",
+        "Mountain, Forest, and Plateau"
+      ],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "What is the name of the deepest gorge in the world, located in Nepal?",
+      "options": [
+        "Kali Gandaki Gorge",
+        "Trishuli Gorge",
+        "Karnali Gorge",
+        "Bheri Gorge"
+      ],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Which is the largest glacier in Nepal?",
+      "options": [
+        "Khumbu Glacier",
+        "Langtang Glacier",
+        "Ngozumpa Glacier",
+        "Yalung Glacier"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which lake in Nepal is famous as one of the highest lakes in the world?",
+      "options": [
+        "Rara Lake",
+        "Phewa Lake",
+        "Tilicho Lake",
+        "Begnas Lake"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Which river is the longest in Nepal?",
+      "options": [
+        "Koshi River",
+        "Gandaki River",
+        "Karnali River",
+        "Bagmati River"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "In which district is the geographical center point of Nepal located?",
+      "options": [
+        "Syangja",
+        "Kaski",
+        "Gorkha",
+        "Lamjung"
+      ],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Nepal lies approximately between which latitudes?",
+      "options": [
+        "20° N and 24° N",
+        "22° N and 26° N",
+        "26° 22' N and 30° 27' N",
+        "30° N and 34° N"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Which Nepalese peak is often called the 'Killer Mountain' because of its climbing danger?",
+      "options": [
+        "Mount Everest",
+        "Mount Manaslu",
+        "Annapurna I",
+        "Dhaulagiri"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "How many of the world's 14 peaks above 8,000 meters are located in Nepal?",
+      "options": [
+        "6",
+        "7",
+        "8",
+        "10"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Which conservation area is the largest in Nepal?",
+      "options": [
+        "Sagarmatha National Park",
+        "Annapurna Conservation Area",
+        "Langtang National Park",
+        "Shey Phoksundo National Park"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which is the only country in the world to occupy an entire continent?",
+      "options": [
+        "Australia",
+        "Greenland",
+        "Russia",
+        "Antarctica"
+      ],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Which two countries share the longest international border?",
+      "options": [
+        "USA and Mexico",
+        "Canada and the USA",
+        "Russia and China",
+        "India and Bangladesh"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "What is the world's largest landlocked country?",
+      "options": [
+        "Mongolia",
+        "Kazakhstan",
+        "Nepal",
+        "Chad"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which African country is crossed by both the Equator and the Prime Meridian?",
+      "options": [
+        "Kenya",
+        "Ghana",
+        "Uganda",
+        "Gabon"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which sea is so salty that people can float easily in it?",
+      "options": [
+        "Red Sea",
+        "Black Sea",
+        "Dead Sea",
+        "Arabian Sea"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "What is the largest country in South America by land area?",
+      "options": [
+        "Argentina",
+        "Peru",
+        "Brazil",
+        "Chile"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Which strait separates Asia and North America?",
+      "options": [
+        "Strait of Malacca",
+        "Bering Strait",
+        "Bosporus Strait",
+        "Hormuz Strait"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which European city is built on more than 100 small islands?",
+      "options": [
+        "Amsterdam",
+        "Athens",
+        "Venice",
+        "Lisbon"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "What is the world's largest coral reef system?",
+      "options": [
+        "Belize Barrier Reef",
+        "Great Barrier Reef",
+        "Red Sea Reef",
+        "Florida Reef"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which desert covers much of Northern Africa?",
+      "options": [
+        "Gobi Desert",
+        "Kalahari Desert",
+        "Arabian Desert",
+        "Sahara Desert"
+      ],
+      "correctAnswerIndex": 3
+    }
+  ]
+}

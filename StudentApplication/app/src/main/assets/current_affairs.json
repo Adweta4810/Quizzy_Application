@@ -1,0 +1,104 @@
+{
+  "questions": [
+    {
+      "questionText": "Who is the Secretary-General of the United Nations (2026)?",
+      "options": ["Ban Ki-moon", "Antonio Guterres", "Tedros Adhanom Ghebreyesus", "Volker Turk"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which country hosted COP29 in 2024?",
+      "options": ["Brazil", "Azerbaijan", "UAE", "Egypt"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which country will host COP30 in 2025?",
+      "options": ["Brazil", "India", "South Africa", "France"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Which global issue is discussed at climate summits?",
+      "options": ["Climate change", "Gaming", "Fashion", "Tourism"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Where is the United Nations headquarters located?",
+      "options": ["Geneva", "New York", "Paris", "London"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which war has been a major global issue since 2022?",
+      "options": ["Russia-Ukraine war", "India-China war", "Korea-Japan war", "France-Spain war"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "What is the capital city of Nepal?",
+      "options": ["Pokhara", "Kathmandu", "Lalitpur", "Biratnagar"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Nepal lies in which continent?",
+      "options": ["Europe", "Africa", "Asia", "South America"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Which country shares an open border with Nepal?",
+      "options": ["India", "Bhutan", "Bangladesh", "Myanmar"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Which is the highest mountain in the world?",
+      "options": ["K2", "Kanchenjunga", "Mount Everest", "Makalu"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Which sector is important for Nepal’s energy export?",
+      "options": ["Hydropower", "Coal", "Oil", "Nuclear"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Which organization supports development in Nepal?",
+      "options": ["FIFA", "World Bank", "NASA", "UEFA"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which country is Nepal’s largest trade partner?",
+      "options": ["China", "India", "USA", "Japan"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which city will host COP30?",
+      "options": ["Rio de Janeiro", "Brasilia", "Belem", "Sao Paulo"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Which organization has expanded membership recently?",
+      "options": ["BRICS", "NATO only", "G7 only", "ASEAN only"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Which sector is a key development priority in Nepal?",
+      "options": ["Infrastructure", "Gaming", "Fashion", "Movies"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Which body includes Nepal’s House of Representatives?",
+      "options": ["Federal Parliament", "Supreme Court", "Election Commission", "Planning Commission"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Which country is known for hosting the G20 Summit in 2023?",
+      "options": ["India", "USA", "China", "UK"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Which global health organization manages international health issues?",
+      "options": ["WHO", "UNICEF", "IMF", "WTO"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Which neighboring country lies to the north of Nepal?",
+      "options": ["India", "China", "Bangladesh", "Pakistan"],
+      "correctAnswerIndex": 1
+    }
+  ]
+}

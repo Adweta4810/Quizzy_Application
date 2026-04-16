@@ -1,0 +1,104 @@
+{
+  "questions": [
+    {
+      "questionText": "Who is known as the \"Father of the Nation\" for unifying modern Nepal?",
+      "options": ["Jung Bahadur Rana", "King Tribhuvan", "King Prithvi Narayan Shah", "Bhimsen Thapa"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "In which year was Nepal declared a Federal Democratic Republic?",
+      "options": ["2006 AD", "2007 AD", "2008 AD", "2015 AD"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "What was the name of the treaty signed in 1816 that ended the Anglo-Nepal War?",
+      "options": ["Treaty of Kathmandu", "Treaty of Sugauli", "Treaty of Nepal", "Treaty of Gorkha"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Who was the first Prime Minister of Nepal after the fall of the Rana regime in 1951?",
+      "options": ["B. P. Koirala", "Matrika Prasad Koirala", "Tanka Prasad Acharya", "Subarna Shumsher Rana"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which dynasty ruled Nepal before the Shah dynasty?",
+      "options": ["Rana dynasty", "Lichhavi dynasty", "Malla dynasty", "Kirat dynasty"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "In which century was Gautam Buddha born in Lumbini?",
+      "options": ["4th Century BCE", "5th Century BCE", "6th Century BCE", "7th Century BCE"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "What was the name of the 10-year conflict that ended with the Comprehensive Peace Accord in 2006?",
+      "options": ["People's Movement", "Nepalese Civil War (Maoist Insurgency)", "Anglo-Nepal War", "Kot Conflict"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Who was the last King of Nepal?",
+      "options": ["Mahendra Bir Bikram Shah", "Birendra Bir Bikram Shah", "Dipendra Bir Bikram Shah", "Gyanendra Bir Bikram Shah"],
+      "correctAnswerIndex": 3
+    },
+    {
+      "questionText": "Who is remembered as the famous commander of Nalapani fort during the Anglo-Nepal War?",
+      "options": ["Amar Singh Thapa", "Balbhadra Kunwar", "Bhimsen Thapa", "Jung Bahadur Rana"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "The \"Kot Massacre\" of 1846 led to the rise of which political dynasty?",
+      "options": ["Shah Dynasty", "Malla Dynasty", "Rana Dynasty", "Lichhavi Dynasty"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Who was the first President of the United States?",
+      "options": ["Thomas Jefferson", "George Washington", "Abraham Lincoln", "John Adams"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "In which year did World War II end?",
+      "options": ["1944", "1945", "1946", "1939"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which ancient civilization built the Great Pyramids of Giza?",
+      "options": ["The Romans", "The Greeks", "The Ancient Egyptians", "The Persians"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Who was the French female leader who led the army at the Siege of Orléans and was later canonized as a saint?",
+      "options": ["Marie Curie", "Joan of Arc", "Catherine de Medici", "Eleanor of Aquitaine"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "What was the Renaissance?",
+      "options": ["A period of industrial growth", "A period of rebirth in European art, culture, and science", "A major world war", "A Roman festival"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which empire was ruled by Julius Caesar and Augustus?",
+      "options": ["Ottoman Empire", "Greek Empire", "Roman Empire", "British Empire"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Who was the leader of the Indian Independence Movement known for non-violent resistance?",
+      "options": ["Jawaharlal Nehru", "Subhas Chandra Bose", "Mahatma Gandhi", "Bhagat Singh"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "In 1969, which event marked a \"giant leap for mankind\"?",
+      "options": ["The launch of Sputnik", "The Apollo 11 Moon landing", "The first airplane flight", "The building of the Berlin Wall"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "What was the name of the wall that divided East and West Berlin until 1989?",
+      "options": ["The Iron Curtain", "The German Wall", "The Berlin Wall", "The Cold War Wall"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Who discovered the sea route from Europe to India via the Cape of Good Hope in 1498?",
+      "options": ["Christopher Columbus", "Ferdinand Magellan", "Marco Polo", "Vasco da Gama"],
+      "correctAnswerIndex": 3
+    }
+  ]
+}
