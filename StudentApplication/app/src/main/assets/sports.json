@@ -1,0 +1,24 @@
+{
+  "questions": [
+    {"questionText": "Which country has won the most FIFA World Cup titles?", "options": ["Germany", "Argentina", "Brazil", "Italy"], "correctAnswerIndex": 2},
+    {"questionText": "How many players are on a standard basketball team on the court?", "options": ["4", "5", "6", "7"], "correctAnswerIndex": 1},
+    {"questionText": "In which sport would you perform a 'slam dunk'?", "options": ["Volleyball", "Tennis", "Basketball", "Baseball"], "correctAnswerIndex": 2},
+    {"questionText": "How many holes are played in a standard round of golf?", "options": ["9", "12", "18", "24"], "correctAnswerIndex": 2},
+    {"questionText": "Which country invented the sport of cricket?", "options": ["Australia", "India", "England", "South Africa"], "correctAnswerIndex": 2},
+    {"questionText": "How many players are on a cricket team?", "options": ["9", "10", "11", "12"], "correctAnswerIndex": 2},
+    {"questionText": "What does 'LBW' stand for in cricket?", "options": ["Left Behind Wicket", "Leg Before Wicket", "Late Ball Warning", "Lost Boundary Win"], "correctAnswerIndex": 1},
+    {"questionText": "In tennis, what is the term for a score of 40-40?", "options": ["Deuce", "Tie", "Draw", "Set"], "correctAnswerIndex": 0},
+    {"questionText": "How many Grand Slam tournaments are there in tennis?", "options": ["2", "3", "4", "5"], "correctAnswerIndex": 2},
+    {"questionText": "Which sport uses a puck?", "options": ["Polo", "Hockey (Ice)", "Lacrosse", "Hurling"], "correctAnswerIndex": 1},
+    {"questionText": "In football (soccer), how long is a standard match?", "options": ["80 minutes", "90 minutes", "100 minutes", "120 minutes"], "correctAnswerIndex": 1},
+    {"questionText": "How many events are in a Decathlon?", "options": ["8", "9", "10", "12"], "correctAnswerIndex": 2},
+    {"questionText": "Which country is the birthplace of the Olympic Games?", "options": ["Italy", "France", "Greece", "Rome"], "correctAnswerIndex": 2},
+    {"questionText": "What is the maximum score in a single bowling frame (strike)?", "options": ["10", "20", "30", "25"], "correctAnswerIndex": 0},
+    {"questionText": "Which sport is Nepal's national sport?", "options": ["Cricket", "Football", "Volleyball", "Kabaddi"], "correctAnswerIndex": 2},
+    {"questionText": "In which sport is a 'shuttlecock' used?", "options": ["Squash", "Badminton", "Table Tennis", "Racquetball"], "correctAnswerIndex": 1},
+    {"questionText": "How many rings are in the Olympic symbol?", "options": ["4", "5", "6", "7"], "correctAnswerIndex": 1},
+    {"questionText": "What is the distance of a marathon in kilometers?", "options": ["40km", "42.195km", "45km", "38km"], "correctAnswerIndex": 1},
+    {"questionText": "Which sport involves 'end zones'?", "options": ["Rugby", "American Football", "Soccer", "Basketball"], "correctAnswerIndex": 1},
+    {"questionText": "What is a perfect score in gymnastics?", "options": ["8.0", "9.0", "10.0", "100"], "correctAnswerIndex": 2}
+  ]
+}
