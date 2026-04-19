@@ -1,7 +1,6 @@
 package com.dma.studentapplication.data.local.room
 
-import androidx.room3.Entity
-import androidx.room3.PrimaryKey
+import androidx.room.*
 
 /**
  * Persisted quiz attempt stored in the ROOM database.

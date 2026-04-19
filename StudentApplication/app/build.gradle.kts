@@ -3,13 +3,13 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
 }
 
 android {
     namespace = "com.dma.studentapplication"
-    compileSdk {
-        version = release(36)
-    }
+
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.dma.studentapplication"
@@ -30,14 +30,16 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
+
     kotlin {
         jvmToolchain(21)
-
     }
+
     buildFeatures {
         compose = true
     }
@@ -53,7 +55,12 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui.text.google.fonts)
     implementation(libs.kotlinx.serialization.json)
-    implementation(libs.androidx.room3.common.jvm)
+    implementation(libs.androidx.navigation.event)
+    implementation(libs.androidx.navigation.event)
+
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
