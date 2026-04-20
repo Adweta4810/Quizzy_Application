@@ -52,6 +52,11 @@ data class QuizResult(
 }
 
 /** Mascot emotional states. */
-enum class MascotState {
-    IDLE, WAVING, THINKING, CORRECT, WRONG, SURPRISED, CELEBRATING
+// ── Mood enum ────────────────────────────────────────────────────────────────
+enum class RoboBuddyState {
+    WAVE, CELEBRATE, THUMBS_UP, READING, THINKING,
+    HAPPY, EXCITED, LOVE, SURPRISED, SAD,
+    ANGRY, LAUGHING, WINK,
+    CORRECT, INCORRECT, STUDYING, WRITING,
+    TROPHY, IDEA, PROGRESS
 }

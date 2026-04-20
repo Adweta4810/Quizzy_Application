@@ -59,6 +59,8 @@ dependencies {
     implementation(libs.androidx.navigation.event)
 
     implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.compose.foundation)
+    implementation(libs.androidx.appcompat)
     ksp(libs.androidx.room.compiler)
 
     testImplementation(libs.junit)
