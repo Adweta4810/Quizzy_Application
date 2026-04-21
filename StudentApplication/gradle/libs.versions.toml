@@ -14,6 +14,7 @@ navigationEvent = "1.0.2"
 roomVersion = "2.8.4"
 foundation = "1.10.6"
 appcompat = "1.7.1"
+pdfInk = "1.0.0-alpha17"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -42,6 +43,7 @@ androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "j
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundation" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-pdf-ink = { group = "androidx.pdf", name = "pdf-ink", version.ref = "pdfInk" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -52,7 +52,7 @@ private val ColorOutline     = Color(0xFF222222)
  * RoboBuddy — Jetpack Compose mascot for your quiz app.
  *
  * Example:
- *   RoboBuddy(state = RoboBuddyState.CORRECT, modifier = Modifier.size(160.dp))
+ *   RoboBuddy(state = RoboBuddyState. CORRECT, modifier = Modifier.size(160.dp))
  */
 @Composable
 fun RoboBuddy(
