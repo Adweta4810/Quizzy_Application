@@ -57,7 +57,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.navigation.event)
     implementation(libs.androidx.navigation.event)
-
+    implementation("androidx.compose.material:material-icons-extended")
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.appcompat)

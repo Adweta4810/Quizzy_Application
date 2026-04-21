@@ -1,4 +1,4 @@
-package com.example.quizapp.ui
+package com.dma.studentapplication.ui.components
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
@@ -11,14 +11,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.drawscope.withTransform
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -207,11 +206,11 @@ private fun DrawScope.drawBody(cx: Float, cy: Float, u: Float) {
     val bodySize = Size(u * 4.4f, u * 2.7f)
     val r = u * 0.8f
     // shadow
-    drawRoundRect(ColorBodyShadow, topLeft = bodyTL + Offset(u * 0.1f, u * 0.15f), size = bodySize, cornerRadius = androidx.compose.ui.geometry.CornerRadius(r))
-    drawRoundRect(ColorBody,       topLeft = bodyTL, size = bodySize, cornerRadius = androidx.compose.ui.geometry.CornerRadius(r))
-    drawRoundRect(ColorOutline,    topLeft = bodyTL, size = bodySize, cornerRadius = androidx.compose.ui.geometry.CornerRadius(r), style = Stroke(width = u * 0.12f))
+    drawRoundRect(ColorBodyShadow, topLeft = bodyTL + Offset(u * 0.1f, u * 0.15f), size = bodySize, cornerRadius = CornerRadius(r))
+    drawRoundRect(ColorBody,       topLeft = bodyTL, size = bodySize, cornerRadius = CornerRadius(r))
+    drawRoundRect(ColorOutline,    topLeft = bodyTL, size = bodySize, cornerRadius = CornerRadius(r), style = Stroke(width = u * 0.12f))
     // chest panel
-    drawRoundRect(ColorScreen, topLeft = Offset(cx - u * 1.1f, cy + u * 1.3f), size = Size(u * 2.2f, u * 1.2f), cornerRadius = androidx.compose.ui.geometry.CornerRadius(u * 0.3f))
+    drawRoundRect(ColorScreen, topLeft = Offset(cx - u * 1.1f, cy + u * 1.3f), size = Size(u * 2.2f, u * 1.2f), cornerRadius = CornerRadius(u * 0.3f))
     // indicator
     drawCircle(ColorGreen, radius = u * 0.25f, center = Offset(cx, cy + u * 1.9f))
 }
@@ -220,17 +219,17 @@ private fun DrawScope.drawBody(cx: Float, cy: Float, u: Float) {
 private fun DrawScope.drawHead(cx: Float, cy: Float, u: Float) {
     val tl   = Offset(cx - u * 2.5f, cy - u * 2.8f)
     val sz   = Size(u * 5f, u * 3.8f)
-    val r    = androidx.compose.ui.geometry.CornerRadius(u * 1.2f)
+    val r    = CornerRadius(u * 1.2f)
     drawRoundRect(ColorBodyShadow, topLeft = tl + Offset(u * 0.12f, u * 0.15f), size = sz, cornerRadius = r)
     drawRoundRect(ColorBody,       topLeft = tl, size = sz, cornerRadius = r)
     drawRoundRect(ColorOutline,    topLeft = tl, size = sz, cornerRadius = r, style = Stroke(width = u * 0.13f))
     // face screen
-    drawRoundRect(ColorScreen, topLeft = Offset(cx - u * 1.9f, cy - u * 2.2f), size = Size(u * 3.8f, u * 2.7f), cornerRadius = androidx.compose.ui.geometry.CornerRadius(u * 0.8f))
+    drawRoundRect(ColorScreen, topLeft = Offset(cx - u * 1.9f, cy - u * 2.2f), size = Size(u * 3.8f, u * 2.7f), cornerRadius = CornerRadius(u * 0.8f))
 }
 
 // ── Ears ──────────────────────────────────────────────────────────────────────
 private fun DrawScope.drawEars(cx: Float, cy: Float, u: Float) {
-    val cr = androidx.compose.ui.geometry.CornerRadius(u * 0.3f)
+    val cr = CornerRadius(u * 0.3f)
     val sw = Stroke(u * 0.1f)
     drawRoundRect(ColorTeal,    topLeft = Offset(cx - u * 3.2f, cy - u * 1.5f), size = Size(u * 0.9f, u * 1.2f), cornerRadius = cr)
     drawRoundRect(ColorOutline, topLeft = Offset(cx - u * 3.2f, cy - u * 1.5f), size = Size(u * 0.9f, u * 1.2f), cornerRadius = cr, style = sw)
@@ -378,7 +377,7 @@ private fun DrawScope.drawThumbsUp(cx: Float, cy: Float, u: Float) {
 
 private fun DrawScope.drawBook(cx: Float, cy: Float, u: Float) {
     drawLine(ColorOutline, Offset(cx - u * 2.2f, cy + u * 1.5f), Offset(cx - u * 3.0f, cy + u * 2.5f), u * 0.35f, cap = StrokeCap.Round)
-    val cr = androidx.compose.ui.geometry.CornerRadius(u * 0.2f)
+    val cr = CornerRadius(u * 0.2f)
     drawRoundRect(ColorGreen,   topLeft = Offset(cx - u * 3.8f, cy + u * 2.0f), size = Size(u * 2.3f, u * 1.6f), cornerRadius = cr)
     drawRoundRect(ColorOutline, topLeft = Offset(cx - u * 3.8f, cy + u * 2.0f), size = Size(u * 2.3f, u * 1.6f), cornerRadius = cr, style = Stroke(u * 0.1f))
     val midX = cx - u * 2.65f
@@ -414,10 +413,10 @@ private fun DrawScope.drawCrossBadge(cx: Float, cy: Float, u: Float) {
 
 private fun DrawScope.drawLaptop(cx: Float, cy: Float, u: Float) {
     drawLine(ColorOutline, Offset(cx - u * 2.2f, cy + u * 1.5f), Offset(cx - u * 2.8f, cy + u * 2.8f), u * 0.3f, cap = StrokeCap.Round)
-    val cr = androidx.compose.ui.geometry.CornerRadius(u * 0.25f)
+    val cr = CornerRadius(u * 0.25f)
     drawRoundRect(ColorTeal,    topLeft = Offset(cx - u * 3.8f, cy + u * 1.5f), size = Size(u * 3.0f, u * 1.5f), cornerRadius = cr)
     drawRoundRect(ColorOutline, topLeft = Offset(cx - u * 3.8f, cy + u * 1.5f), size = Size(u * 3.0f, u * 1.5f), cornerRadius = cr, style = Stroke(u * 0.1f))
-    val cr2 = androidx.compose.ui.geometry.CornerRadius(u * 0.1f)
+    val cr2 = CornerRadius(u * 0.1f)
     drawRoundRect(ColorTeal,    topLeft = Offset(cx - u * 4.0f, cy + u * 2.95f), size = Size(u * 3.5f, u * 0.35f), cornerRadius = cr2)
     drawRoundRect(ColorOutline, topLeft = Offset(cx - u * 4.0f, cy + u * 2.95f), size = Size(u * 3.5f, u * 0.35f), cornerRadius = cr2, style = Stroke(u * 0.1f))
 }
