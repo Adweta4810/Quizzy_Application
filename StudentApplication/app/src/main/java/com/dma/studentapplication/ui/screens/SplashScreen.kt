@@ -28,6 +28,20 @@ import com.dma.studentapplication.model.RoboBuddyState
 import com.dma.studentapplication.ui.components.RoboBuddy
 import com.dma.studentapplication.ui.theme.StudentApplicationTheme
 
+/**
+ * Splash screen of the quiz application.
+ *
+ * This screen introduces the app with:
+ * - animated background
+ * - robot mascot section
+ * - app branding
+ * - short subtitle
+ * - start learning button
+ *
+ * The layout supports both light and dark themes.
+ *
+ * @param onStartClick callback triggered when the user taps the start button
+ */
 @Composable
 fun SplashScreen(
     onStartClick: () -> Unit = {}
@@ -35,13 +49,16 @@ fun SplashScreen(
     val isDark = isSystemInDarkTheme()
     val scrollState = rememberScrollState()
 
+    // Main text colors based on current theme.
     val titleColor = if (isDark) Color(0xFFF7FAFF) else Color(0xFF081A56)
     val subtitleColor = if (isDark) Color(0xFFB8C2D6) else Color(0xFF52607A)
 
+    // Tag/pill colors shown below the robot.
     val pillBg = if (isDark) Color(0xFF031126) else Color(0xFFF1FFF7)
     val pillBorder = if (isDark) Color(0xFF126E72) else Color(0xFF20BF72)
     val pillText = if (isDark) Color(0xFF2DE08A) else Color(0xFF15995D)
 
+    // Button gradient and shadow colors.
     val buttonTop = Color(0xFF35D86E)
     val buttonBottom = Color(0xFF14C97C)
     val buttonShadow = if (isDark) Color(0xFF001A28) else Color(0xFFC5F0DB)
@@ -55,6 +72,7 @@ fun SplashScreen(
         val contentMaxWidth = 420.dp
         val screenMinHeight = this.maxHeight - 24.dp
 
+        // Decorative animated background layer.
         SplashBackground(isDark = isDark)
 
         Column(
@@ -73,10 +91,12 @@ fun SplashScreen(
             ) {
                 Spacer(modifier = Modifier.height(56.dp))
 
+                // Main animated robot section.
                 RobotHeroSection(isDark = isDark)
 
                 Spacer(modifier = Modifier.height(1.dp))
 
+                // Small branding pill under the mascot.
                 Surface(
                     shape = RoundedCornerShape(999.dp),
                     color = pillBg,
@@ -100,6 +120,7 @@ fun SplashScreen(
 
                 Spacer(modifier = Modifier.height(24.dp))
 
+                // App title.
                 Text(
                     text = "Quizzy",
                     color = titleColor,
@@ -120,6 +141,7 @@ fun SplashScreen(
 
                 Spacer(modifier = Modifier.height(14.dp))
 
+                // Decorative underline below the title.
                 Box(
                     modifier = Modifier
                         .width(92.dp)
@@ -137,6 +159,7 @@ fun SplashScreen(
 
                 Spacer(modifier = Modifier.height(22.dp))
 
+                // Short app description.
                 Text(
                     text = "Practice fun topics, answer fast, and let your robo buddy cheer you on through every quiz.",
                     color = subtitleColor,
@@ -149,6 +172,7 @@ fun SplashScreen(
 
                 Spacer(modifier = Modifier.height(34.dp))
 
+                // Primary call-to-action button.
                 StartLearningButton(
                     isDark = isDark,
                     topColor = buttonTop,
@@ -164,10 +188,19 @@ fun SplashScreen(
     }
 }
 
+/**
+ * Animated hero section that displays the robot mascot.
+ *
+ * Includes:
+ * - floating animation for the robot
+ * - ambient glow beneath the robot
+ * - animated shadow for more depth
+ */
 @Composable
 private fun RobotHeroSection(isDark: Boolean) {
     val infiniteTransition = rememberInfiniteTransition(label = "robot_hero")
 
+    // Floating motion for the robot.
     val floatY by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = -10f,
@@ -178,6 +211,7 @@ private fun RobotHeroSection(isDark: Boolean) {
         label = "robot_float"
     )
 
+    // Animated ambient glow alpha.
     val ambientAlpha by infiniteTransition.animateFloat(
         initialValue = if (isDark) 0.08f else 0.12f,
         targetValue = if (isDark) 0.16f else 0.20f,
@@ -188,6 +222,7 @@ private fun RobotHeroSection(isDark: Boolean) {
         label = "ambient_alpha"
     )
 
+    // Animated floor shadow alpha.
     val shadowAlpha by infiniteTransition.animateFloat(
         initialValue = if (isDark) 0.24f else 0.18f,
         targetValue = if (isDark) 0.34f else 0.24f,
@@ -204,6 +239,7 @@ private fun RobotHeroSection(isDark: Boolean) {
             .height(280.dp),
         contentAlignment = Alignment.TopCenter
     ) {
+        // Decorative light glow and shadow under the robot.
         Canvas(modifier = Modifier.fillMaxSize()) {
             val ambientWidth = size.width * 0.42f
             val ambientHeight = size.height * 0.08f
@@ -264,6 +300,7 @@ private fun RobotHeroSection(isDark: Boolean) {
             )
         }
 
+        // Main mascot composable.
         RoboBuddy(
             state = RoboBuddyState.WAVE,
             modifier = Modifier
@@ -279,10 +316,19 @@ private fun RobotHeroSection(isDark: Boolean) {
     }
 }
 
+/**
+ * Animated decorative background for the splash screen.
+ *
+ * Draws:
+ * - soft glow circles
+ * - dashed arc
+ * - animated sparkles
+ */
 @Composable
 private fun SplashBackground(isDark: Boolean) {
     val infiniteTransition = rememberInfiniteTransition(label = "background_animation")
 
+    // Pulse scale for glow effects.
     val glowPulse by infiniteTransition.animateFloat(
         initialValue = 0.92f,
         targetValue = 1.08f,
@@ -293,6 +339,7 @@ private fun SplashBackground(isDark: Boolean) {
         label = "glow_pulse"
     )
 
+    // Phase value used to alternate sparkle brightness.
     val sparklePhase by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = 1f,
@@ -324,24 +371,28 @@ private fun SplashBackground(isDark: Boolean) {
     }
 
     Canvas(modifier = Modifier.fillMaxSize()) {
+        // Top-left glow.
         drawCircle(
             brush = bigCircleColor,
             radius = size.minDimension * 0.13f * glowPulse,
             center = Offset(size.width * 0.10f, size.height * 0.12f)
         )
 
+        // Top-right glow.
         drawCircle(
             brush = smallCircleColor,
             radius = size.minDimension * 0.07f * glowPulse,
             center = Offset(size.width * 0.86f, size.height * 0.15f)
         )
 
+        // Lower-left glow.
         drawCircle(
             brush = smallCircleColor,
             radius = size.minDimension * 0.055f * glowPulse,
             center = Offset(size.width * 0.10f, size.height * 0.67f)
         )
 
+        // Center ambient glow.
         drawCircle(
             brush = Brush.radialGradient(
                 colors = if (isDark) {
@@ -360,6 +411,7 @@ private fun SplashBackground(isDark: Boolean) {
             center = Offset(size.width * 0.5f, size.height * 0.54f)
         )
 
+        // Decorative dashed arc.
         drawArc(
             color = if (isDark) Color(0xFF0A7B73).copy(alpha = 0.48f) else Color(0xFF9FDBCA),
             startAngle = 155f,
@@ -373,6 +425,9 @@ private fun SplashBackground(isDark: Boolean) {
             )
         )
 
+        /**
+         * Draws a plus-shaped sparkle using two crossing lines.
+         */
         fun sparkle(cx: Float, cy: Float, r: Float, color: Color, alpha: Float) {
             drawLine(
                 color = color.copy(alpha = alpha),
@@ -388,6 +443,7 @@ private fun SplashBackground(isDark: Boolean) {
             )
         }
 
+        // Animated sparkle decorations.
         sparkle(size.width * 0.24f, size.height * 0.26f, 10f, Color(0xFF2D67D8), 0.55f + 0.35f * sparklePhase)
         sparkle(size.width * 0.73f, size.height * 0.25f, 9f, Color(0xFF2D67D8), 0.50f + 0.30f * (1f - sparklePhase))
         sparkle(size.width * 0.84f, size.height * 0.31f, 12f, Color(0xFF2DD9A5), 0.60f + 0.30f * sparklePhase)
@@ -399,6 +455,21 @@ private fun SplashBackground(isDark: Boolean) {
     }
 }
 
+/**
+ * Main start button displayed on the splash screen.
+ *
+ * Includes:
+ * - gradient fill
+ * - glow effect
+ * - moving shine animation
+ * - button shadow layer
+ *
+ * @param isDark whether dark theme is enabled
+ * @param topColor top gradient color
+ * @param bottomColor bottom gradient color
+ * @param shadowColor shadow/background color behind the button
+ * @param onClick callback for button tap
+ */
 @Composable
 private fun StartLearningButton(
     isDark: Boolean,
@@ -411,6 +482,7 @@ private fun StartLearningButton(
 
     val infiniteTransition = rememberInfiniteTransition(label = "button_animation")
 
+    // Horizontal moving shine across the button.
     val shineOffset by infiniteTransition.animateFloat(
         initialValue = -250f,
         targetValue = 900f,
@@ -421,6 +493,7 @@ private fun StartLearningButton(
         label = "button_shine"
     )
 
+    // Animated glow intensity.
     val glowAlpha by infiniteTransition.animateFloat(
         initialValue = if (isDark) 0.18f else 0.10f,
         targetValue = if (isDark) 0.30f else 0.18f,
@@ -431,6 +504,7 @@ private fun StartLearningButton(
         label = "button_glow"
     )
 
+    // Scale animation value for future button press effects.
     val scale by animateFloatAsState(
         targetValue = 1f,
         animationSpec = tween(180),
@@ -446,6 +520,7 @@ private fun StartLearningButton(
                 scaleY = scale
             }
     ) {
+        // Bottom shadow layer.
         Box(
             modifier = Modifier
                 .matchParentSize()
@@ -455,6 +530,7 @@ private fun StartLearningButton(
                 .alpha(if (isDark) 0.90f else 0.75f)
         )
 
+        // Main clickable surface.
         Surface(
             shape = RoundedCornerShape(28.dp),
             color = Color.Transparent,
@@ -473,11 +549,13 @@ private fun StartLearningButton(
                     onClick = onClick
                 )
                 .drawBehind {
+                    // Base vertical gradient.
                     drawRoundRect(
                         brush = Brush.verticalGradient(listOf(topColor, bottomColor)),
                         cornerRadius = CornerRadius(28.dp.toPx(), 28.dp.toPx())
                     )
 
+                    // Soft highlight overlay.
                     drawRoundRect(
                         brush = Brush.verticalGradient(
                             listOf(
@@ -488,6 +566,7 @@ private fun StartLearningButton(
                         cornerRadius = CornerRadius(28.dp.toPx(), 28.dp.toPx())
                     )
 
+                    // Glow effect near top area.
                     drawRoundRect(
                         brush = Brush.radialGradient(
                             colors = listOf(
@@ -500,6 +579,7 @@ private fun StartLearningButton(
                         cornerRadius = CornerRadius(28.dp.toPx(), 28.dp.toPx())
                     )
 
+                    // Moving shine stripe.
                     drawRoundRect(
                         brush = Brush.linearGradient(
                             colors = listOf(
@@ -553,6 +633,9 @@ private fun StartLearningButton(
     }
 }
 
+/**
+ * Light theme preview of the splash screen.
+ */
 @Preview(
     name = "Splash Light",
     showBackground = true,
@@ -565,6 +648,9 @@ private fun SplashLightPreview() {
     }
 }
 
+/**
+ * Dark theme preview of the splash screen.
+ */
 @Preview(
     name = "Splash Dark",
     showBackground = true,
