@@ -1,82 +1,52 @@
 package com.dma.studentapplication.ui.screens
 
 import android.content.res.Configuration
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.windowInsetsBottomHeight
-import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.shape.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.MenuBook
-import androidx.compose.material.icons.filled.ArrowForwardIos
-import androidx.compose.material.icons.filled.Calculate
-import androidx.compose.material.icons.filled.Code
-import androidx.compose.material.icons.filled.Groups
-import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.LocalMovies
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Public
-import androidx.compose.material.icons.filled.QueryStats
-import androidx.compose.material.icons.filled.Science
-import androidx.compose.material.icons.filled.School
-import androidx.compose.material.icons.filled.SportsBasketball
-import androidx.compose.material.icons.outlined.AutoStories
-import androidx.compose.material.icons.outlined.CheckCircle
-import androidx.compose.material.icons.outlined.GridView
-import androidx.compose.material.icons.outlined.WavingHand
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.dma.studentapplication.ui.components.RoboBuddy
+import com.dma.studentapplication.ui.model.HomeTopicUi
 import com.dma.studentapplication.ui.theme.StudentApplicationTheme
 
-data class HomeTopicUi(
-    val id: String,
-    val title: String,
-    val icon: ImageVector,
-    val iconTint: Color,
-    val lightBg: Color,
-    val darkBg: Color,
-    val questionsLeft: Int
-)
+/**
+ * Returns `true` when the device is currently in landscape orientation.
+ * Recomposes automatically whenever the user rotates the device.
+ */
+private val isLandscape: Boolean
+    @Composable get() = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
+/**
+ * Root screen composable for the Home destination.
+ *
+ * Responsibilities:
+ * - Derives all theme colors from the current dark/light mode.
+ * - Builds the static topic list (remembered to survive recomposition).
+ * - Switches between portrait layout (Box + BottomBar) and
+ *   landscape layout (Row + NavigationRail) based on device orientation.
+ *
+ * @param userName        Display name shown in the greeting header.
+ * @param onDailyQuizClick Called when the user taps the Daily Quiz card.
+ * @param onTopicClick    Called with the topic id when any topic is tapped.
+ * @param onProfileClick  Called when the user taps the avatar/profile button.
+ */
 @Composable
 fun HomeScreen(
     userName: String = "Astrea",
@@ -84,198 +54,306 @@ fun HomeScreen(
     onTopicClick: (String) -> Unit = {},
     onProfileClick: () -> Unit = {}
 ) {
-    val isDark = isSystemInDarkTheme()
+    val isDark    = isSystemInDarkTheme()
+    val landscape = isLandscape
 
-    val screenBg = if (isDark) Color(0xFF000B1B) else Color(0xFFF3F4F6)
-    val surfaceColor = if (isDark) Color(0xFF071833) else Color(0xFFFFFFFF)
-    val cardBorder = if (isDark) Color.White.copy(alpha = 0.08f) else Color(0xFFE6ECF2)
-    val titleColor = if (isDark) Color(0xFFFFFFFF) else Color(0xFF0B1B4A)
-    val subtitleColor = if (isDark) Color(0xFFB8C4E0) else Color(0xFF5B6785)
+    /* --- Theme colors -------------------------------------------------------
+       All colors are derived here once so every child composable receives a
+       concrete Color value instead of recalculating on every recomposition. */
+    val screenBg       = if (isDark) Color(0xFF000B1B) else Color(0xFFF3F4F6)
+    val surfaceColor   = if (isDark) Color(0xFF071833) else Color(0xFFFFFFFF)
+    val cardBorder     = if (isDark) Color.White.copy(alpha = 0.08f) else Color(0xFFE6ECF2)
+    val titleColor     = if (isDark) Color(0xFFFFFFFF) else Color(0xFF0B1B4A)
+    val subtitleColor  = if (isDark) Color(0xFFB8C4E0) else Color(0xFF5B6785)
     val bottomBarColor = if (isDark) Color(0xFF041225) else Color(0xFFFFFFFF)
-    val selectedNav = Color(0xFF27D17F)
-    val unselectedNav = if (isDark) Color(0xFF8FA3C8) else Color(0xFF6B7280)
+    val selectedNav    = Color(0xFF27D17F)
+    val unselectedNav  = if (isDark) Color(0xFF8FA3C8) else Color(0xFF6B7280)
 
-    val dailyQuizGradient = if (isDark) {
-        Brush.horizontalGradient(
-            listOf(Color(0xFF14838A), Color(0xFF25D39F))
-        )
-    } else {
-        Brush.horizontalGradient(
-            listOf(Color(0xFF22C55E), Color(0xFF4ADE80))
-        )
-    }
+    /* Dark mode uses teal tones; light mode uses brighter greens. */
+    val dailyQuizGradient = if (isDark)
+        Brush.horizontalGradient(listOf(Color(0xFF14838A), Color(0xFF25D39F)))
+    else
+        Brush.horizontalGradient(listOf(Color(0xFF22C55E), Color(0xFF4ADE80)))
 
+    /* Wrapped in remember so the list is only created once and survives
+       recompositions caused by rotation or theme changes. */
     val topics = remember {
         listOf(
-            HomeTopicUi(
-                id = "math",
-                title = "Math",
-                icon = Icons.Default.Calculate,
-                iconTint = Color(0xFF22C55E),
-                lightBg = Color(0xFFEAF8EE),
-                darkBg = Color(0xFF0C2540),
-                questionsLeft = 12
-            ),
-            HomeTopicUi(
-                id = "history",
-                title = "History",
-                icon = Icons.Outlined.AutoStories,
-                iconTint = Color(0xFF4B83FF),
-                lightBg = Color(0xFFEEF4FF),
-                darkBg = Color(0xFF10284A),
-                questionsLeft = 6
-            ),
-            HomeTopicUi(
-                id = "science",
-                title = "Science",
-                icon = Icons.Default.Science,
-                iconTint = Color(0xFF8B5CF6),
-                lightBg = Color(0xFFF3EDFF),
-                darkBg = Color(0xFF1A234B),
-                questionsLeft = 20
-            ),
-            HomeTopicUi(
-                id = "programming",
-                title = "Programming",
-                icon = Icons.Default.Code,
-                iconTint = Color(0xFF10CBE8),
-                lightBg = Color(0xFFEAFBFF),
-                darkBg = Color(0xFF102848),
-                questionsLeft = 8
-            ),
-            HomeTopicUi(
-                id = "movies",
-                title = "Movies",
-                icon = Icons.Default.LocalMovies,
-                iconTint = Color(0xFFF45B87),
-                lightBg = Color(0xFFFFEEF3),
-                darkBg = Color(0xFF2A1C3F),
-                questionsLeft = 5
-            ),
-            HomeTopicUi(
-                id = "sports",
-                title = "Sports",
-                icon = Icons.Default.SportsBasketball,
-                iconTint = Color(0xFFF59E0B),
-                lightBg = Color(0xFFFFF5E6),
-                darkBg = Color(0xFF3A2810),
-                questionsLeft = 9
-            ),
-            HomeTopicUi(
-                id = "geography",
-                title = "Geography",
-                icon = Icons.Default.Public,
-                iconTint = Color(0xFF14B87A),
-                lightBg = Color(0xFFEAFBF5),
-                darkBg = Color(0xFF102A2B),
-                questionsLeft = 7
-            )
+            HomeTopicUi("math",        "Math",        Icons.Default.Calculate,        Color(0xFF22C55E), Color(0xFFEAF8EE), Color(0xFF0C2540), 12),
+            HomeTopicUi("history",     "History",     Icons.Outlined.AutoStories,     Color(0xFF4B83FF), Color(0xFFEEF4FF), Color(0xFF10284A), 6),
+            HomeTopicUi("science",     "Science",     Icons.Default.Science,          Color(0xFF8B5CF6), Color(0xFFF3EDFF), Color(0xFF1A234B), 20),
+            HomeTopicUi("programming", "Programming", Icons.Default.Code,             Color(0xFF10CBE8), Color(0xFFEAFBFF), Color(0xFF102848), 8),
+            HomeTopicUi("movies",      "Movies",      Icons.Default.LocalMovies,      Color(0xFFF45B87), Color(0xFFFFEEF3), Color(0xFF2A1C3F), 5),
+            HomeTopicUi("sports",      "Sports",      Icons.Default.SportsBasketball, Color(0xFFF59E0B), Color(0xFFFFF5E6), Color(0xFF3A2810), 9),
+            HomeTopicUi("geography",   "Geography",   Icons.Default.Public,           Color(0xFF14B87A), Color(0xFFEAFBF5), Color(0xFF102A2B), 7),
         )
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(screenBg)
-            .windowInsetsPadding(WindowInsets.navigationBars)
-    ) {
-        LazyColumn(
+    /* --- Layout branch ------------------------------------------------------
+       Landscape : NavigationRail on the left + scrollable content on the right.
+       Portrait  : scrollable content fills the screen, BottomBar floats above. */
+    if (landscape) {
+        Row(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 20.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .background(screenBg)
+                // safeDrawing handles the notch/cutout on the LEFT edge in
+                // landscape mode as well as the top status bar.
+                .windowInsetsPadding(WindowInsets.safeDrawing)
         ) {
-            item { Spacer(modifier = Modifier.padding(top = 16.dp)) }
+            LandscapeNavRail(
+                containerColor  = bottomBarColor,
+                selectedColor   = selectedNav,
+                unselectedColor = unselectedNav
+            )
 
-            item {
-                HeaderSection(
-                    userName = userName,
-                    titleColor = titleColor,
-                    subtitleColor = subtitleColor,
-                    isDark = isDark,
-                    onProfileClick = onProfileClick
-                )
-            }
-
-            item {
-                SectionTitle(
-                    title = "Practice More",
-                    icon = Icons.Outlined.CheckCircle,
-                    titleColor = titleColor
-                )
-            }
-
-            item {
-                DailyQuizCard(
-                    gradient = dailyQuizGradient,
-                    onClick = onDailyQuizClick
-                )
-            }
-
-            item {
-                SectionTitle(
-                    title = "Quick Topics",
-                    icon = Icons.Outlined.GridView,
-                    titleColor = titleColor
-                )
-            }
-
-            item {
-                LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    items(topics) { topic ->
-                        QuickTopicCard(
-                            topic = topic,
-                            isDark = isDark,
-                            onClick = { onTopicClick(topic.id) }
-                        )
-                    }
-                }
-            }
-
-            item {
-                SectionTitle(
-                    title = "Continue Studying",
-                    icon = Icons.AutoMirrored.Filled.MenuBook,
-                    titleColor = titleColor
-                )
-            }
-
-            items(topics.take(3)) { topic ->
-                TopicProgressCard(
-                    topic = topic,
-                    isDark = isDark,
-                    surfaceColor = surfaceColor,
-                    borderColor = cardBorder,
-                    titleColor = titleColor,
-                    subtitleColor = subtitleColor,
-                    onClick = { onTopicClick(topic.id) }
-                )
-            }
-
-            item {
-                SummaryCard(
-                    surfaceColor = surfaceColor,
-                    borderColor = cardBorder,
-                    titleColor = titleColor,
-                    subtitleColor = subtitleColor
-                )
-            }
-
-            item {
-                Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
-                Spacer(modifier = Modifier.padding(bottom = 72.dp))
-            }
+            ContentColumn(
+                modifier          = Modifier.weight(1f),
+                userName          = userName,
+                isDark            = isDark,
+                landscape         = true,
+                surfaceColor      = surfaceColor,
+                cardBorder        = cardBorder,
+                titleColor        = titleColor,
+                subtitleColor     = subtitleColor,
+                dailyQuizGradient = dailyQuizGradient,
+                topics            = topics,
+                onDailyQuizClick  = onDailyQuizClick,
+                onTopicClick      = onTopicClick,
+                onProfileClick    = onProfileClick
+            )
         }
+    } else {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(screenBg)
+                // In portrait only the navigation bar inset is needed;
+                // the status bar is handled by the Activity window flags.
+                .windowInsetsPadding(WindowInsets.navigationBars)
+        ) {
+            ContentColumn(
+                modifier          = Modifier.fillMaxSize(),
+                userName          = userName,
+                isDark            = isDark,
+                landscape         = false,
+                surfaceColor      = surfaceColor,
+                cardBorder        = cardBorder,
+                titleColor        = titleColor,
+                subtitleColor     = subtitleColor,
+                dailyQuizGradient = dailyQuizGradient,
+                topics            = topics,
+                onDailyQuizClick  = onDailyQuizClick,
+                onTopicClick      = onTopicClick,
+                onProfileClick    = onProfileClick
+            )
 
-        BottomBar(
-            modifier = Modifier.align(Alignment.BottomCenter),
-            containerColor = bottomBarColor,
-            selectedColor = selectedNav,
-            unselectedColor = unselectedNav
-        )
+            /* BottomBar overlaid at the bottom of the Box.
+               ContentColumn's bottom contentPadding (96.dp) ensures list
+               items are never hidden behind it. */
+            BottomBar(
+                modifier        = Modifier.align(Alignment.BottomCenter),
+                containerColor  = bottomBarColor,
+                selectedColor   = selectedNav,
+                unselectedColor = unselectedNav
+            )
+        }
     }
 }
 
+/**
+ * Shared scrollable body rendered by both portrait and landscape layouts.
+ *
+ * Orientation differences handled here:
+ * - **Bottom padding** — portrait needs 96.dp to clear the BottomBar;
+ *   landscape uses 16.dp since there is no bottom bar.
+ * - **Continue Studying** — landscape renders a 2-column grid to make
+ *   better use of the extra horizontal space; portrait uses a plain list.
+ *
+ * @param modifier          Modifier forwarded from the parent layout.
+ * @param userName          Passed through to [HeaderSection].
+ * @param isDark            Whether dark mode is active.
+ * @param landscape         `true` when the device is in landscape orientation.
+ * @param surfaceColor      Card background color.
+ * @param cardBorder        Card border color.
+ * @param titleColor        Primary text color.
+ * @param subtitleColor     Secondary text color.
+ * @param dailyQuizGradient Gradient brush for the Daily Quiz card.
+ * @param topics            Full list of available topics.
+ * @param onDailyQuizClick  Called when the Daily Quiz card is tapped.
+ * @param onTopicClick      Called with the topic id when a topic card is tapped.
+ * @param onProfileClick    Called when the avatar is tapped.
+ */
+@Composable
+private fun ContentColumn(
+    modifier: Modifier,
+    userName: String,
+    isDark: Boolean,
+    landscape: Boolean,
+    surfaceColor: Color,
+    cardBorder: Color,
+    titleColor: Color,
+    subtitleColor: Color,
+    dailyQuizGradient: Brush,
+    topics: List<HomeTopicUi>,
+    onDailyQuizClick: () -> Unit,
+    onTopicClick: (String) -> Unit,
+    onProfileClick: () -> Unit
+) {
+    LazyColumn(
+        modifier            = modifier.padding(horizontal = 20.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        contentPadding      = PaddingValues(
+            top    = 16.dp,
+            bottom = if (landscape) 16.dp else 96.dp  // 96.dp clears the BottomBar
+        )
+    ) {
+        // Greeting header with user name and tappable avatar
+        item {
+            HeaderSection(
+                userName       = userName,
+                titleColor     = titleColor,
+                subtitleColor  = subtitleColor,
+                isDark         = isDark,
+                onProfileClick = onProfileClick
+            )
+        }
+
+        // Daily Quiz section
+        item { SectionTitle("Practice More",     Icons.Outlined.CheckCircle,            titleColor) }
+        item { DailyQuizCard(dailyQuizGradient,  onDailyQuizClick) }
+
+        // Quick Topics horizontal scroll
+        item { SectionTitle("Quick Topics",      Icons.Outlined.GridView,               titleColor) }
+        item {
+            /* LazyRow so only the visible topic chips are composed. */
+            LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                items(topics) { topic ->
+                    QuickTopicCard(
+                        topic   = topic,
+                        isDark  = isDark,
+                        onClick = { onTopicClick(topic.id) }
+                    )
+                }
+            }
+        }
+
+        // Continue Studying section
+        item { SectionTitle("Continue Studying", Icons.AutoMirrored.Filled.MenuBook,    titleColor) }
+
+        if (landscape) {
+            /* Landscape: chunk topics into pairs and render a 2-column grid.
+               An invisible Spacer fills the second slot if the count is odd. */
+            item {
+                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    topics.take(4).chunked(2).forEach { row ->
+                        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                            row.forEach { topic ->
+                                TopicProgressCard(
+                                    modifier      = Modifier.weight(1f),
+                                    topic         = topic,
+                                    isDark        = isDark,
+                                    surfaceColor  = surfaceColor,
+                                    borderColor   = cardBorder,
+                                    titleColor    = titleColor,
+                                    subtitleColor = subtitleColor,
+                                    onClick       = { onTopicClick(topic.id) }
+                                )
+                            }
+                            if (row.size == 1) Spacer(Modifier.weight(1f))
+                        }
+                    }
+                }
+            }
+        } else {
+            // Portrait: simple vertical list limited to 3 topics
+            items(topics.take(3)) { topic ->
+                TopicProgressCard(
+                    topic         = topic,
+                    isDark        = isDark,
+                    surfaceColor  = surfaceColor,
+                    borderColor   = cardBorder,
+                    titleColor    = titleColor,
+                    subtitleColor = subtitleColor,
+                    onClick       = { onTopicClick(topic.id) }
+                )
+            }
+        }
+
+        // Summary stats card at the bottom of the list
+        item {
+            SummaryCard(
+                surfaceColor  = surfaceColor,
+                borderColor   = cardBorder,
+                titleColor    = titleColor,
+                subtitleColor = subtitleColor
+            )
+        }
+    }
+}
+
+/**
+ * Vertical navigation rail displayed on the left side in landscape mode.
+ *
+ * Replaces [BottomBar] when screen height is limited so all vertical space
+ * is available for scrollable content.
+ *
+ * @param containerColor  Background color of the rail.
+ * @param selectedColor   Icon and label color for the selected destination.
+ * @param unselectedColor Icon and label color for unselected destinations.
+ */
+@Composable
+private fun LandscapeNavRail(
+    containerColor: Color,
+    selectedColor: Color,
+    unselectedColor: Color
+) {
+    /* Remembered so the list object is not recreated on recomposition. */
+    val navItems = remember {
+        listOf(
+            Icons.Default.Home      to "Home",
+            Icons.Outlined.GridView to "Topics",
+            Icons.Default.History   to "History",
+            Icons.Default.Person    to "Profile",
+        )
+    }
+
+    NavigationRail(
+        modifier       = Modifier.fillMaxHeight(),
+        containerColor = containerColor,
+    ) {
+        Spacer(Modifier.height(8.dp)) // breathing room below the status bar
+
+        navItems.forEachIndexed { index, (icon, label) ->
+            NavigationRailItem(
+                selected = index == 0, // Home is always active on this screen
+                onClick  = {},
+                icon     = { Icon(icon, contentDescription = label) },
+                label    = { Text(label, fontSize = 10.sp) },
+                colors   = NavigationRailItemDefaults.colors(
+                    selectedIconColor   = selectedColor,
+                    selectedTextColor   = selectedColor,
+                    unselectedIconColor = unselectedColor,
+                    unselectedTextColor = unselectedColor,
+                    indicatorColor      = Color.Transparent // no pill indicator
+                )
+            )
+        }
+    }
+}
+
+/**
+ * Greeting header displayed at the top of the content list.
+ *
+ * Shows a waving-hand icon, the user's name, a subtitle, and a tappable
+ * [RoboBuddy] avatar that navigates to the profile screen.
+ *
+ * @param userName       Name displayed in the greeting text.
+ * @param titleColor     Color for the primary greeting text.
+ * @param subtitleColor  Color for the secondary subtitle text.
+ * @param isDark         Whether dark mode is active (affects icon backgrounds).
+ * @param onProfileClick Called when the avatar is tapped.
+ */
 @Composable
 private fun HeaderSection(
     userName: String,
@@ -285,13 +363,11 @@ private fun HeaderSection(
     onProfileClick: () -> Unit
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier          = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(
-            modifier = Modifier.weight(1f),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+        // Left: waving hand icon + greeting text
+        Row(modifier = Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
             Box(
                 modifier = Modifier
                     .size(56.dp)
@@ -300,29 +376,20 @@ private fun HeaderSection(
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    imageVector = Icons.Outlined.WavingHand,
+                    Icons.Outlined.WavingHand,
                     contentDescription = "Greeting",
-                    tint = Color(0xFF27D17F),
+                    tint     = Color(0xFF27D17F),
                     modifier = Modifier.size(28.dp)
                 )
             }
-
             Column(modifier = Modifier.padding(start = 14.dp)) {
-                Text(
-                    text = "Hi $userName,",
-                    color = titleColor,
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.ExtraBold
-                )
-                Text(
-                    text = "Great to see you again!",
-                    color = subtitleColor,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Medium
-                )
+                Text("Hi $userName,",           color = titleColor,    fontSize = 22.sp, fontWeight = FontWeight.ExtraBold)
+                Text("Great to see you again!", color = subtitleColor, fontSize = 14.sp, fontWeight = FontWeight.Medium)
             }
         }
 
+        /* Right: avatar — intentionally larger than its container (100.dp inside
+           a 56.dp Box) so the character fills the circle without extra padding. */
         Box(
             modifier = Modifier
                 .size(56.dp)
@@ -336,40 +403,45 @@ private fun HeaderSection(
     }
 }
 
+/**
+ * Small section header with a tinted icon and a bold label.
+ *
+ * Used above each content group (e.g. "Quick Topics", "Continue Studying").
+ *
+ * @param title      Text displayed next to the icon.
+ * @param icon       Icon shown to the left of the title.
+ * @param titleColor Color applied to both the icon tint and the text.
+ */
 @Composable
-private fun SectionTitle(
-    title: String,
-    icon: ImageVector,
-    titleColor: Color
-) {
+private fun SectionTitle(title: String, icon: ImageVector, titleColor: Color) {
     Row(verticalAlignment = Alignment.CenterVertically) {
-        Icon(
-            imageVector = icon,
-            contentDescription = title,
-            tint = Color(0xFF27D17F),
-            modifier = Modifier.size(20.dp)
-        )
+        Icon(icon, contentDescription = title, tint = Color(0xFF27D17F), modifier = Modifier.size(20.dp))
         Text(
-            text = title,
-            color = titleColor,
-            fontSize = 17.sp,
+            text       = title,
+            color      = titleColor,
+            fontSize   = 17.sp,
             fontWeight = FontWeight.ExtraBold,
-            modifier = Modifier.padding(start = 10.dp)
+            modifier   = Modifier.padding(start = 10.dp)
         )
     }
 }
 
+/**
+ * Full-width gradient card promoting the daily quiz.
+ *
+ * Displays a countdown badge, quiz title, question count, a participant
+ * icon and a forward arrow to indicate the card is tappable.
+ *
+ * @param gradient Horizontal gradient brush applied to the card background.
+ * @param onClick  Called when the card is tapped.
+ */
 @Composable
-private fun DailyQuizCard(
-    gradient: Brush,
-    onClick: () -> Unit
-) {
+private fun DailyQuizCard(gradient: Brush, onClick: () -> Unit) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() },
-        shape = RoundedCornerShape(28.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+        modifier  = Modifier.fillMaxWidth().clickable { onClick() },
+        shape     = RoundedCornerShape(28.dp),
+        /* Transparent so the gradient Box inside shows through the Card. */
+        colors    = CardDefaults.cardColors(containerColor = Color.Transparent),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Box(
@@ -377,10 +449,9 @@ private fun DailyQuizCard(
                 .background(gradient)
                 .padding(horizontal = 18.dp, vertical = 20.dp)
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+            Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+
+                // Countdown badge showing time until the quiz resets
                 Box(
                     modifier = Modifier
                         .size(52.dp)
@@ -388,92 +459,80 @@ private fun DailyQuizCard(
                         .background(Color.White.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        text = "3h",
-                        color = Color.White,
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold
-                    )
+                    Text("3h", color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.Bold)
                 }
 
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(start = 10.dp)
-                ) {
-                    Text(
-                        text = "Daily Quiz",
-                        color = Color.White,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.ExtraBold
-                    )
-                    Text(
-                        text = "20 mixed questions",
-                        color = Color.White.copy(alpha = 0.95f),
-                        fontSize = 14.sp,
-                        maxLines = 1
-                    )
+                // Quiz title and question count
+                Column(modifier = Modifier.weight(1f).padding(start = 10.dp)) {
+                    Text("Daily Quiz",         color = Color.White,                   fontSize = 18.sp, fontWeight = FontWeight.ExtraBold)
+                    Text("20 mixed questions", color = Color.White.copy(alpha = 0.95f), fontSize = 14.sp, maxLines = 1)
                 }
 
+                // Participant count icon stacked above the navigate arrow
                 Column(horizontalAlignment = Alignment.End) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            imageVector = Icons.Default.Groups,
-                            contentDescription = null,
-                            tint = Color.White.copy(alpha = 0.95f),
-                            modifier = Modifier.size(16.dp)
-                        )
+                        Icon(Icons.Default.Groups, null, tint = Color.White.copy(alpha = 0.95f), modifier = Modifier.size(16.dp))
                     }
-
                     Spacer(modifier = Modifier.padding(top = 8.dp))
-
-                    Icon(
-                        imageVector = Icons.Default.ArrowForwardIos,
-                        contentDescription = "Open Daily Quiz",
-                        tint = Color.White,
-                        modifier = Modifier.size(18.dp)
-                    )
+                    Icon(Icons.Default.ArrowForwardIos, "Open Daily Quiz", tint = Color.White, modifier = Modifier.size(18.dp))
                 }
             }
         }
     }
 }
 
+/**
+ * Compact card used inside the horizontal Quick Topics [LazyRow].
+ *
+ * Background color adapts to dark/light mode using the per-topic colors
+ * defined in [HomeTopicUi].
+ *
+ * @param topic   Data model containing the icon, title and theme colors.
+ * @param isDark  Whether dark mode is active.
+ * @param onClick Called when the card is tapped.
+ */
 @Composable
-private fun QuickTopicCard(
-    topic: HomeTopicUi,
-    isDark: Boolean,
-    onClick: () -> Unit
-) {
+private fun QuickTopicCard(topic: HomeTopicUi, isDark: Boolean, onClick: () -> Unit) {
     Card(
-        modifier = Modifier.clickable { onClick() },
-        shape = RoundedCornerShape(22.dp),
-        colors = CardDefaults.cardColors(
+        modifier  = Modifier.clickable { onClick() },
+        shape     = RoundedCornerShape(22.dp),
+        colors    = CardDefaults.cardColors(
             containerColor = if (isDark) topic.darkBg else topic.lightBg
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(
-            modifier = Modifier.padding(horizontal = 18.dp, vertical = 16.dp),
+            modifier            = Modifier.padding(horizontal = 18.dp, vertical = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Icon(
-                imageVector = topic.icon,
-                contentDescription = topic.title,
-                tint = topic.iconTint,
-                modifier = Modifier.size(30.dp)
-            )
+            Icon(topic.icon, topic.title, tint = topic.iconTint, modifier = Modifier.size(30.dp))
             Text(
-                text = topic.title,
-                color = if (isDark) Color.White else Color(0xFF0F172A),
-                fontSize = 13.sp,
+                text       = topic.title,
+                color      = if (isDark) Color.White else Color(0xFF0F172A),
+                fontSize   = 13.sp,
                 fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.padding(top = 10.dp)
+                modifier   = Modifier.padding(top = 10.dp)
             )
         }
     }
 }
 
+/**
+ * Card showing a topic's icon, name and remaining question count.
+ *
+ * Used in both portrait (full-width list) and landscape (2-column grid).
+ * The optional [modifier] parameter lets the landscape grid pass
+ * `Modifier.weight(1f)` so both cards in a row share equal width.
+ *
+ * @param topic         Data model for the topic.
+ * @param isDark        Whether dark mode is active.
+ * @param surfaceColor  Card background color.
+ * @param borderColor   Card border color.
+ * @param titleColor    Color for the topic name text.
+ * @param subtitleColor Color for the questions-left text.
+ * @param onClick       Called when the card is tapped.
+ * @param modifier      Optional modifier; defaults to no extra constraints.
+ */
 @Composable
 private fun TopicProgressCard(
     topic: HomeTopicUi,
@@ -482,23 +541,21 @@ private fun TopicProgressCard(
     borderColor: Color,
     titleColor: Color,
     subtitleColor: Color,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() },
-        shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = surfaceColor),
-        border = BorderStroke(1.dp, borderColor),
+        modifier  = modifier.fillMaxWidth().clickable { onClick() },
+        shape     = RoundedCornerShape(24.dp),
+        colors    = CardDefaults.cardColors(containerColor = surfaceColor),
+        border    = BorderStroke(1.dp, borderColor),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 16.dp),
+            modifier          = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            // Topic icon inside a rounded-square badge
             Box(
                 modifier = Modifier
                     .size(58.dp)
@@ -506,105 +563,79 @@ private fun TopicProgressCard(
                     .background(if (isDark) topic.darkBg else topic.lightBg),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    imageVector = topic.icon,
-                    contentDescription = topic.title,
-                    tint = topic.iconTint,
-                    modifier = Modifier.size(30.dp)
-                )
+                Icon(topic.icon, topic.title, tint = topic.iconTint, modifier = Modifier.size(30.dp))
             }
 
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(start = 14.dp)
-            ) {
+            // Topic name and questions remaining
+            Column(modifier = Modifier.weight(1f).padding(start = 14.dp)) {
                 Text(
-                    text = topic.title,
-                    color = titleColor,
-                    fontSize = 18.sp,
+                    text       = topic.title,
+                    color      = titleColor,
+                    fontSize   = 18.sp,
                     fontWeight = FontWeight.ExtraBold,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    maxLines   = 1,
+                    overflow   = TextOverflow.Ellipsis  // graceful truncation for long titles
                 )
-                Text(
-                    text = "${topic.questionsLeft} questions left",
-                    color = subtitleColor,
-                    fontSize = 14.sp
-                )
+                Text("${topic.questionsLeft} questions left", color = subtitleColor, fontSize = 14.sp)
             }
 
+            // Forward arrow indicating the card is tappable
             Icon(
-                imageVector = Icons.Default.ArrowForwardIos,
+                Icons.Default.ArrowForwardIos,
                 contentDescription = "Open ${topic.title}",
-                tint = subtitleColor,
+                tint     = subtitleColor,
                 modifier = Modifier.size(18.dp)
             )
         }
     }
 }
 
+/**
+ * Card displaying three quick stats separated by thin vertical dividers.
+ *
+ * Stats shown: quizzes completed, average accuracy, questions per quiz.
+ * Positioned at the bottom of the scrollable content list.
+ *
+ * @param surfaceColor  Card background color.
+ * @param borderColor   Card border and divider color.
+ * @param titleColor    Color for the stat value text.
+ * @param subtitleColor Color for the stat label text.
+ */
 @Composable
-private fun SummaryCard(
-    surfaceColor: Color,
-    borderColor: Color,
-    titleColor: Color,
-    subtitleColor: Color
-) {
+private fun SummaryCard(surfaceColor: Color, borderColor: Color, titleColor: Color, subtitleColor: Color) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(22.dp),
-        colors = CardDefaults.cardColors(containerColor = surfaceColor),
-        border = BorderStroke(1.dp, borderColor),
+        modifier  = Modifier.fillMaxWidth(),
+        shape     = RoundedCornerShape(22.dp),
+        colors    = CardDefaults.cardColors(containerColor = surfaceColor),
+        border    = BorderStroke(1.dp, borderColor),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 10.dp, vertical = 18.dp),
-            verticalAlignment = Alignment.CenterVertically,
+            modifier              = Modifier.fillMaxWidth().padding(horizontal = 10.dp, vertical = 18.dp),
+            verticalAlignment     = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            SummaryItem(
-                icon = Icons.Outlined.CheckCircle,
-                value = "3",
-                label = "Quizzes\nCompleted",
-                titleColor = titleColor,
-                subtitleColor = subtitleColor,
-                modifier = Modifier.weight(1f)
-            )
-
-            Divider(
-                modifier = Modifier.size(width = 1.dp, height = 48.dp),
-                color = borderColor
-            )
-
-            SummaryItem(
-                icon = Icons.Default.QueryStats,
-                value = "80%",
-                label = "Average\nAccuracy",
-                titleColor = titleColor,
-                subtitleColor = subtitleColor,
-                modifier = Modifier.weight(1f)
-            )
-
-            Divider(
-                modifier = Modifier.size(width = 1.dp, height = 48.dp),
-                color = borderColor
-            )
-
-            SummaryItem(
-                icon = Icons.Default.School,
-                value = "10",
-                label = "Questions\nPer Quiz",
-                titleColor = titleColor,
-                subtitleColor = subtitleColor,
-                modifier = Modifier.weight(1f)
-            )
+            SummaryItem(Icons.Outlined.CheckCircle, "3",   "Quizzes\nCompleted",  titleColor, subtitleColor, Modifier.weight(1f))
+            Divider(modifier = Modifier.size(width = 1.dp, height = 48.dp), color = borderColor)
+            SummaryItem(Icons.Default.QueryStats,   "80%", "Average\nAccuracy",   titleColor, subtitleColor, Modifier.weight(1f))
+            Divider(modifier = Modifier.size(width = 1.dp, height = 48.dp), color = borderColor)
+            SummaryItem(Icons.Default.School,       "10",  "Questions\nPer Quiz", titleColor, subtitleColor, Modifier.weight(1f))
         }
     }
 }
 
+/**
+ * Single stat cell used inside [SummaryCard].
+ *
+ * Stacks an icon, a bold numeric value and a two-line label vertically.
+ *
+ * @param icon          Icon shown above the value.
+ * @param value         Bold numeric string (e.g. "80%").
+ * @param label         Two-line description below the value.
+ * @param titleColor    Color for [value].
+ * @param subtitleColor Color for [label].
+ * @param modifier      Forwarded from the parent; typically `Modifier.weight(1f)`.
+ */
 @Composable
 private fun SummaryItem(
     icon: ImageVector,
@@ -614,32 +645,25 @@ private fun SummaryItem(
     subtitleColor: Color,
     modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            tint = Color(0xFF27D17F),
-            modifier = Modifier.size(22.dp)
-        )
-        Text(
-            text = value,
-            color = titleColor,
-            fontSize = 17.sp,
-            fontWeight = FontWeight.ExtraBold,
-            modifier = Modifier.padding(top = 4.dp)
-        )
-        Text(
-            text = label,
-            color = subtitleColor,
-            fontSize = 12.sp,
-            lineHeight = 16.sp
-        )
+    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+        Icon(icon, contentDescription = null, tint = Color(0xFF27D17F), modifier = Modifier.size(22.dp))
+        Text(value, color = titleColor,    fontSize = 17.sp, fontWeight = FontWeight.ExtraBold, modifier = Modifier.padding(top = 4.dp))
+        Text(label, color = subtitleColor, fontSize = 12.sp, lineHeight = 16.sp)
     }
 }
 
+/**
+ * Material 3 bottom navigation bar shown in portrait mode only.
+ *
+ * In landscape mode this is replaced by [LandscapeNavRail]. The nav items
+ * are defined in the same order as the rail so destinations stay consistent
+ * across orientations. The first item (Home) is always marked selected.
+ *
+ * @param modifier        Modifier forwarded from the parent (used to align to bottom).
+ * @param containerColor  Background color of the bar.
+ * @param selectedColor   Icon and label color for the selected destination.
+ * @param unselectedColor Icon and label color for unselected destinations.
+ */
 @Composable
 private fun BottomBar(
     modifier: Modifier = Modifier,
@@ -647,97 +671,58 @@ private fun BottomBar(
     selectedColor: Color,
     unselectedColor: Color
 ) {
+    /* Remembered so the list object is not recreated on recomposition. */
+    val navItems = remember {
+        listOf(
+            Icons.Default.Home      to "Home",
+            Icons.Outlined.GridView to "Topics",
+            Icons.Default.History   to "History",
+            Icons.Default.Person    to "Profile",
+        )
+    }
+
     NavigationBar(
-        modifier = modifier.fillMaxWidth(),
+        modifier       = modifier.fillMaxWidth(),
         containerColor = containerColor,
-        tonalElevation = 0.dp
+        tonalElevation = 0.dp  // flat — no elevation tint overlay
     ) {
-        NavigationBarItem(
-            selected = true,
-            onClick = {},
-            icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
-            label = { Text("Home") },
-            colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = selectedColor,
-                selectedTextColor = selectedColor,
-                unselectedIconColor = unselectedColor,
-                unselectedTextColor = unselectedColor,
-                indicatorColor = Color.Transparent
+        navItems.forEachIndexed { index, (icon, label) ->
+            NavigationBarItem(
+                selected = index == 0, // Home is always active on this screen
+                onClick  = {},
+                icon     = { Icon(icon, contentDescription = label) },
+                label    = { Text(label) },
+                colors   = NavigationBarItemDefaults.colors(
+                    selectedIconColor   = selectedColor,
+                    selectedTextColor   = selectedColor,
+                    unselectedIconColor = unselectedColor,
+                    unselectedTextColor = unselectedColor,
+                    indicatorColor      = Color.Transparent // no pill background
+                )
             )
-        )
-
-        NavigationBarItem(
-            selected = false,
-            onClick = {},
-            icon = { Icon(Icons.Outlined.GridView, contentDescription = "Topics") },
-            label = { Text("Topics") },
-            colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = selectedColor,
-                selectedTextColor = selectedColor,
-                unselectedIconColor = unselectedColor,
-                unselectedTextColor = unselectedColor,
-                indicatorColor = Color.Transparent
-            )
-        )
-
-        NavigationBarItem(
-            selected = false,
-            onClick = {},
-            icon = { Icon(Icons.Default.History, contentDescription = "History") },
-            label = { Text("History") },
-            colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = selectedColor,
-                selectedTextColor = selectedColor,
-                unselectedIconColor = unselectedColor,
-                unselectedTextColor = unselectedColor,
-                indicatorColor = Color.Transparent
-            )
-        )
-
-        NavigationBarItem(
-            selected = false,
-            onClick = {},
-            icon = { Icon(Icons.Default.Person, contentDescription = "Profile") },
-            label = { Text("Profile") },
-            colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = selectedColor,
-                selectedTextColor = selectedColor,
-                unselectedIconColor = unselectedColor,
-                unselectedTextColor = unselectedColor,
-                indicatorColor = Color.Transparent
-            )
-        )
-    }
-}
-
-@Preview(
-    showBackground = true,
-    backgroundColor = 0xFFF3F4F6,
-    uiMode = Configuration.UI_MODE_NIGHT_NO,
-    widthDp = 390,
-    heightDp = 844
-)
-@Composable
-private fun HomeScreenLightPreview() {
-    StudentApplicationTheme {
-        Surface {
-            HomeScreen()
         }
     }
 }
 
-@Preview(
-    showBackground = true,
-    backgroundColor = 0xFF000B1B,
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-    widthDp = 390,
-    heightDp = 844
-)
-@Composable
-private fun HomeScreenDarkPreview() {
-    StudentApplicationTheme {
-        Surface {
-            HomeScreen()
-        }
-    }
-}
+/*
+ * Previews
+ *
+ * Four previews cover all combinations of orientation × theme so the design
+ * can be verified in Android Studio without running on a device.
+ */
+
+/** Portrait light preview. */
+@Preview(showBackground = true, backgroundColor = 0xFFF3F4F6, uiMode = Configuration.UI_MODE_NIGHT_NO,  widthDp = 390, heightDp = 844)
+@Composable private fun HomeScreenLightPreview() { StudentApplicationTheme { Surface { HomeScreen() } } }
+
+/** Portrait dark preview. */
+@Preview(showBackground = true, backgroundColor = 0xFF000B1B, uiMode = Configuration.UI_MODE_NIGHT_YES, widthDp = 390, heightDp = 844)
+@Composable private fun HomeScreenDarkPreview()  { StudentApplicationTheme { Surface { HomeScreen() } } }
+
+/** Landscape light preview. */
+@Preview(showBackground = true, backgroundColor = 0xFFF3F4F6, uiMode = Configuration.UI_MODE_NIGHT_NO,  widthDp = 844, heightDp = 390)
+@Composable private fun HomeScreenLandscapeLightPreview() { StudentApplicationTheme { Surface { HomeScreen() } } }
+
+/** Landscape dark preview. */
+@Preview(showBackground = true, backgroundColor = 0xFF000B1B, uiMode = Configuration.UI_MODE_NIGHT_YES, widthDp = 844, heightDp = 390)
+@Composable private fun HomeScreenLandscapeDarkPreview()  { StudentApplicationTheme { Surface { HomeScreen() } } }
