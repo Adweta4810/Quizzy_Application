@@ -234,7 +234,7 @@ fun ReviewScreen(
 }
 
 @Composable
-private fun ReviewQuestionCard(
+fun ReviewQuestionCard(
     questionNumber: Int,
     item: ReviewQuestionItem,
     isDark: Boolean,
