@@ -13,21 +13,13 @@ object JsonLoader {
 
     private val json = Json { ignoreUnknownKeys = true }
 
-    /** Maps every topic id → its asset filename. */
-    private val topicFileMap = mapOf(
-        "math"            to "math.json",
-        "history"         to "history.json",
-        "science"         to "science.json",
-        "programming"     to "programming.json",
-        "movies"          to "movies.json",
-        "sports"          to "sports.json",
-        "geography"       to "geography.json",
-        "networking"      to "networking.json",
-        "technology"      to "technology.json",
-        "current_affairs" to "current_affairs.json"
-    )
-
-    /** Loads all questions from a given asset file. */
+    /**
+     * Reads raw JSON from assets and returns all [Question] objects.
+     *
+     * Handles two formats:
+     * - Bare array  : math.json            → `[ {...}, ... ]`
+     * - Wrapped obj : all others           → `{ "questions": [ {...}, ... ] }`
+     */
     fun loadQuestions(context: Context, fileName: String): List<Question> {
         return try {
             val raw = context.assets.open(fileName).bufferedReader().use { it.readText() }
@@ -48,15 +40,21 @@ object JsonLoader {
     }
 
     /**
-     * Returns exactly 10 shuffled [QuizQuestionUi] ready for the quiz.
-     * Both the question pool and each question's options are shuffled
-     * so answers are never in the same position.
+     * Returns exactly [Constants.QUESTIONS_PER_QUIZ] shuffled [QuizQuestionUi]
+     * ready for the quiz.
+     *
+     * - Topic filename is resolved from [Constants.quizTopics] so there is
+     *   a single source of truth for topic → file mapping.
+     * - Both the question pool and each question's options are shuffled so
+     *   answers are never in the same position every time.
      */
     fun getPreparedQuestions(context: Context, topicId: String): List<QuizQuestionUi> {
-        val fileName = topicFileMap[topicId] ?: return emptyList()
+        val fileName = Constants.quizTopics
+            .find { it.id == topicId }?.fileName ?: return emptyList()
+
         return loadQuestions(context, fileName)
             .shuffled()
-            .take(10)
+            .take(Constants.QUESTIONS_PER_QUIZ)
             .mapIndexed { index, question ->
                 val correctText  = question.options[question.correctAnswerIndex]
                 val shuffledOpts = question.options.shuffled()

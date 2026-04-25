@@ -27,6 +27,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.Calculate
+import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.EmojiEvents
@@ -41,6 +42,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
@@ -55,11 +57,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.dma.studentapplication.ui.theme.StudentApplicationTheme
-import com.dma.studentapplication.ui.model.QuizHistoryDetail
 
 // ─── Shared color tokens (from HistoryScreen / HomeScreen) ───────────────────
 
@@ -96,6 +98,23 @@ private val detailTopicMeta: Map<String, DetailTopicMeta> = mapOf(
     "Movies"      to DetailTopicMeta(Icons.Default.LocalMovies,      Color(0xFFF45B87), Color(0xFFFFEEF3), Color(0xFF2A1C3F)),
     "Sports"      to DetailTopicMeta(Icons.Default.SportsBasketball, Color(0xFFF59E0B), Color(0xFFFFF5E6), Color(0xFF3A2810)),
     "Geography"   to DetailTopicMeta(Icons.Default.Public,           Color(0xFF14B87A), Color(0xFFEAFBF5), Color(0xFF102A2B)),
+)
+
+// ─── Data model ───────────────────────────────────────────────────────────────
+
+/**
+ * Full detail data for a single completed quiz session.
+ *
+ * @param historyItem   The parent [QuizHistoryItem] tapped from [HistoryScreen].
+ * @param timeTaken     Human-readable duration string, e.g. "3:42".
+ * @param totalQuestions Total number of questions in the quiz.
+ * @param reviewItems   Per-question breakdown passed to the answer cards.
+ */
+data class QuizHistoryDetail(
+    val historyItem: QuizHistoryItem,
+    val timeTaken: String,
+    val totalQuestions: Int,
+    val reviewItems: List<ReviewQuestionItem>
 )
 
 // ─── Screen ───────────────────────────────────────────────────────────────────
