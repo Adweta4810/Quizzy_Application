@@ -43,9 +43,9 @@ import com.dma.studentapplication.ui.theme.StudentApplicationTheme
  * @param onStartClick callback triggered when the user taps the start button
  */
 @Composable
-fun SplashScreen(
-    onStartClick: () -> Unit = {}
-) {
+    fun SplashScreen(
+        onStartClick: () -> Unit = {},
+    ) {
     val isDark = isSystemInDarkTheme()
     val scrollState = rememberScrollState()
 

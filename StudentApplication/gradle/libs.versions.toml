@@ -15,6 +15,8 @@ roomVersion = "2.8.4"
 foundation = "1.10.6"
 appcompat = "1.7.1"
 pdfInk = "1.0.0-alpha17"
+navigationCompose = "2.9.8"
+playServicesBasement = "18.10.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -44,6 +46,8 @@ androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-co
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundation" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 androidx-pdf-ink = { group = "androidx.pdf", name = "pdf-ink", version.ref = "pdfInk" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+play-services-basement = { group = "com.google.android.gms", name = "play-services-basement", version.ref = "playServicesBasement" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
