@@ -1,30 +1,38 @@
 package com.dma.studentapplication.data.local.room
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
+import com.dma.studentapplication.ui.screens.*
 
 @Dao
 interface QuizResultDao {
 
+    /**
+     * Inserts a new quiz result and returns its auto-generated row id.
+     * The id is immediately passed to the Result screen so "Review Lesson"
+     * can navigate to the correct ROOM record.
+     */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(result: QuizResultEntity)
+    suspend fun insert(result: QuizResultEntity): Long
 
-    /** All results, newest first. */
-    @Query("SELECT * FROM quiz_results ORDER BY dateTaken DESC")
+    /**
+     * Returns all quiz results ordered newest-first as a [Flow] so
+     * [HistoryScreen] updates automatically when new results are saved.
+     */
+    @Query("SELECT * FROM quiz_results ORDER BY id DESC")
     fun getAllResults(): Flow<List<QuizResultEntity>>
 
-    /** Results filtered by topic, newest first. */
-    @Query("SELECT * FROM quiz_results WHERE topicId = :topicId ORDER BY dateTaken DESC")
-    fun getResultsByTopic(topicId: String): Flow<List<QuizResultEntity>>
+    /**
+     * Returns a single result by its primary key — used by [ReviewScreen]
+     * and [HistoryDetailScreen] to load per-question breakdown data.
+     */
+    @Query("SELECT * FROM quiz_results WHERE id = :id")
+    suspend fun getById(id: Long): QuizResultEntity?
 
-    /** Best score ever for a given topic. */
-    @Query("SELECT MAX(score) FROM quiz_results WHERE topicId = :topicId")
-    suspend fun bestScoreForTopic(topicId: String): Int?
-
-    /** Total XP across all attempts. */
-    @Query("SELECT COALESCE(SUM(xpEarned), 0) FROM quiz_results")
-    fun totalXp(): Flow<Int>
-
+    /** Wipes all stored results (useful for a "Clear History" feature). */
     @Query("DELETE FROM quiz_results")
-    suspend fun clearAll()
+    suspend fun deleteAll()
 }
