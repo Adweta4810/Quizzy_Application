@@ -5,14 +5,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.dma.studentapplication.data.local.room.QuizResultEntity
 import com.dma.studentapplication.repository.QuizRepository
-import com.dma.studentapplication.ui.model.QuizQuestionUi
-import com.dma.studentapplication.ui.screens.ReviewQuestionItem
+import com.dma.studentapplication.ui.screens.model.QuizQuestionUi
+import com.dma.studentapplication.ui.screens.model.ReviewQuestionItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class QuizViewModel(private val repository: QuizRepository) : ViewModel() {
 
@@ -54,17 +55,21 @@ class QuizViewModel(private val repository: QuizRepository) : ViewModel() {
         score: Int,
         totalQuestions: Int,
         timeTaken: String,
-        reviewItems: List<ReviewQuestionItem>
+        reviewItems: List<ReviewQuestionItem>,
+        onSaved: (Long) -> Unit = {}
     ) {
         viewModelScope.launch {
-            val id = repository.saveResult(
-                topic          = topic,
-                score          = score,
-                totalQuestions = totalQuestions,
-                timeTaken      = timeTaken,
-                reviewItems    = reviewItems
-            )
+            val id = withContext(Dispatchers.IO) {
+                repository.saveResult(
+                    topic          = topic,
+                    score          = score,
+                    totalQuestions = totalQuestions,
+                    timeTaken      = timeTaken,
+                    reviewItems    = reviewItems
+                )
+            }
             _savedResultId.value = id
+            onSaved(id)
         }
     }
 

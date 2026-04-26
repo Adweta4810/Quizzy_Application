@@ -2,7 +2,7 @@ package com.dma.studentapplication.utils
 
 import android.content.Context
 import com.dma.studentapplication.model.Question
-import com.dma.studentapplication.ui.model.QuizQuestionUi
+import com.dma.studentapplication.ui.screens.model.QuizQuestionUi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.decodeFromJsonElement
@@ -53,6 +53,10 @@ object JsonLoader {
             .find { it.id == topicId }?.fileName ?: return emptyList()
 
         return loadQuestions(context, fileName)
+            .filter { question ->
+                question.options.isNotEmpty() &&
+                        question.correctAnswerIndex in question.options.indices
+            }
             .shuffled()
             .take(Constants.QUESTIONS_PER_QUIZ)
             .mapIndexed { index, question ->

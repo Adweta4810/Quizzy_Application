@@ -26,7 +26,8 @@ fun ProfileScreen(
     quizzesCompleted: Int = 12,
     bestScore: String = "9/10",
     onBack: () -> Unit = {},
-    onHistoryClick: () -> Unit = {}
+    onHistoryClick: () -> Unit = {},
+    onLeaderboardClick: () -> Unit = {}
 ) {
     val isDark = isSystemInDarkTheme()
 
@@ -144,6 +145,35 @@ fun ProfileScreen(
                     text = "View Quiz History",
                     fontWeight = FontWeight.Bold
                 )
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Button(
+                onClick = onLeaderboardClick,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                shape = RoundedCornerShape(18.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = primaryGreen,
+                    contentColor = Color(0xFF000B1B)
+                )
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.EmojiEvents,
+                        contentDescription = null,
+                        modifier = Modifier.size(20.dp).padding(end = 8.dp)
+                    )
+                    Text(
+                        text = "View Leaderboard",
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(12.dp))

@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 /**
  * ROOM entity that stores one completed quiz session.
  *
- * [reviewJson] is a Gson-serialized `List<ReviewQuestionItem>` so all
+ * [reviewJson] is a kotlinx.serialization-serialized `List<ReviewQuestionItem>` so all
  * per-question answer data is stored without needing a second table.
  */
 @Entity(tableName = "quiz_results")
@@ -30,7 +30,7 @@ data class QuizResultEntity(
     val timeTaken: String,
 
     /**
-     * Gson JSON of `List<ReviewQuestionItem>` — stores every question,
+     * kotlinx.serialization JSON of `List<ReviewQuestionItem>` — stores every question,
      * the user's selected answer, the correct answer, and whether it was right.
      */
     val reviewJson: String

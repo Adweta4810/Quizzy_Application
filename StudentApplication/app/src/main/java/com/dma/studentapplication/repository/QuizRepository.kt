@@ -3,11 +3,10 @@ package com.dma.studentapplication.repository
 import android.content.Context
 import com.dma.studentapplication.data.local.room.QuizResultDao
 import com.dma.studentapplication.data.local.room.QuizResultEntity
-import com.dma.studentapplication.ui.model.QuizQuestionUi
-import com.dma.studentapplication.ui.screens.ReviewQuestionItem
+import com.dma.studentapplication.ui.screens.model.QuizQuestionUi
+import com.dma.studentapplication.ui.screens.model.ReviewQuestionItem
 import com.dma.studentapplication.utils.JsonLoader
 import kotlinx.coroutines.flow.Flow
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.text.SimpleDateFormat
 import java.util.Date

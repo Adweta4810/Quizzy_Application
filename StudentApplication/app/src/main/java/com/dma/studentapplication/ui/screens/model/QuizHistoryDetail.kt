@@ -1,7 +1,6 @@
-package com.dma.studentapplication.ui.model
+package com.dma.studentapplication.ui.screens.model
 
 import com.dma.studentapplication.ui.screens.QuizHistoryItem
-import com.dma.studentapplication.ui.screens.ReviewQuestionItem
 
 data class QuizHistoryDetail(
     val historyItem: QuizHistoryItem,

@@ -1,4 +1,4 @@
-package com.dma.studentapplication.ui.model
+package com.dma.studentapplication.ui.screens.model
 
 data class QuizQuestionUi(
     val id: Int,

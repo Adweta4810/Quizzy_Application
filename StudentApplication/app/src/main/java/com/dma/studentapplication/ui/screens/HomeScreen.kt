@@ -23,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.dma.studentapplication.ui.components.RoboBuddy
-import com.dma.studentapplication.ui.model.HomeTopicUi
+import com.dma.studentapplication.ui.screens.model.HomeTopicUi
 import com.dma.studentapplication.ui.theme.StudentApplicationTheme
 
 /**
@@ -52,6 +52,8 @@ fun HomeScreen(
     userName: String = "Astrea",
     onDailyQuizClick: () -> Unit = {},
     onTopicClick: (String) -> Unit = {},
+    onTopicsClick: () -> Unit = {},
+    onHistoryClick: () -> Unit = {},
     onProfileClick: () -> Unit = {}
 ) {
     val isDark    = isSystemInDarkTheme()
@@ -86,6 +88,9 @@ fun HomeScreen(
             HomeTopicUi("movies",      "Movies",      Icons.Default.LocalMovies,      Color(0xFFF45B87), Color(0xFFFFEEF3), Color(0xFF2A1C3F), 5),
             HomeTopicUi("sports",      "Sports",      Icons.Default.SportsBasketball, Color(0xFFF59E0B), Color(0xFFFFF5E6), Color(0xFF3A2810), 9),
             HomeTopicUi("geography",   "Geography",   Icons.Default.Public,           Color(0xFF14B87A), Color(0xFFEAFBF5), Color(0xFF102A2B), 7),
+            HomeTopicUi("technology",  "Technology",  Icons.Default.Devices,          Color(0xFF6366F1), Color(0xFFE0E7FF), Color(0xFF12123A), 10),
+            HomeTopicUi("networking",   "Networking",   Icons.Default.Router,           Color(0xFF0EA5E9), Color(0xFFE0F2FE), Color(0xFF0C1A2E), 10),
+            HomeTopicUi("current_affairs", "Current Affairs", Icons.Default.Newspaper, Color(0xFFEF4444), Color(0xFFFEE2E2), Color(0xFF2A0E0E), 10),
         )
     }
 
@@ -104,7 +109,10 @@ fun HomeScreen(
             LandscapeNavRail(
                 containerColor  = bottomBarColor,
                 selectedColor   = selectedNav,
-                unselectedColor = unselectedNav
+                unselectedColor = unselectedNav,
+                onTopicsClick   = onTopicsClick,
+                onHistoryClick  = onHistoryClick,
+                onProfileClick  = onProfileClick
             )
 
             ContentColumn(
@@ -155,7 +163,10 @@ fun HomeScreen(
                 modifier        = Modifier.align(Alignment.BottomCenter),
                 containerColor  = bottomBarColor,
                 selectedColor   = selectedNav,
-                unselectedColor = unselectedNav
+                unselectedColor = unselectedNav,
+                onTopicsClick   = onTopicsClick,
+                onHistoryClick  = onHistoryClick,
+                onProfileClick  = onProfileClick
             )
         }
     }
@@ -246,7 +257,7 @@ private fun ContentColumn(
                An invisible Spacer fills the second slot if the count is odd. */
             item {
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    topics.take(4).chunked(2).forEach { row ->
+                    topics.chunked(2).forEach { row ->
                         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                             row.forEach { topic ->
                                 TopicProgressCard(
@@ -267,7 +278,7 @@ private fun ContentColumn(
             }
         } else {
             // Portrait: simple vertical list limited to 3 topics
-            items(topics.take(3)) { topic ->
+            items(topics) { topic ->
                 TopicProgressCard(
                     topic         = topic,
                     isDark        = isDark,
@@ -306,7 +317,10 @@ private fun ContentColumn(
 private fun LandscapeNavRail(
     containerColor: Color,
     selectedColor: Color,
-    unselectedColor: Color
+    unselectedColor: Color,
+    onTopicsClick: () -> Unit,
+    onHistoryClick: () -> Unit,
+    onProfileClick: () -> Unit
 ) {
     /* Remembered so the list object is not recreated on recomposition. */
     val navItems = remember {
@@ -327,7 +341,13 @@ private fun LandscapeNavRail(
         navItems.forEachIndexed { index, (icon, label) ->
             NavigationRailItem(
                 selected = index == 0, // Home is always active on this screen
-                onClick  = {},
+                onClick  = {
+                    when (label) {
+                        "Topics" -> onTopicsClick()
+                        "History" -> onHistoryClick()
+                        "Profile" -> onProfileClick()
+                    }
+                },
                 icon     = { Icon(icon, contentDescription = label) },
                 label    = { Text(label, fontSize = 10.sp) },
                 colors   = NavigationRailItemDefaults.colors(
@@ -669,7 +689,10 @@ private fun BottomBar(
     modifier: Modifier = Modifier,
     containerColor: Color,
     selectedColor: Color,
-    unselectedColor: Color
+    unselectedColor: Color,
+    onTopicsClick: () -> Unit,
+    onHistoryClick: () -> Unit,
+    onProfileClick: () -> Unit
 ) {
     /* Remembered so the list object is not recreated on recomposition. */
     val navItems = remember {
@@ -689,7 +712,13 @@ private fun BottomBar(
         navItems.forEachIndexed { index, (icon, label) ->
             NavigationBarItem(
                 selected = index == 0, // Home is always active on this screen
-                onClick  = {},
+                onClick  = {
+                    when (label) {
+                        "Topics" -> onTopicsClick()
+                        "History" -> onHistoryClick()
+                        "Profile" -> onProfileClick()
+                    }
+                },
                 icon     = { Icon(icon, contentDescription = label) },
                 label    = { Text(label) },
                 colors   = NavigationBarItemDefaults.colors(

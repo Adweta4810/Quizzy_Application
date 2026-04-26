@@ -26,6 +26,9 @@ sealed class Screen(val route: String) {
     /** User profile screen. */
     object Profile : Screen("profile")
 
+    /** Global or local leaderboard screen. */
+    object Leaderboard : Screen("leaderboard")
+
     /**
      * Active quiz screen.
      * Args: topicId (String), topicTitle (String — URL-encoded).
@@ -39,13 +42,14 @@ sealed class Screen(val route: String) {
      * Post-quiz result / score screen.
      * Args: score (Int), total (Int), timeTaken (String), topicTitle (String).
      */
-    object Result : Screen("result/{score}/{total}/{timeTaken}/{topicTitle}") {
+    object Result : Screen("result/{resultId}/{score}/{total}/{timeTaken}/{topicTitle}") {
         fun createRoute(
+            resultId: Long,
             score: Int,
             total: Int,
             timeTaken: String,
             topicTitle: String
-        ): String = "result/$score/$total/${Uri.encode(timeTaken)}/${Uri.encode(topicTitle)}"
+        ): String = "result/$resultId/$score/$total/${Uri.encode(timeTaken)}/${Uri.encode(topicTitle)}"
     }
 
     /**
