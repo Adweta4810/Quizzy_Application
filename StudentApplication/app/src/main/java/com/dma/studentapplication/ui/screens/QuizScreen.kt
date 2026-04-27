@@ -20,7 +20,6 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.toMutableStateList
@@ -32,25 +31,42 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dma.studentapplication.model.RoboBuddyState
 import com.dma.studentapplication.ui.components.RoboBuddy
 import com.dma.studentapplication.ui.screens.model.QuizQuestionUi
 import com.dma.studentapplication.ui.screens.model.ReviewQuestionItem
 import com.dma.studentapplication.ui.theme.StudentApplicationTheme
+import com.dma.studentapplication.viewmodel.QuizViewModel
 import kotlinx.coroutines.delay
+
 @Composable
 fun QuizScreen(
+    viewModel: QuizViewModel,
+    topicTitle: String = "Quizzy Quiz",
+    onBackClick: () -> Unit = {},
+    onQuizFinished: (Int, Int, List<ReviewQuestionItem>) -> Unit = { _, _, _ -> }
+) {
+    val questions by viewModel.questions.collectAsStateWithLifecycle()
+
+    QuizScreenContent(
+        questions = questions,
+        topicTitle = topicTitle,
+        onBackClick = onBackClick,
+        onQuizFinished = onQuizFinished
+    )
+}
+
+@Composable
+internal fun QuizScreenContent(
     questions: List<QuizQuestionUi>,
     topicTitle: String = "Quizzy Quiz",
     onBackClick: () -> Unit = {},
-    onQuizFinished: (
-        score: Int,
-        total: Int,
-        reviewItems: List<ReviewQuestionItem>
-    ) -> Unit = { _, _, _ -> }
+    onQuizFinished: (Int, Int, List<ReviewQuestionItem>) -> Unit = { _, _, _ -> }
 ) {
     val isDark = isSystemInDarkTheme()
     val totalQuestions = questions.size
@@ -59,32 +75,28 @@ fun QuizScreen(
     var selectedAnswerIndex by rememberSaveable { mutableStateOf<Int?>(null) }
     var answerLocked by rememberSaveable { mutableStateOf(false) }
     var score by rememberSaveable { mutableIntStateOf(0) }
-
-    // FIX: no key here, so rotation does not reset timer to 15
     var timeLeft by rememberSaveable { mutableIntStateOf(15) }
-
     var showQuitDialog by rememberSaveable { mutableStateOf(false) }
 
     val reviewItems = rememberSaveable(
         saver = listSaver(
             save = { list ->
-                list.map { item ->
+                list.map {
                     listOf(
-                        item.question,
-                        item.selectedAnswer,
-                        item.correctAnswer,
-                        item.isCorrect.toString()
+                        it.question,
+                        it.selectedAnswer,
+                        it.correctAnswer,
+                        it.isCorrect.toString()
                     )
                 }
             },
             restore = { saved ->
                 saved.map { raw ->
-                    val data = raw as List<String>
                     ReviewQuestionItem(
-                        question = data[0],
-                        selectedAnswer = data[1],
-                        correctAnswer = data[2],
-                        isCorrect = data[3].toBoolean()
+                        question = raw[0],
+                        selectedAnswer = raw[1],
+                        correctAnswer = raw[2],
+                        isCorrect = raw[3].toBoolean()
                     )
                 }.toMutableStateList()
             }
@@ -93,9 +105,7 @@ fun QuizScreen(
         mutableStateListOf<ReviewQuestionItem>()
     }
 
-    BackHandler {
-        showQuitDialog = true
-    }
+    BackHandler { showQuitDialog = true }
 
     if (questions.isEmpty()) {
         Box(
@@ -118,21 +128,45 @@ fun QuizScreen(
 
     val correctIndex = currentQuestion.options.indexOf(currentQuestion.correctAnswer)
 
+    val screenBg = if (isDark) Color(0xFF001226) else Color(0xFFF5F8FC)
+    val screenBgBottom = if (isDark) Color(0xFF041B38) else Color(0xFFEAF2FB)
+    val surfaceColor = if (isDark) Color(0xFF0B1F3A) else Color.White
+    val cardBorder = if (isDark) Color(0xFF37506F) else Color(0xFFD7E0EA)
+    val titleColor = if (isDark) Color.White else Color(0xFF0F172A)
+    val subtitleColor = if (isDark) Color(0xFFD6E0F5) else Color(0xFF475569)
+
+    val accentGreen = Color(0xFF22C55E)
+    val darkGreen = Color(0xFF14532D)
+    val accentTeal = Color(0xFF0891B2)
+    val warningColor = Color(0xFFE58A00)
+    val wrongColor = Color(0xFFDC2626)
+
+    val animatedProgress by animateFloatAsState(
+        targetValue = (currentQuestionIndex + 1) / totalQuestions.toFloat(),
+        animationSpec = tween(500),
+        label = "progress"
+    )
+
+    val roboState = when {
+        answerLocked && selectedAnswerIndex == correctIndex -> RoboBuddyState.CORRECT
+        answerLocked && selectedAnswerIndex != null -> RoboBuddyState.INCORRECT
+        answerLocked -> RoboBuddyState.SAD
+        timeLeft <= 5 -> RoboBuddyState.SURPRISED
+        else -> RoboBuddyState.THINKING
+    }
+
     if (showQuitDialog) {
         QuitQuizDialog(
-            onDismiss = { showQuitDialog = false },
+            onDismiss = { },
             onQuit = {
-                showQuitDialog = false
                 onBackClick()
             },
             onEnd = {
-                showQuitDialog = false
                 onQuizFinished(score, totalQuestions, reviewItems.toList())
             }
         )
     }
 
-    // FIX: timer continues after rotation instead of starting from 15 again
     LaunchedEffect(currentQuestionIndex, answerLocked) {
         while (timeLeft > 0 && !answerLocked) {
             delay(1000)
@@ -152,61 +186,36 @@ fun QuizScreen(
         }
     }
 
-    val roboState = when {
-        answerLocked && selectedAnswerIndex == correctIndex -> RoboBuddyState.CORRECT
-        answerLocked && selectedAnswerIndex != null && selectedAnswerIndex != correctIndex -> RoboBuddyState.INCORRECT
-        answerLocked && selectedAnswerIndex == null -> RoboBuddyState.SAD
-        timeLeft <= 5 -> RoboBuddyState.SURPRISED
-        else -> RoboBuddyState.THINKING
-    }
-
-    val screenBg = if (isDark) Color(0xFF000B1B) else Color(0xFFF3F7FC)
-    val screenBgBottom = if (isDark) Color(0xFF05162D) else Color(0xFFEAF2FB)
-    val surfaceColor = if (isDark) Color(0xFF071833) else Color.White
-    val cardBorder = if (isDark) Color.White.copy(alpha = 0.08f) else Color(0xFFE2E8F0)
-    val titleColor = if (isDark) Color.White else Color(0xFF0F172A)
-    val subtitleColor = if (isDark) Color(0xFFB8C4E0) else Color(0xFF64748B)
-    val accentGreen = Color(0xFF27D17F)
-    val accentTeal = Color(0xFF16C6D9)
-    val warningColor = Color(0xFFFFB84D)
-    val wrongColor = Color(0xFFFF6B6B)
-    val buttonTextColor = if (isDark) Color(0xFF052012) else Color.White
-
-    val animatedProgress by animateFloatAsState(
-        targetValue = (currentQuestionIndex + 1) / totalQuestions.toFloat(),
-        animationSpec = tween(600),
-        label = "progress"
-    )
-
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Brush.verticalGradient(listOf(screenBg, screenBgBottom)))
+            .windowInsetsPadding(WindowInsets.safeDrawing)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .windowInsetsPadding(WindowInsets.safeDrawing)
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(
+                start = 20.dp,
+                end = 20.dp,
+                top = 18.dp,
+                bottom = 28.dp
+            ),
+            verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 24.dp)
-            ) {
+            item {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Surface(
-                        modifier = Modifier.size(42.dp),
+                        modifier = Modifier.size(48.dp),
                         shape = CircleShape,
                         color = surfaceColor,
-                        shadowElevation = if (isDark) 0.dp else 2.dp,
                         border = BorderStroke(1.dp, cardBorder)
                     ) {
                         IconButton(onClick = { showQuitDialog = true }) {
                             Icon(
-                                Icons.AutoMirrored.Filled.ArrowBack,
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                                 contentDescription = "Back",
                                 tint = titleColor
                             )
@@ -219,240 +228,222 @@ fun QuizScreen(
                         Text(
                             text = topicTitle,
                             color = titleColor,
-                            fontSize = 18.sp,
+                            fontSize = 21.sp,
                             fontWeight = FontWeight.ExtraBold,
-                            maxLines = 1
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
                         )
+
                         Text(
                             text = "Question ${currentQuestionIndex + 1} of $totalQuestions",
                             color = subtitleColor,
-                            fontSize = 13.sp
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Medium
                         )
                     }
 
-                    ScoreChip(score, isDark, accentGreen)
+                    ScoreChip(score = score, isDark = isDark)
                 }
+            }
 
-                Spacer(modifier = Modifier.height(14.dp))
-
+            item {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     LinearProgressIndicator(
                         progress = { animatedProgress },
                         modifier = Modifier
                             .weight(1f)
-                            .height(8.dp)
-                            .clip(RoundedCornerShape(20.dp)),
+                            .height(9.dp)
+                            .clip(RoundedCornerShape(50.dp)),
                         color = accentGreen,
-                        trackColor = if (isDark) Color.White.copy(alpha = 0.10f) else Color(0xFFE5E7EB),
+                        trackColor = if (isDark) Color(0xFF28415F) else Color(0xFFDDE7F0),
                         strokeCap = StrokeCap.Round
                     )
 
-                    TimerChip(timeLeft, accentGreen, warningColor, wrongColor)
+                    TimerChip(
+                        timeLeft = timeLeft,
+                        accentGreen = accentGreen,
+                        warningColor = warningColor,
+                        wrongColor = wrongColor
+                    )
                 }
             }
 
-            LazyColumn(
-                modifier = Modifier.weight(1f),
-                contentPadding = PaddingValues(
-                    start = 20.dp,
-                    end = 20.dp,
-                    top = 4.dp,
-                    bottom = 16.dp
-                ),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                item(key = "robo_$currentQuestionIndex") {
-                    Card(
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(24.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
-                        elevation = CardDefaults.cardElevation(0.dp)
+            item {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(26.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+                    elevation = CardDefaults.cardElevation(0.dp)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                Brush.horizontalGradient(
+                                    listOf(Color(0xFF0F766E), Color(0xFF16A34A))
+                                )
+                            )
+                            .padding(18.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(
-                                    Brush.horizontalGradient(
-                                        listOf(Color(0xFF14838A), Color(0xFF25D39F))
-                                    )
-                                )
-                                .padding(vertical = 16.dp, horizontal = 16.dp)
-                        ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                RoboBuddy(
-                                    state = roboState,
-                                    modifier = Modifier.size(90.dp)
-                                )
+                        RoboBuddy(
+                            state = roboState,
+                            modifier = Modifier.size(78.dp)
+                        )
 
-                                Spacer(modifier = Modifier.width(12.dp))
+                        Spacer(modifier = Modifier.width(14.dp))
 
-                                Column(modifier = Modifier.weight(1f)) {
-                                    Text(
-                                        text = when {
-                                            answerLocked && selectedAnswerIndex == correctIndex -> "Nice one!"
-                                            answerLocked && selectedAnswerIndex != null && selectedAnswerIndex != correctIndex -> "Oops, not this time"
-                                            answerLocked && selectedAnswerIndex == null -> "Time is up!"
-                                            timeLeft <= 5 -> "Hurry up!"
-                                            else -> "Think carefully!"
-                                        },
-                                        color = Color.White,
-                                        fontSize = 16.sp,
-                                        fontWeight = FontWeight.ExtraBold
-                                    )
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = when {
+                                    answerLocked && selectedAnswerIndex == correctIndex -> "Nice one!"
+                                    answerLocked && selectedAnswerIndex != null -> "Oops, not this time"
+                                    answerLocked -> "Time is up!"
+                                    timeLeft <= 5 -> "Hurry up!"
+                                    else -> "Think carefully!"
+                                },
+                                color = Color.White,
+                                fontSize = 19.sp,
+                                fontWeight = FontWeight.ExtraBold
+                            )
 
-                                    Spacer(modifier = Modifier.height(3.dp))
-
-                                    Text(
-                                        text = when {
-                                            answerLocked && selectedAnswerIndex == correctIndex -> "Robo is proud of you!"
-                                            answerLocked && selectedAnswerIndex != null && selectedAnswerIndex != correctIndex -> "Check the correct answer below."
-                                            answerLocked && selectedAnswerIndex == null -> "You ran out of time."
-                                            else -> "You have ${timeLeft}s for this question."
-                                        },
-                                        color = Color.White.copy(alpha = 0.90f),
-                                        fontSize = 12.sp,
-                                        lineHeight = 17.sp
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
-
-                item(key = "question_$currentQuestionIndex") {
-                    Card(
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(24.dp),
-                        colors = CardDefaults.cardColors(containerColor = surfaceColor),
-                        border = BorderStroke(1.dp, cardBorder),
-                        elevation = CardDefaults.cardElevation(0.dp)
-                    ) {
-                        Column(modifier = Modifier.padding(20.dp)) {
-                            Surface(
-                                shape = RoundedCornerShape(8.dp),
-                                color = accentTeal.copy(alpha = 0.12f)
-                            ) {
-                                Text(
-                                    text = "Question ${currentQuestionIndex + 1}",
-                                    color = accentTeal,
-                                    fontSize = 12.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
-                                )
-                            }
-
-                            Spacer(modifier = Modifier.height(12.dp))
+                            Spacer(modifier = Modifier.height(4.dp))
 
                             Text(
-                                text = currentQuestion.question,
-                                color = titleColor,
-                                fontSize = 20.sp,
-                                lineHeight = 28.sp,
-                                fontWeight = FontWeight.Bold
+                                text = when {
+                                    answerLocked && selectedAnswerIndex == correctIndex -> "Robo is proud of you!"
+                                    answerLocked && selectedAnswerIndex != null -> "Check the correct answer below."
+                                    answerLocked -> "You ran out of time."
+                                    else -> "You have ${timeLeft}s for this question."
+                                },
+                                color = Color.White,
+                                fontSize = 15.sp,
+                                lineHeight = 21.sp,
+                                fontWeight = FontWeight.Medium
                             )
                         }
                     }
                 }
+            }
 
-                items(
-                    items = currentQuestion.options.mapIndexed { index, option -> index to option },
-                    key = { (index, _) -> "option_${currentQuestionIndex}_$index" }
-                ) { (index, option) ->
-                    QuizOptionItem(
-                        optionLabel = ('A' + index).toString(),
-                        optionText = option,
-                        isSelected = selectedAnswerIndex == index,
-                        isCorrect = answerLocked && index == correctIndex,
-                        isWrongSelected = answerLocked && selectedAnswerIndex == index && index != correctIndex,
-                        enabled = !answerLocked,
-                        isDark = isDark,
-                        onClick = {
-                            if (!answerLocked) {
-                                selectedAnswerIndex = index
-                            }
-                        }
-                    )
-                }
+            item {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(24.dp),
+                    colors = CardDefaults.cardColors(containerColor = surfaceColor),
+                    border = BorderStroke(1.dp, cardBorder),
+                    elevation = CardDefaults.cardElevation(0.dp)
+                ) {
+                    Column(modifier = Modifier.padding(20.dp)) {
+                        Text(
+                            text = "Question ${currentQuestionIndex + 1}",
+                            color = accentTeal,
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.ExtraBold
+                        )
 
-                if (answerLocked && selectedAnswerIndex != correctIndex) {
-                    item(key = "reveal_$currentQuestionIndex") {
-                        CorrectAnswerReveal(
-                            correctAnswer = currentQuestion.correctAnswer,
-                            isDark = isDark
+                        Spacer(modifier = Modifier.height(10.dp))
+
+                        Text(
+                            text = currentQuestion.question,
+                            color = titleColor,
+                            fontSize = 21.sp,
+                            lineHeight = 29.sp,
+                            fontWeight = FontWeight.Bold
                         )
                     }
                 }
             }
 
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 12.dp)
-            ) {
-                Button(
+            items(
+                items = currentQuestion.options.mapIndexed { index, option -> index to option },
+                key = { (index, _) -> "option_${currentQuestionIndex}_$index" }
+            ) { (index, option) ->
+                QuizOptionItem(
+                    optionLabel = ('A' + index).toString(),
+                    optionText = option,
+                    isSelected = selectedAnswerIndex == index,
+                    isCorrect = answerLocked && index == correctIndex,
+                    isWrongSelected = answerLocked && selectedAnswerIndex == index && index != correctIndex,
+                    enabled = !answerLocked,
+                    isDark = isDark,
                     onClick = {
-                        if (!answerLocked) {
-                            val isCorrect = selectedAnswerIndex == correctIndex
+                        if (!answerLocked) selectedAnswerIndex = index
+                    }
+                )
+            }
 
-                            if (isCorrect) {
-                                score++
-                            }
-
-                            reviewItems.add(
-                                ReviewQuestionItem(
-                                    question = currentQuestion.question,
-                                    selectedAnswer = selectedAnswerIndex
-                                        ?.let { currentQuestion.options[it] }
-                                        ?: "No answer selected",
-                                    correctAnswer = currentQuestion.correctAnswer,
-                                    isCorrect = isCorrect
-                                )
-                            )
-
-                            answerLocked = true
-                        } else {
-                            if (currentQuestionIndex < totalQuestions - 1) {
-                                currentQuestionIndex++
-                                selectedAnswerIndex = null
-                                answerLocked = false
-                                timeLeft = 15
-                            } else {
-                                onQuizFinished(
-                                    score,
-                                    totalQuestions,
-                                    reviewItems.toList()
-                                )
-                            }
-                        }
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
-                    shape = RoundedCornerShape(18.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = accentGreen,
-                        contentColor = buttonTextColor,
-                        disabledContainerColor = accentGreen.copy(alpha = 0.35f),
-                        disabledContentColor = Color.White.copy(alpha = 0.5f)
-                    ),
-                    enabled = selectedAnswerIndex != null || answerLocked
-                ) {
-                    Text(
-                        text = when {
-                            !answerLocked -> "Lock Answer"
-                            currentQuestionIndex == totalQuestions - 1 -> "Finish Quiz"
-                            else -> "Next Question"
-                        },
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.ExtraBold
+            if (answerLocked && selectedAnswerIndex != correctIndex) {
+                item {
+                    CorrectAnswerReveal(
+                        correctAnswer = currentQuestion.correctAnswer,
+                        isDark = isDark
                     )
+                }
+            }
+
+            item {
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Button(
+                        onClick = {
+                            if (!answerLocked) {
+                                val isCorrect = selectedAnswerIndex == correctIndex
+
+                                if (isCorrect) score++
+
+                                reviewItems.add(
+                                    ReviewQuestionItem(
+                                        question = currentQuestion.question,
+                                        selectedAnswer = selectedAnswerIndex
+                                            ?.let { currentQuestion.options[it] }
+                                            ?: "No answer selected",
+                                        correctAnswer = currentQuestion.correctAnswer,
+                                        isCorrect = isCorrect
+                                    )
+                                )
+
+                                answerLocked = true
+                            } else {
+                                if (currentQuestionIndex < totalQuestions - 1) {
+                                    currentQuestionIndex++
+                                    selectedAnswerIndex = null
+                                    answerLocked = false
+                                    timeLeft = 15
+                                } else {
+                                    onQuizFinished(score, totalQuestions, reviewItems.toList())
+                                }
+                            }
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .widthIn(max = 520.dp)
+                            .height(56.dp),
+                        shape = RoundedCornerShape(18.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = darkGreen,
+                            contentColor = Color.White,
+                            disabledContainerColor = Color(0xFF334155),
+                            disabledContentColor = Color(0xFFE2E8F0)
+                        ),
+                        enabled = selectedAnswerIndex != null || answerLocked
+                    ) {
+                        Text(
+                            text = when {
+                                !answerLocked -> "Lock Answer"
+                                currentQuestionIndex == totalQuestions - 1 -> "Finish Quiz"
+                                else -> "Next Question"
+                            },
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.ExtraBold
+                        )
+                    }
                 }
             }
         }
@@ -474,23 +465,11 @@ private fun QuitQuizDialog(
             )
         },
         text = {
-            Text(
-                text = "Do you want to keep going, quit the quiz, or end this session and view your result?",
-                lineHeight = 22.sp
-            )
+            Text("Do you want to keep going, quit the quiz, or end this session and view your result?")
         },
         confirmButton = {
-            Button(
-                onClick = onEnd,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF27D17F)
-                )
-            ) {
-                Text(
-                    text = "End Session",
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFF052012)
-                )
+            Button(onClick = onEnd) {
+                Text("End Session")
             }
         },
         dismissButton = {
@@ -500,10 +479,7 @@ private fun QuitQuizDialog(
                 }
 
                 TextButton(onClick = onQuit) {
-                    Text(
-                        text = "Quit",
-                        color = Color(0xFFFF6B6B)
-                    )
+                    Text("Quit")
                 }
             }
         }
@@ -511,71 +487,22 @@ private fun QuitQuizDialog(
 }
 
 @Composable
-private fun CorrectAnswerReveal(
-    correctAnswer: String,
-    isDark: Boolean
-) {
-    val bg = if (isDark) Color(0xFF10271F) else Color(0xFFECFDF5)
-    val border = if (isDark) Color(0xFF1F8F63) else Color(0xFF86EFAC)
-    val text = if (isDark) Color(0xFF6EE7B7) else Color(0xFF15803D)
-
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(18.dp),
-        colors = CardDefaults.cardColors(containerColor = bg),
-        border = BorderStroke(1.dp, border),
-        elevation = CardDefaults.cardElevation(0.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 14.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                Icons.Default.CheckCircle,
-                contentDescription = null,
-                tint = text,
-                modifier = Modifier.size(20.dp)
-            )
-
-            Spacer(modifier = Modifier.width(10.dp))
-
-            Column {
-                Text(
-                    text = "Correct Answer",
-                    color = text,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
-
-                Text(
-                    text = correctAnswer,
-                    color = text,
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.ExtraBold,
-                    lineHeight = 21.sp
-                )
-            }
-        }
-    }
-}
-
-@Composable
 private fun ScoreChip(
     score: Int,
-    isDark: Boolean,
-    accentGreen: Color
+    isDark: Boolean
 ) {
     Surface(
         shape = RoundedCornerShape(14.dp),
-        color = accentGreen.copy(alpha = if (isDark) 0.18f else 0.12f),
-        border = BorderStroke(1.dp, accentGreen.copy(alpha = 0.35f))
+        color = if (isDark) Color(0xFF064E3B) else Color(0xFFDCFCE7),
+        border = BorderStroke(
+            1.dp,
+            if (isDark) Color(0xFF34D399) else Color(0xFF16A34A)
+        )
     ) {
         Text(
             text = "Score $score",
             modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp),
-            color = if (isDark) Color(0xFF6EE7B7) else Color(0xFF166534),
+            color = if (isDark) Color.White else Color(0xFF14532D),
             fontSize = 14.sp,
             fontWeight = FontWeight.ExtraBold
         )
@@ -601,27 +528,27 @@ private fun TimerChip(
 
     Surface(
         shape = RoundedCornerShape(14.dp),
-        color = timerColor.copy(alpha = 0.16f),
-        border = BorderStroke(1.dp, timerColor.copy(alpha = 0.40f))
+        color = Color.Transparent,
+        border = BorderStroke(1.dp, timerColor)
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                Icons.Default.Timer,
+                imageVector = Icons.Default.Timer,
                 contentDescription = "Timer",
                 tint = timerColor,
-                modifier = Modifier.size(14.dp)
+                modifier = Modifier.size(17.dp)
             )
 
-            Spacer(modifier = Modifier.width(4.dp))
+            Spacer(modifier = Modifier.width(5.dp))
 
             Text(
                 text = "${timeLeft}s",
                 color = timerColor,
                 fontWeight = FontWeight.ExtraBold,
-                fontSize = 13.sp
+                fontSize = 15.sp
             )
         }
     }
@@ -640,10 +567,10 @@ private fun QuizOptionItem(
 ) {
     val backgroundColor by animateColorAsState(
         targetValue = when {
-            isCorrect -> if (isDark) Color(0xFF123A2B) else Color(0xFFEAFBF1)
-            isWrongSelected -> if (isDark) Color(0xFF3A1A23) else Color(0xFFFFF1F1)
-            isSelected -> if (isDark) Color(0xFF102B4A) else Color(0xFFE8F4FF)
-            else -> if (isDark) Color(0xFF071833) else Color.White
+            isCorrect -> if (isDark) Color(0xFF064E3B) else Color(0xFFDCFCE7)
+            isWrongSelected -> if (isDark) Color(0xFF7F1D1D) else Color(0xFFFEE2E2)
+            isSelected -> if (isDark) Color(0xFF164E63) else Color(0xFFE0F2FE)
+            else -> if (isDark) Color(0xFF0B1F3A) else Color.White
         },
         animationSpec = tween(200),
         label = "optionBg"
@@ -651,39 +578,28 @@ private fun QuizOptionItem(
 
     val borderColor by animateColorAsState(
         targetValue = when {
-            isCorrect -> Color(0xFF27D17F)
-            isWrongSelected -> Color(0xFFFF6B6B)
-            isSelected -> Color(0xFF16C6D9)
-            else -> if (isDark) Color.White.copy(alpha = 0.10f) else Color(0xFFE2E8F0)
+            isCorrect -> Color(0xFF22C55E)
+            isWrongSelected -> Color(0xFFDC2626)
+            isSelected -> Color(0xFF0891B2)
+            else -> if (isDark) Color(0xFF37506F) else Color(0xFFD7E0EA)
         },
         animationSpec = tween(200),
         label = "optionBorder"
     )
 
     val textColor = when {
-        isCorrect -> if (isDark) Color(0xFFA8FFD1) else Color(0xFF166534)
-        isWrongSelected -> if (isDark) Color(0xFFFFB3B3) else Color(0xFFB91C1C)
-        isSelected -> if (isDark) Color(0xFF93C5FD) else Color(0xFF1D4ED8)
-        else -> if (isDark) Color.White else Color(0xFF0F172A)
-    }
-
-    val labelBg = when {
-        isCorrect -> Color(0xFF27D17F)
-        isWrongSelected -> Color(0xFFFF6B6B)
-        isSelected -> Color(0xFF16C6D9)
-        else -> if (isDark) Color.White.copy(alpha = 0.10f) else Color(0xFFF1F5F9)
-    }
-
-    val labelTextColor = when {
-        isCorrect || isWrongSelected || isSelected -> Color.White
-        else -> if (isDark) Color(0xFF8FA3C8) else Color(0xFF64748B)
+        isDark -> Color.White
+        isCorrect -> Color(0xFF14532D)
+        isWrongSelected -> Color(0xFF7F1D1D)
+        isSelected -> Color(0xFF0C4A6E)
+        else -> Color(0xFF0F172A)
     }
 
     OutlinedButton(
         onClick = onClick,
         enabled = enabled,
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(18.dp),
         border = BorderStroke(1.5.dp, borderColor),
         colors = ButtonDefaults.outlinedButtonColors(
             containerColor = backgroundColor,
@@ -694,22 +610,22 @@ private fun QuizOptionItem(
         contentPadding = PaddingValues(horizontal = 14.dp, vertical = 14.dp)
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
-                modifier = Modifier
-                    .size(36.dp)
-                    .clip(CircleShape)
-                    .background(labelBg),
-                contentAlignment = Alignment.Center
+            Surface(
+                modifier = Modifier.size(36.dp),
+                shape = CircleShape,
+                color = borderColor
             ) {
-                Text(
-                    text = optionLabel,
-                    color = labelTextColor,
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 14.sp
-                )
+                Box(contentAlignment = Alignment.Center) {
+                    Text(
+                        text = optionLabel,
+                        color = Color.White,
+                        fontWeight = FontWeight.ExtraBold,
+                        fontSize = 14.sp
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.width(12.dp))
@@ -720,29 +636,74 @@ private fun QuizOptionItem(
                 color = textColor,
                 fontSize = 15.sp,
                 lineHeight = 22.sp,
-                fontWeight = if (isCorrect || isWrongSelected || isSelected) {
-                    FontWeight.SemiBold
-                } else {
-                    FontWeight.Normal
-                },
+                fontWeight = FontWeight.SemiBold,
                 textAlign = TextAlign.Start
             )
 
             if (isCorrect) {
-                Spacer(modifier = Modifier.width(8.dp))
                 Icon(
-                    Icons.Default.CheckCircle,
-                    contentDescription = null,
-                    tint = Color(0xFF27D17F),
-                    modifier = Modifier.size(18.dp)
+                    imageVector = Icons.Default.CheckCircle,
+                    contentDescription = "Correct answer",
+                    tint = Color(0xFF22C55E),
+                    modifier = Modifier.size(20.dp)
                 )
-            } else if (isWrongSelected) {
-                Spacer(modifier = Modifier.width(8.dp))
+            }
+
+            if (isWrongSelected) {
                 Icon(
-                    Icons.Default.Cancel,
-                    contentDescription = null,
-                    tint = Color(0xFFFF6B6B),
-                    modifier = Modifier.size(18.dp)
+                    imageVector = Icons.Default.Cancel,
+                    contentDescription = "Wrong answer",
+                    tint = Color(0xFFDC2626),
+                    modifier = Modifier.size(20.dp)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun CorrectAnswerReveal(
+    correctAnswer: String,
+    isDark: Boolean
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(18.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = if (isDark) Color(0xFF064E3B) else Color(0xFFDCFCE7)
+        ),
+        border = BorderStroke(
+            1.dp,
+            if (isDark) Color(0xFF34D399) else Color(0xFF16A34A)
+        ),
+        elevation = CardDefaults.cardElevation(0.dp)
+    ) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Default.CheckCircle,
+                contentDescription = null,
+                tint = if (isDark) Color.White else Color(0xFF14532D),
+                modifier = Modifier.size(22.dp)
+            )
+
+            Spacer(modifier = Modifier.width(10.dp))
+
+            Column {
+                Text(
+                    text = "Correct Answer",
+                    color = if (isDark) Color.White else Color(0xFF14532D),
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.Bold
+                )
+
+                Text(
+                    text = correctAnswer,
+                    color = if (isDark) Color.White else Color(0xFF14532D),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.ExtraBold
                 )
             }
         }
@@ -752,7 +713,7 @@ private fun QuizOptionItem(
 private val previewQuestions = listOf(
     QuizQuestionUi(
         id = 1,
-        question = "Which language is preferred for Android?",
+        question = "Which language is preferred for Android development?",
         options = listOf("Java", "Swift", "Kotlin", "Python"),
         correctAnswer = "Kotlin"
     ),
@@ -772,14 +733,13 @@ private val previewQuestions = listOf(
 @Preview(
     name = "Quiz Light",
     showBackground = true,
-    backgroundColor = 0xFFF3F7FC,
-    uiMode = Configuration.UI_MODE_NIGHT_NO,
-    showSystemUi = true
+    showSystemUi = true,
+    uiMode = Configuration.UI_MODE_NIGHT_NO
 )
 @Composable
 private fun QuizScreenLightPreview() {
     StudentApplicationTheme(darkTheme = false) {
-        QuizScreen(
+        QuizScreenContent(
             questions = previewQuestions,
             topicTitle = "Technology Quiz"
         )
@@ -787,16 +747,17 @@ private fun QuizScreenLightPreview() {
 }
 
 @Preview(
-    name = "Quiz Dark",
+    name = "Quiz Dark Landscape",
     showBackground = true,
-    backgroundColor = 0xFF000B1B,
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-    showSystemUi = true
+    showSystemUi = true,
+    widthDp = 900,
+    heightDp = 420,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
 )
 @Composable
-private fun QuizScreenDarkPreview() {
+private fun QuizScreenDarkLandscapePreview() {
     StudentApplicationTheme(darkTheme = true) {
-        QuizScreen(
+        QuizScreenContent(
             questions = previewQuestions,
             topicTitle = "Technology Quiz"
         )

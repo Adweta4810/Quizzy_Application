@@ -22,34 +22,71 @@ class QuizViewModel(private val repository: QuizRepository) : ViewModel() {
     private val _questions = MutableStateFlow<List<QuizQuestionUi>>(emptyList())
     val questions: StateFlow<List<QuizQuestionUi>> = _questions
 
+    // Tracks which topic is already loaded so rotation never triggers a reload.
+    private var activeTopicId: String? = null
+
     /**
-     * Loads 10 shuffled questions for [topicId] on a background thread.
-     * Called when the Quiz composable first enters composition.
+     * Loads and shuffles questions exactly once per quiz session.
+     *
+     * Subsequent calls with the same [topicId] while questions are already
+     * loaded (e.g. after a screen rotation) are intentionally ignored so the
+     * question list — including the shuffled option order — stays stable.
      */
     fun loadQuestions(topicId: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            _questions.value = repository.getQuestions(topicId)
+        // Guard: skip if this topic is already loaded.
+        if (activeTopicId == topicId && _questions.value.isNotEmpty()) return
+
+        activeTopicId = topicId
+        fetchAndShuffle(topicId)
+    }
+
+    /**
+     * Forces a brand-new quiz session (e.g. user taps "Restart").
+     * Always fetches fresh questions and re-shuffles, regardless of state.
+     */
+    fun startNewQuiz(topicId: String) {
+        activeTopicId = topicId
+        fetchAndShuffle(topicId)
+    }
+
+    /**
+     * Fetches questions from the repository and shuffles the options of each
+     * question once, storing the result in [_questions].
+     *
+     * Shuffling is done here in the ViewModel so it happens exactly once and
+     * survives configuration changes. The repository itself must NOT shuffle —
+     * it should return questions with a stable option order every time.
+     */
+    private fun fetchAndShuffle(topicId: String) {
+        viewModelScope.launch {
+            val loaded = withContext(Dispatchers.IO) {
+                repository.getQuestions(topicId)
+            }
+
+            // Shuffle answer options once here so the order is fixed for the
+            // entire session.  Each QuizQuestionUi gets a new options list
+            // with its correct answer randomised into a different position.
+            _questions.value = loaded.map { q ->
+                q.copy(options = q.options.shuffled())
+            }
         }
     }
 
-    /** Clears questions so stale data is not shown when a new quiz starts. */
+    /**
+     * Clears the current quiz session.
+     * Do NOT call this on screen rotation — only call it when the user
+     * deliberately exits or finishes the quiz.
+     */
     fun clearQuestions() {
+        activeTopicId = null
         _questions.value = emptyList()
     }
 
     // ── Save result after quiz completion ─────────────────────────────────────
 
-    /**
-     * Row id of the most recently saved result.
-     * ResultScreen collects this to navigate to ReviewScreen with the correct id.
-     */
     private val _savedResultId = MutableStateFlow<Long?>(null)
     val savedResultId: StateFlow<Long?> = _savedResultId
 
-    /**
-     * Serializes [reviewItems] and persists the completed quiz to ROOM.
-     * Emits the new row id via [savedResultId].
-     */
     fun saveResult(
         topic: String,
         score: Int,
@@ -61,35 +98,31 @@ class QuizViewModel(private val repository: QuizRepository) : ViewModel() {
         viewModelScope.launch {
             val id = withContext(Dispatchers.IO) {
                 repository.saveResult(
-                    topic          = topic,
-                    score          = score,
+                    topic = topic,
+                    score = score,
                     totalQuestions = totalQuestions,
-                    timeTaken      = timeTaken,
-                    reviewItems    = reviewItems
+                    timeTaken = timeTaken,
+                    reviewItems = reviewItems
                 )
             }
+
             _savedResultId.value = id
             onSaved(id)
         }
     }
 
-    /** Resets [savedResultId] so the old id is not re-used on next quiz. */
     fun clearSavedResultId() {
         _savedResultId.value = null
     }
 
     // ── History list ──────────────────────────────────────────────────────────
 
-    /**
-     * Live stream of all saved results newest-first.
-     * HistoryScreen collects this to build its list.
-     */
     val allResults: StateFlow<List<QuizResultEntity>> =
         repository.getAllResults()
             .stateIn(
-                scope            = viewModelScope,
-                started          = SharingStarted.WhileSubscribed(5_000),
-                initialValue     = emptyList()
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = emptyList()
             )
 
     // ── Detail / Review ───────────────────────────────────────────────────────
@@ -97,17 +130,16 @@ class QuizViewModel(private val repository: QuizRepository) : ViewModel() {
     private val _detailResult = MutableStateFlow<QuizResultEntity?>(null)
     val detailResult: StateFlow<QuizResultEntity?> = _detailResult
 
-    /**
-     * Loads a single [QuizResultEntity] by [id] for ReviewScreen or
-     * HistoryDetailScreen.
-     */
     fun loadDetail(id: Long) {
-        viewModelScope.launch(Dispatchers.IO) {
-            _detailResult.value = repository.getResultById(id)
+        viewModelScope.launch {
+            val result = withContext(Dispatchers.IO) {
+                repository.getResultById(id)
+            }
+
+            _detailResult.value = result
         }
     }
 
-    /** Clears cached detail so a stale record is not shown briefly. */
     fun clearDetail() {
         _detailResult.value = null
     }
@@ -115,7 +147,9 @@ class QuizViewModel(private val repository: QuizRepository) : ViewModel() {
     // ── Clear all history ─────────────────────────────────────────────────────
 
     fun clearAllHistory() {
-        viewModelScope.launch { repository.clearAll() }
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.clearAll()
+        }
     }
 }
 
@@ -123,6 +157,7 @@ class QuizViewModel(private val repository: QuizRepository) : ViewModel() {
 
 class QuizViewModelFactory(private val repository: QuizRepository) :
     ViewModelProvider.Factory {
+
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T =
         QuizViewModel(repository) as T

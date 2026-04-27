@@ -9,7 +9,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -18,17 +17,7 @@ import androidx.navigation.navArgument
 import com.dma.studentapplication.data.local.room.QuizDatabase
 import com.dma.studentapplication.navigation.Screen
 import com.dma.studentapplication.repository.QuizRepository
-import com.dma.studentapplication.ui.screens.HistoryDetailScreen
-import com.dma.studentapplication.ui.screens.HistoryScreen
-import com.dma.studentapplication.ui.screens.HomeScreen
-import com.dma.studentapplication.ui.screens.LeaderboardScreen
-import com.dma.studentapplication.ui.screens.ProfileScreen
-import com.dma.studentapplication.ui.screens.QuizHistoryItem
-import com.dma.studentapplication.ui.screens.QuizScreen
-import com.dma.studentapplication.ui.screens.ResultScreen
-import com.dma.studentapplication.ui.screens.ReviewScreen
-import com.dma.studentapplication.ui.screens.SplashScreen
-import com.dma.studentapplication.ui.screens.TopicScreen
+import com.dma.studentapplication.ui.screens.*
 import com.dma.studentapplication.ui.screens.model.QuizHistoryDetail
 import com.dma.studentapplication.ui.screens.model.ReviewQuestionItem
 import com.dma.studentapplication.ui.theme.StudentApplicationTheme
@@ -62,6 +51,25 @@ class MainActivity : ComponentActivity() {
                     }
                 }
 
+                fun goHome() {
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(Screen.Home.route) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+                }
+
+                fun topicTitleToId(topicTitle: String): String {
+                    return when (topicTitle) {
+                        "Daily Quiz" -> "technology"
+                        else -> topicTitle
+                            .removeSuffix(" Quiz")
+                            .lowercase()
+                            .replace(" ", "_")
+                    }
+                }
+
                 NavHost(
                     navController = navController,
                     startDestination = Screen.Splash.route
@@ -88,9 +96,7 @@ class MainActivity : ComponentActivity() {
                                         it.replaceFirstChar(Char::uppercase)
                                     } + " Quiz"
 
-                                navController.navigate(
-                                    Screen.Quiz.createRoute(topicId, title)
-                                )
+                                navController.navigate(Screen.Quiz.createRoute(topicId, title))
                             },
                             onDailyQuizClick = {
                                 navController.navigate(
@@ -115,12 +121,12 @@ class MainActivity : ComponentActivity() {
                                 navController.navigate(
                                     Screen.Quiz.createRoute(
                                         topicItem.id,
-                                        topicItem.title + " Quiz"
+                                        "${topicItem.title} Quiz"
                                     )
                                 )
                             },
                             onBack = {
-                                navController.popBackStack()
+                                goHome()
                             },
                             onHomeClick = {
                                 navigateBottomTab(Screen.Home.route)
@@ -143,13 +149,21 @@ class MainActivity : ComponentActivity() {
                             quizzesCompleted = quizzesCompleted,
                             bestScore = bestScore,
                             onBack = {
-                                navController.popBackStack()
+                                goHome()
+                            },
+                            onHomeClick = {
+                                navigateBottomTab(Screen.Home.route)
+                            },
+                            onTopicsClick = {
+                                navigateBottomTab(Screen.Topics.route)
                             },
                             onHistoryClick = {
                                 navigateBottomTab(Screen.History.route)
                             },
                             onLeaderboardClick = {
-                                navController.navigate(Screen.Leaderboard.route)
+                                navController.navigate(Screen.Leaderboard.route) {
+                                    launchSingleTop = true
+                                }
                             }
                         )
                     }
@@ -157,81 +171,66 @@ class MainActivity : ComponentActivity() {
                     composable(
                         route = Screen.Quiz.route,
                         arguments = listOf(
-                            navArgument("topicId") {
-                                type = NavType.StringType
-                            },
-                            navArgument("topicTitle") {
-                                type = NavType.StringType
-                            }
+                            navArgument("topicId") { type = NavType.StringType },
+                            navArgument("topicTitle") { type = NavType.StringType }
                         )
                     ) { backStackEntry ->
                         val topicId = backStackEntry.arguments?.getString("topicId") ?: ""
                         val topicTitle = backStackEntry.arguments?.getString("topicTitle") ?: ""
-                        val questions by viewModel.questions.collectAsStateWithLifecycle()
-                        val startTime = remember { System.currentTimeMillis() }
+                        val startTime = remember(topicId, topicTitle) {
+                            System.currentTimeMillis()
+                        }
 
                         LaunchedEffect(topicId) {
-                            viewModel.clearQuestions()
                             viewModel.loadQuestions(topicId)
                         }
 
-                        if (questions.isNotEmpty()) {
-                            QuizScreen(
-                                questions = questions,
-                                topicTitle = topicTitle,
-                                onBackClick = {
-                                    navController.popBackStack()
-                                },
-                                onQuizFinished = { score, total, reviewItems ->
-                                    val elapsedMs = System.currentTimeMillis() - startTime
-                                    val mins = (elapsedMs / 60_000).toInt()
-                                    val secs = ((elapsedMs % 60_000) / 1_000).toInt()
-                                    val timeTaken = "$mins:${secs.toString().padStart(2, '0')}"
+                        QuizScreen(
+                            viewModel = viewModel,
+                            topicTitle = topicTitle,
+                            onBackClick = {
+                                navController.popBackStack()
+                            },
+                            onQuizFinished = { score, total, reviewItems ->
+                                val elapsedMs = System.currentTimeMillis() - startTime
+                                val mins = (elapsedMs / 60_000).toInt()
+                                val secs = ((elapsedMs % 60_000) / 1_000).toInt()
+                                val timeTaken = "$mins:${secs.toString().padStart(2, '0')}"
 
-                                    viewModel.saveResult(
-                                        topic = topicTitle,
-                                        score = score,
-                                        totalQuestions = total,
-                                        timeTaken = timeTaken,
-                                        reviewItems = reviewItems
-                                    ) { resultId ->
-                                        navController.navigate(
-                                            Screen.Result.createRoute(
-                                                resultId,
-                                                score,
-                                                total,
-                                                timeTaken,
-                                                topicTitle
-                                            )
-                                        ) {
-                                            popUpTo(Screen.Quiz.route) {
-                                                inclusive = true
-                                            }
+                                viewModel.saveResult(
+                                    topic = topicTitle,
+                                    score = score,
+                                    totalQuestions = total,
+                                    timeTaken = timeTaken,
+                                    reviewItems = reviewItems
+                                ) { resultId ->
+                                    navController.navigate(
+                                        Screen.Result.createRoute(
+                                            resultId,
+                                            score,
+                                            total,
+                                            timeTaken,
+                                            topicTitle
+                                        )
+                                    ) {
+                                        popUpTo(Screen.Quiz.route) {
+                                            inclusive = true
                                         }
+                                        launchSingleTop = true
                                     }
                                 }
-                            )
-                        }
+                            }
+                        )
                     }
 
                     composable(
                         route = Screen.Result.route,
                         arguments = listOf(
-                            navArgument("resultId") {
-                                type = NavType.LongType
-                            },
-                            navArgument("score") {
-                                type = NavType.IntType
-                            },
-                            navArgument("total") {
-                                type = NavType.IntType
-                            },
-                            navArgument("timeTaken") {
-                                type = NavType.StringType
-                            },
-                            navArgument("topicTitle") {
-                                type = NavType.StringType
-                            }
+                            navArgument("resultId") { type = NavType.LongType },
+                            navArgument("score") { type = NavType.IntType },
+                            navArgument("total") { type = NavType.IntType },
+                            navArgument("timeTaken") { type = NavType.StringType },
+                            navArgument("topicTitle") { type = NavType.StringType }
                         )
                     ) { backStackEntry ->
                         val resultId = backStackEntry.arguments?.getLong("resultId") ?: 0L
@@ -250,11 +249,18 @@ class MainActivity : ComponentActivity() {
                             },
                             onRestartQuizClick = {
                                 viewModel.clearSavedResultId()
-                                navigateBottomTab(Screen.Home.route)
+                                val topicId = topicTitleToId(topicTitle)
+
+                                navController.navigate(
+                                    Screen.Quiz.createRoute(topicId, topicTitle)
+                                ) {
+                                    popUpTo(Screen.Home.route)
+                                    launchSingleTop = true
+                                }
                             },
                             onBackHomeClick = {
                                 viewModel.clearSavedResultId()
-                                navigateBottomTab(Screen.Home.route)
+                                goHome()
                             }
                         )
                     }
@@ -262,9 +268,7 @@ class MainActivity : ComponentActivity() {
                     composable(
                         route = Screen.Review.route,
                         arguments = listOf(
-                            navArgument("resultId") {
-                                type = NavType.LongType
-                            }
+                            navArgument("resultId") { type = NavType.LongType }
                         )
                     ) { backStackEntry ->
                         val resultId = backStackEntry.arguments?.getLong("resultId") ?: 0L
@@ -283,10 +287,19 @@ class MainActivity : ComponentActivity() {
                                 totalQuestions = e.totalQuestions,
                                 reviewItems = parseReviewItems(e.reviewJson),
                                 onRestartQuizClick = {
-                                    navigateBottomTab(Screen.Home.route)
+                                    viewModel.clearSavedResultId()
+                                    val topicId = topicTitleToId(e.topic)
+
+                                    navController.navigate(
+                                        Screen.Quiz.createRoute(topicId, e.topic)
+                                    ) {
+                                        popUpTo(Screen.Home.route)
+                                        launchSingleTop = true
+                                    }
                                 },
                                 onBackHomeClick = {
-                                    navigateBottomTab(Screen.Home.route)
+                                    viewModel.clearSavedResultId()
+                                    goHome()
                                 }
                             )
                         }
@@ -351,9 +364,7 @@ class MainActivity : ComponentActivity() {
                     composable(
                         route = Screen.HistoryDetail.route,
                         arguments = listOf(
-                            navArgument("resultId") {
-                                type = NavType.LongType
-                            }
+                            navArgument("resultId") { type = NavType.LongType }
                         )
                     ) { backStackEntry ->
                         val resultId = backStackEntry.arguments?.getLong("resultId") ?: 0L
@@ -382,10 +393,19 @@ class MainActivity : ComponentActivity() {
                                     navController.popBackStack()
                                 },
                                 onRetakeQuizClick = {
-                                    navigateBottomTab(Screen.Home.route)
+                                    viewModel.clearSavedResultId()
+                                    val topicId = topicTitleToId(e.topic)
+
+                                    navController.navigate(
+                                        Screen.Quiz.createRoute(topicId, e.topic)
+                                    ) {
+                                        popUpTo(Screen.Home.route)
+                                        launchSingleTop = true
+                                    }
                                 },
                                 onBackHomeClick = {
-                                    navigateBottomTab(Screen.Home.route)
+                                    viewModel.clearSavedResultId()
+                                    goHome()
                                 }
                             )
                         }
@@ -402,8 +422,8 @@ private fun parseReviewItems(jsonString: String?): List<ReviewQuestionItem> {
     return try {
         Json {
             ignoreUnknownKeys = true
-        }.decodeFromString(jsonString)
-    } catch (e: Exception) {
+        }.decodeFromString<List<ReviewQuestionItem>>(jsonString)
+    } catch (_: Exception) {
         emptyList()
     }
 }
