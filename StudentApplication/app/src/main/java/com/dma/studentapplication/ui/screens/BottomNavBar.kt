@@ -1,0 +1,69 @@
+package com.dma.studentapplication.ui.screens
+
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.GridView
+import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.dp
+
+private val PrimaryGreen = Color(0xFF27D17F)
+private val LightTextMuted = Color(0xFF5B6785)
+private val DarkTextMuted = Color(0xFF8FA3C8)
+private val LightNavBar = Color.White
+private val DarkNavBar = Color(0xFF041225)
+
+data class BottomNavItem(
+    val key: String,
+    val label: String,
+    val icon: ImageVector,
+    val onClick: () -> Unit
+)
+
+@Composable
+fun AppBottomNavBar(
+    current: String,
+    onHomeClick: () -> Unit,
+    onTopicsClick: () -> Unit,
+    onHistoryClick: () -> Unit,
+    onProfileClick: () -> Unit,
+    isDark: Boolean = isSystemInDarkTheme()
+) {
+    val navBarColor = if (isDark) DarkNavBar else LightNavBar
+    val mutedColor = if (isDark) DarkTextMuted else LightTextMuted
+
+    val items = listOf(
+        BottomNavItem("home", "Home", Icons.Default.Home, onHomeClick),
+        BottomNavItem("topics", "Topics", Icons.Default.GridView, onTopicsClick),
+        BottomNavItem("history", "History", Icons.Default.History, onHistoryClick),
+        BottomNavItem("profile", "Profile", Icons.Default.Person, onProfileClick)
+    )
+
+    NavigationBar(containerColor = navBarColor, tonalElevation = 0.dp) {
+        items.forEach { item ->
+            val selected = item.key == current
+            NavigationBarItem(
+                selected = selected,
+                onClick = item.onClick,
+                icon = { Icon(item.icon, contentDescription = item.label) },
+                label = { Text(item.label) },
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = PrimaryGreen,
+                    selectedTextColor = PrimaryGreen,
+                    unselectedIconColor = mutedColor,
+                    unselectedTextColor = mutedColor,
+                    indicatorColor = Color.Transparent
+                )
+            )
+        }
+    }
+}

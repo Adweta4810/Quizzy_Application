@@ -6,17 +6,18 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -45,7 +46,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.dma.studentapplication.ui.screens.model.ReviewQuestionItem
 
-
 @Composable
 fun ReviewScreen(
     topicTitle: String,
@@ -73,88 +73,88 @@ fun ReviewScreen(
     val correctTextColor = if (isDark) Color(0xFF6EE7B7) else Color(0xFF15803D)
     val wrongTextColor   = if (isDark) Color(0xFFFF9AA5) else Color(0xFFDC2626)
 
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .background(Brush.verticalGradient(listOf(screenBgTop, screenBgBottom)))
-            .padding(WindowInsets.navigationBars.asPaddingValues())
+            .windowInsetsPadding(WindowInsets.safeDrawing),
+        contentPadding = PaddingValues(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 24.dp),
+        verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
-        Column(
-            modifier            = Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(text = "Review Lesson", color = titleColor, fontSize = 28.sp, fontWeight = FontWeight.ExtraBold)
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = topicTitle, color = accentTeal, fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
-            Spacer(modifier = Modifier.height(14.dp))
-
-            Card(
+        item {
+            Column(
                 modifier = Modifier.fillMaxWidth(),
-                shape    = RoundedCornerShape(22.dp),
-                colors   = CardDefaults.cardColors(containerColor = cardColor),
-                border   = BorderStroke(1.dp, borderColor)
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Column(
-                    modifier            = Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 18.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                Text(text = "Review Lesson", color = titleColor, fontSize = 28.sp, fontWeight = FontWeight.ExtraBold)
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(text = topicTitle, color = accentTeal, fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
+                Spacer(modifier = Modifier.height(14.dp))
+
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape    = RoundedCornerShape(22.dp),
+                    colors   = CardDefaults.cardColors(containerColor = cardColor),
+                    border   = BorderStroke(1.dp, borderColor)
                 ) {
-                    Text(text = "$score / $totalQuestions", color = titleColor, fontSize = 30.sp, fontWeight = FontWeight.ExtraBold)
-                    Spacer(modifier = Modifier.height(6.dp))
-                    Text(text = "Here is a review of your quiz answers", color = subtitleColor, fontSize = 14.sp, textAlign = TextAlign.Center)
+                    Column(
+                        modifier            = Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 18.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(text = "$score / $totalQuestions", color = titleColor, fontSize = 30.sp, fontWeight = FontWeight.ExtraBold)
+                        Spacer(modifier = Modifier.height(6.dp))
+                        Text(text = "Here is a review of your quiz answers", color = subtitleColor, fontSize = 14.sp, textAlign = TextAlign.Center)
+                    }
                 }
             }
         }
 
-        LazyColumn(
-            modifier       = Modifier.weight(1f),
-            contentPadding = WindowInsets.navigationBars.asPaddingValues()
-        ) {
-            itemsIndexed(reviewItems) { index, item ->
-                ReviewQuestionCard(
-                    questionNumber   = index + 1,
-                    item             = item,
-                    isDark           = isDark,
-                    titleColor       = titleColor,
-                    subtitleColor    = subtitleColor,
-                    correctCardBg    = correctCardBg,
-                    wrongCardBg      = wrongCardBg,
-                    correctBorder    = correctBorder,
-                    wrongBorder      = wrongBorder,
-                    correctTextColor = correctTextColor,
-                    wrongTextColor   = wrongTextColor
-                )
-            }
-            item { Spacer(modifier = Modifier.height(12.dp)) }
+        itemsIndexed(reviewItems) { index, item ->
+            ReviewQuestionCard(
+                questionNumber   = index + 1,
+                item             = item,
+                isDark           = isDark,
+                titleColor       = titleColor,
+                subtitleColor    = subtitleColor,
+                correctCardBg    = correctCardBg,
+                wrongCardBg      = wrongCardBg,
+                correctBorder    = correctBorder,
+                wrongBorder      = wrongBorder,
+                correctTextColor = correctTextColor,
+                wrongTextColor   = wrongTextColor
+            )
         }
 
-        Column(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            Button(
-                onClick  = onRestartQuizClick,
-                modifier = Modifier.fillMaxWidth().height(56.dp),
-                shape    = RoundedCornerShape(18.dp),
-                colors   = ButtonDefaults.buttonColors(
-                    containerColor = primaryColor,
-                    contentColor   = if (isDark) Color(0xFF052012) else Color.White
-                )
+        item {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                Icon(Icons.Default.Refresh, "Restart Quiz", modifier = Modifier.size(18.dp))
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(text = "Restart Quiz", fontSize = 16.sp, fontWeight = FontWeight.Bold)
-            }
+                Button(
+                    onClick  = onRestartQuizClick,
+                    modifier = Modifier.fillMaxWidth().height(56.dp),
+                    shape    = RoundedCornerShape(18.dp),
+                    colors   = ButtonDefaults.buttonColors(
+                        containerColor = primaryColor,
+                        contentColor   = if (isDark) Color(0xFF052012) else Color.White
+                    )
+                ) {
+                    Icon(Icons.Default.Refresh, "Restart Quiz", modifier = Modifier.size(18.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(text = "Restart Quiz", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                }
 
-            OutlinedButton(
-                onClick  = onBackHomeClick,
-                modifier = Modifier.fillMaxWidth().height(54.dp),
-                shape    = RoundedCornerShape(18.dp),
-                border   = BorderStroke(1.dp, borderColor),
-                colors   = ButtonDefaults.outlinedButtonColors(contentColor = titleColor)
-            ) {
-                Icon(Icons.Default.Home, "Back Home", modifier = Modifier.size(18.dp))
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(text = "Back Home", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+                OutlinedButton(
+                    onClick  = onBackHomeClick,
+                    modifier = Modifier.fillMaxWidth().height(54.dp),
+                    shape    = RoundedCornerShape(18.dp),
+                    border   = BorderStroke(1.dp, borderColor),
+                    colors   = ButtonDefaults.outlinedButtonColors(contentColor = titleColor)
+                ) {
+                    Icon(Icons.Default.Home, "Back Home", modifier = Modifier.size(18.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(text = "Back Home", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+                }
             }
         }
     }
@@ -182,7 +182,7 @@ fun ReviewQuestionCard(
     val answerLabelColor = if (item.isCorrect) correctTextColor  else wrongTextColor
 
     Card(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 8.dp),
+        modifier = Modifier.fillMaxWidth(),
         shape    = RoundedCornerShape(20.dp),
         colors   = CardDefaults.cardColors(containerColor = containerColor),
         border   = BorderStroke(1.dp, borderColor)

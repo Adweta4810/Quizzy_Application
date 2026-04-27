@@ -19,6 +19,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -48,6 +50,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -81,11 +84,11 @@ fun QuizScreen(
     val isDark         = isSystemInDarkTheme()
     val totalQuestions = questions.size
 
-    var currentQuestionIndex by remember { mutableIntStateOf(0) }
-    var selectedAnswerIndex  by remember { mutableStateOf<Int?>(null) }
-    var answerLocked         by remember { mutableStateOf(false) }
-    var score                by remember { mutableIntStateOf(0) }
-    var timeLeft             by remember(currentQuestionIndex) { mutableIntStateOf(15) }
+    var currentQuestionIndex by rememberSaveable { mutableIntStateOf(0) }
+    var selectedAnswerIndex  by rememberSaveable { mutableStateOf<Int?>(null) }
+    var answerLocked         by rememberSaveable { mutableStateOf(false) }
+    var score                by rememberSaveable { mutableIntStateOf(0) }
+    var timeLeft             by rememberSaveable(currentQuestionIndex) { mutableIntStateOf(15) }
 
     val reviewItems     = remember { mutableStateListOf<ReviewQuestionItem>() }
     val currentQuestion = questions.getOrNull(currentQuestionIndex)
@@ -154,7 +157,7 @@ fun QuizScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(WindowInsets.navigationBars.asPaddingValues())
+                .windowInsetsPadding(WindowInsets.safeDrawing)
         ) {
             // ── Sticky top bar ────────────────────────────────────────────────
             Column(

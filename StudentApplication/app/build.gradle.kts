@@ -55,7 +55,6 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui.text.google.fonts)
     implementation(libs.androidx.navigation.compose)
-    //implementation(libs.androidx.pdf.ink)
     implementation(libs.firebase.crashlytics.buildtools)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.navigation.event)

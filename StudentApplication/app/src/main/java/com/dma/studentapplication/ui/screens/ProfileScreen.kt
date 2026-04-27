@@ -3,17 +3,45 @@ package com.dma.studentapplication.ui.screens
 import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.*
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.EmojiEvents
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Quiz
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -26,6 +54,8 @@ fun ProfileScreen(
     quizzesCompleted: Int = 12,
     bestScore: String = "9/10",
     onBack: () -> Unit = {},
+    onHomeClick: () -> Unit = onBack,
+    onTopicsClick: () -> Unit = {},
     onHistoryClick: () -> Unit = {},
     onLeaderboardClick: () -> Unit = {}
 ) {
@@ -44,152 +74,173 @@ fun ProfileScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .windowInsetsPadding(WindowInsets.safeDrawing)
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+            LazyColumn(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),
+                contentPadding = PaddingValues(start = 20.dp, end = 20.dp, top = 18.dp, bottom = 24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                IconButton(onClick = onBack) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBack,
-                        contentDescription = "Back",
-                        tint = textDark
-                    )
+                item {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        IconButton(onClick = onBack) {
+                            Icon(
+                                imageVector = Icons.Default.ArrowBack,
+                                contentDescription = "Back",
+                                tint = textDark
+                            )
+                        }
+
+                        Text(
+                            text = "Profile",
+                            color = textDark,
+                            style = MaterialTheme.typography.headlineSmall,
+                            fontWeight = FontWeight.ExtraBold
+                        )
+                    }
                 }
 
-                Text(
-                    text = "Profile",
-                    color = textDark,
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.ExtraBold
-                )
-            }
+                item {
+                    Box(
+                        modifier = Modifier
+                            .size(110.dp)
+                            .clip(CircleShape)
+                            .background(primaryGreen.copy(alpha = 0.18f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Person,
+                            contentDescription = "Profile",
+                            tint = primaryGreen,
+                            modifier = Modifier.size(62.dp)
+                        )
+                    }
+                }
 
-            Spacer(modifier = Modifier.height(28.dp))
+                item {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(
+                            text = userName,
+                            color = textDark,
+                            style = MaterialTheme.typography.headlineMedium,
+                            fontWeight = FontWeight.ExtraBold
+                        )
 
-            Box(
-                modifier = Modifier
-                    .size(110.dp)
-                    .clip(CircleShape)
-                    .background(primaryGreen.copy(alpha = 0.18f)),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Person,
-                    contentDescription = "Profile",
-                    tint = primaryGreen,
-                    modifier = Modifier.size(62.dp)
-                )
-            }
+                        Text(
+                            text = email,
+                            color = textMuted,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                }
 
-            Spacer(modifier = Modifier.height(16.dp))
+                item {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        ProfileStatCard(
+                            title = "Quizzes",
+                            value = quizzesCompleted.toString(),
+                            icon = Icons.Default.Quiz,
+                            cardColor = cardColor,
+                            textDark = textDark,
+                            textMuted = textMuted,
+                            primaryGreen = primaryGreen,
+                            modifier = Modifier.weight(1f)
+                        )
 
-            Text(
-                text = userName,
-                color = textDark,
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.ExtraBold
-            )
+                        ProfileStatCard(
+                            title = "Best Score",
+                            value = bestScore,
+                            icon = Icons.Default.Star,
+                            cardColor = cardColor,
+                            textDark = textDark,
+                            textMuted = textMuted,
+                            primaryGreen = primaryGreen,
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                }
 
-            Text(
-                text = email,
-                color = textMuted,
-                style = MaterialTheme.typography.bodyMedium
-            )
+                item {
+                    Button(
+                        onClick = onHistoryClick,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp),
+                        shape = RoundedCornerShape(18.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = primaryGreen,
+                            contentColor = Color(0xFF000B1B)
+                        )
+                    ) {
+                        Text(
+                            text = "View Quiz History",
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
 
-            Spacer(modifier = Modifier.height(30.dp))
+                item {
+                    Button(
+                        onClick = onLeaderboardClick,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp),
+                        shape = RoundedCornerShape(18.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = primaryGreen,
+                            contentColor = Color(0xFF000B1B)
+                        )
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.EmojiEvents,
+                                contentDescription = null,
+                                modifier = Modifier.size(20.dp).padding(end = 8.dp)
+                            )
+                            Text(
+                                text = "View Leaderboard",
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+                }
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                ProfileStatCard(
-                    title = "Quizzes",
-                    value = quizzesCompleted.toString(),
-                    icon = Icons.Default.Quiz,
-                    cardColor = cardColor,
-                    textDark = textDark,
-                    textMuted = textMuted,
-                    primaryGreen = primaryGreen,
-                    modifier = Modifier.weight(1f)
-                )
-
-                ProfileStatCard(
-                    title = "Best Score",
-                    value = bestScore,
-                    icon = Icons.Default.Star,
-                    cardColor = cardColor,
-                    textDark = textDark,
-                    textMuted = textMuted,
-                    primaryGreen = primaryGreen,
-                    modifier = Modifier.weight(1f)
-                )
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Button(
-                onClick = onHistoryClick,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
-                shape = RoundedCornerShape(18.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = primaryGreen,
-                    contentColor = Color(0xFF000B1B)
-                )
-            ) {
-                Text(
-                    text = "View Quiz History",
-                    fontWeight = FontWeight.Bold
-                )
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Button(
-                onClick = onLeaderboardClick,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
-                shape = RoundedCornerShape(18.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = primaryGreen,
-                    contentColor = Color(0xFF000B1B)
-                )
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.EmojiEvents,
-                        contentDescription = null,
-                        modifier = Modifier.size(20.dp).padding(end = 8.dp)
-                    )
-                    Text(
-                        text = "View Leaderboard",
-                        fontWeight = FontWeight.Bold
-                    )
+                item {
+                    OutlinedButton(
+                        onClick = onHomeClick,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp),
+                        shape = RoundedCornerShape(18.dp),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            contentColor = textDark
+                        )
+                    ) {
+                        Text(text = "Back to Home")
+                    }
                 }
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
-
-            OutlinedButton(
-                onClick = onBack,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
-                shape = RoundedCornerShape(18.dp),
-                colors = ButtonDefaults.outlinedButtonColors(
-                    contentColor = textDark
-                )
-            ) {
-                Text(text = "Back to Home")
-            }
+            AppBottomNavBar(
+                current = "profile",
+                onHomeClick = onHomeClick,
+                onTopicsClick = onTopicsClick,
+                onHistoryClick = onHistoryClick,
+                onProfileClick = {},
+                isDark = isDark
+            )
         }
     }
 }
@@ -198,7 +249,7 @@ fun ProfileScreen(
 private fun ProfileStatCard(
     title: String,
     value: String,
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    icon: ImageVector,
     cardColor: Color,
     textDark: Color,
     textMuted: Color,
@@ -251,11 +302,7 @@ fun ProfileScreenPreview() {
     }
 }
 
-@Preview(
-    showBackground = true,
-    showSystemUi = true,
-    uiMode = Configuration.UI_MODE_NIGHT_YES
-)
+@Preview(showBackground = true, showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun ProfileScreenDarkPreview() {
     StudentApplicationTheme {
