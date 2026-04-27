@@ -1,4 +1,4 @@
-package com.dma.studentapplication.ui
+package com.dma.studentapplication.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

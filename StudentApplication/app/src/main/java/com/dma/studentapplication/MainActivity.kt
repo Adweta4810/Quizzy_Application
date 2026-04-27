@@ -17,8 +17,8 @@ import androidx.navigation.navArgument
 import com.dma.studentapplication.data.local.room.QuizDatabase
 import com.dma.studentapplication.navigation.Screen
 import com.dma.studentapplication.repository.QuizRepository
-import com.dma.studentapplication.ui.QuizViewModel
-import com.dma.studentapplication.ui.QuizViewModelFactory
+import com.dma.studentapplication.viewmodel.QuizViewModel
+import com.dma.studentapplication.viewmodel.QuizViewModelFactory
 import com.dma.studentapplication.ui.screens.model.QuizHistoryDetail
 import com.dma.studentapplication.ui.screens.model.ReviewQuestionItem
 import com.dma.studentapplication.ui.screens.HistoryDetailScreen
