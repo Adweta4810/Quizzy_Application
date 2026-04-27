@@ -364,9 +364,9 @@ private fun DetailTopBar(
     onBack: () -> Unit
 ) {
     Row(
-        modifier          = Modifier
+        modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp, vertical = 16.dp),
+            .padding(horizontal = 8.dp, vertical = 45.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         // Back button — same as QuizScreen

@@ -79,14 +79,14 @@ fun LeaderboardScreen(
             LazyColumn(
                 modifier            = Modifier.weight(1f).fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
-                contentPadding      = PaddingValues(top = 32.dp, bottom = 96.dp)
+                contentPadding      = PaddingValues(top = 45.dp, bottom = 96.dp)
             ) {
                 // Header
                 item {
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 20.dp),
+                            .padding(horizontal = 30.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Icon(

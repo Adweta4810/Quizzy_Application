@@ -78,7 +78,7 @@ fun ReviewScreen(
             .fillMaxSize()
             .background(Brush.verticalGradient(listOf(screenBgTop, screenBgBottom)))
             .windowInsetsPadding(WindowInsets.safeDrawing),
-        contentPadding = PaddingValues(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 24.dp),
+        contentPadding = PaddingValues(start = 20.dp, end = 20.dp, top = 30.dp, bottom = 24.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
         item {

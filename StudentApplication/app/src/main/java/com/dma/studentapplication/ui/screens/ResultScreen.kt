@@ -8,17 +8,19 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTime
@@ -107,7 +109,7 @@ fun ResultScreen(
     val mistakesTextColor = if (isDark) Color(0xFFFF8E96) else Color(0xFFDC2626)
     val correctTextColor = if (isDark) Color(0xFF6EE7B7) else Color(0xFF16A34A)
 
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .background(
@@ -115,182 +117,189 @@ fun ResultScreen(
                     colors = listOf(screenBgTop, screenBgBottom)
                 )
             )
-            .padding(WindowInsets.navigationBars.asPaddingValues())
-            .padding(horizontal = 24.dp, vertical = 28.dp),
+            .windowInsetsPadding(WindowInsets.safeDrawing),
+        contentPadding = PaddingValues(
+            start = 24.dp,
+            end = 24.dp,
+            top = 50.dp,
+            bottom = 90.dp
+        ),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceBetween
+        verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        Spacer(modifier = Modifier.height(4.dp))
-
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            ScoreRing(
-                percentage = percentage,
-                ringColor = ringColor,
-                isDark = isDark,
-                roboState = roboState
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Text(
-                text = title,
-                color = titleColor,
-                fontSize = 32.sp,
-                fontWeight = FontWeight.ExtraBold,
-                textAlign = TextAlign.Center
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = subtitle,
-                color = subtitleColor,
-                fontSize = 16.sp,
-                lineHeight = 24.sp,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth(0.92f)
-            )
-
-            Spacer(modifier = Modifier.height(18.dp))
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically
+        item {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Icon(
-                    imageVector = Icons.Default.AccessTime,
-                    contentDescription = "Time Taken",
-                    tint = Color(0xFFEAB308),
-                    modifier = Modifier.size(18.dp)
+                ScoreRing(
+                    percentage = percentage,
+                    ringColor = ringColor,
+                    isDark = isDark,
+                    roboState = roboState
                 )
 
-                Spacer(modifier = Modifier.width(6.dp))
+                Spacer(modifier = Modifier.height(24.dp))
 
                 Text(
-                    text = timeTakenText,
-                    color = Color(0xFFEAB308),
+                    text = title,
+                    color = titleColor,
+                    fontSize = 32.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    textAlign = TextAlign.Center
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = subtitle,
+                    color = subtitleColor,
                     fontSize = 16.sp,
+                    lineHeight = 24.sp,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth(0.92f)
+                )
+
+                Spacer(modifier = Modifier.height(18.dp))
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.AccessTime,
+                        contentDescription = "Time Taken",
+                        tint = Color(0xFFEAB308),
+                        modifier = Modifier.size(18.dp)
+                    )
+
+                    Spacer(modifier = Modifier.width(6.dp))
+
+                    Text(
+                        text = timeTakenText,
+                        color = Color(0xFFEAB308),
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(14.dp))
+
+                Text(
+                    text = topicTitle,
+                    color = accentTeal,
+                    fontSize = 15.sp,
                     fontWeight = FontWeight.SemiBold
                 )
-            }
 
-            Spacer(modifier = Modifier.height(14.dp))
+                Spacer(modifier = Modifier.height(28.dp))
 
-            Text(
-                text = topicTitle,
-                color = accentTeal,
-                fontSize = 15.sp,
-                fontWeight = FontWeight.SemiBold
-            )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(14.dp)
+                ) {
+                    StatCard(
+                        modifier = Modifier.weight(1f),
+                        number = mistakes.toString(),
+                        label = "Mistakes",
+                        textColor = mistakesTextColor,
+                        backgroundColor = mistakesCardBg,
+                        iconText = "✕"
+                    )
 
-            Spacer(modifier = Modifier.height(28.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(14.dp)
-            ) {
-                StatCard(
-                    modifier = Modifier.weight(1f),
-                    number = mistakes.toString(),
-                    label = "Mistakes",
-                    textColor = mistakesTextColor,
-                    backgroundColor = mistakesCardBg,
-                    iconText = "✕"
-                )
-
-                StatCard(
-                    modifier = Modifier.weight(1f),
-                    number = score.toString(),
-                    label = "Correct",
-                    textColor = correctTextColor,
-                    backgroundColor = correctCardBg,
-                    iconText = "✓"
-                )
+                    StatCard(
+                        modifier = Modifier.weight(1f),
+                        number = score.toString(),
+                        label = "Correct",
+                        textColor = correctTextColor,
+                        backgroundColor = correctCardBg,
+                        iconText = "✓"
+                    )
+                }
             }
         }
 
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            Button(
-                onClick = onReviewLessonClick,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(58.dp),
-                shape = RoundedCornerShape(18.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = primaryColor,
-                    contentColor = if (isDark) Color(0xFF052012) else Color.White
-                )
+        item {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                Icon(
-                    imageVector = Icons.Default.Visibility,
-                    contentDescription = "Review Lesson",
-                    modifier = Modifier.size(18.dp)
-                )
+                Button(
+                    onClick = onReviewLessonClick,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(58.dp),
+                    shape = RoundedCornerShape(18.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = primaryColor,
+                        contentColor = if (isDark) Color(0xFF052012) else Color.White
+                    )
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Visibility,
+                        contentDescription = "Review Lesson",
+                        modifier = Modifier.size(18.dp)
+                    )
 
-                Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
 
-                Text(
-                    text = "Review Lesson",
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
+                    Text(
+                        text = "Review Lesson",
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
 
-            OutlinedButton(
-                onClick = onRestartQuizClick,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(54.dp),
-                shape = RoundedCornerShape(18.dp),
-                border = BorderStroke(1.dp, borderColor),
-                colors = ButtonDefaults.outlinedButtonColors(
-                    contentColor = titleColor
-                )
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Refresh,
-                    contentDescription = "Restart Quiz",
-                    modifier = Modifier.size(18.dp)
-                )
+                OutlinedButton(
+                    onClick = onRestartQuizClick,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(54.dp),
+                    shape = RoundedCornerShape(18.dp),
+                    border = BorderStroke(1.dp, borderColor),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        contentColor = titleColor
+                    )
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Refresh,
+                        contentDescription = "Restart Quiz",
+                        modifier = Modifier.size(18.dp)
+                    )
 
-                Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
 
-                Text(
-                    text = "Restart Quiz",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
-            }
+                    Text(
+                        text = "Restart Quiz",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
 
-            OutlinedButton(
-                onClick = onBackHomeClick,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(54.dp),
-                shape = RoundedCornerShape(18.dp),
-                border = BorderStroke(1.dp, borderColor),
-                colors = ButtonDefaults.outlinedButtonColors(
-                    contentColor = titleColor
-                )
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Home,
-                    contentDescription = "Back Home",
-                    modifier = Modifier.size(18.dp)
-                )
+                OutlinedButton(
+                    onClick = onBackHomeClick,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(54.dp),
+                    shape = RoundedCornerShape(18.dp),
+                    border = BorderStroke(1.dp, borderColor),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        contentColor = titleColor
+                    )
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Home,
+                        contentDescription = "Back Home",
+                        modifier = Modifier.size(18.dp)
+                    )
 
-                Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
 
-                Text(
-                    text = "Back Home",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
+                    Text(
+                        text = "Back Home",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
             }
         }
     }

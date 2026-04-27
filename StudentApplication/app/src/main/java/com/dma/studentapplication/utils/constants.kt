@@ -2,7 +2,7 @@ package com.dma.studentapplication.utils
 
 import com.dma.studentapplication.model.QuizTopic
 
-object Constants {
+object constants {
 
     const val QUESTIONS_PER_QUIZ = 10
     const val TIMER_SECONDS      = 15

@@ -49,7 +49,7 @@ object JsonLoader {
      *   answers are never in the same position every time.
      */
     fun getPreparedQuestions(context: Context, topicId: String): List<QuizQuestionUi> {
-        val fileName = Constants.quizTopics
+        val fileName = constants.quizTopics
             .find { it.id == topicId }?.fileName ?: return emptyList()
 
         return loadQuestions(context, fileName)
@@ -58,7 +58,7 @@ object JsonLoader {
                         question.correctAnswerIndex in question.options.indices
             }
             .shuffled()
-            .take(Constants.QUESTIONS_PER_QUIZ)
+            .take(constants.QUESTIONS_PER_QUIZ)
             .mapIndexed { index, question ->
                 val correctText  = question.options[question.correctAnswerIndex]
                 val shuffledOpts = question.options.shuffled()

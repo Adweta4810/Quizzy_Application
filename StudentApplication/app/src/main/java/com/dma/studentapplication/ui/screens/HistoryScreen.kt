@@ -159,14 +159,14 @@ fun HistoryScreen(
         ) {
             LazyColumn(
                 modifier            = Modifier.weight(1f).fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(14.dp)
+                verticalArrangement = Arrangement.spacedBy(24.dp)
             ) {
                 // Header
                 item {
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(start = 20.dp, end = 20.dp, top = 32.dp, bottom = 4.dp)
+                            .padding(start = 30.dp, end = 20.dp, top = 45.dp, bottom = 4.dp)
                     ) {
                         Text(
                             text       = "Quiz History",

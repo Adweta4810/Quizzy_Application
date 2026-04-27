@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.sp
 import com.dma.studentapplication.ui.components.RoboBuddy
 import com.dma.studentapplication.ui.screens.model.HomeTopicUi
 import com.dma.studentapplication.ui.theme.StudentApplicationTheme
+import com.dma.studentapplication.utils.constants.greeting
 
 /**
  * Returns `true` when the device is currently in landscape orientation.
@@ -212,10 +213,10 @@ private fun ContentColumn(
     onProfileClick: () -> Unit
 ) {
     LazyColumn(
-        modifier            = modifier.padding(horizontal = 20.dp),
+        modifier            = modifier.padding(horizontal = 25.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding      = PaddingValues(
-            top    = 16.dp,
+            top    = 50.dp,
             bottom = if (landscape) 16.dp else 96.dp  // 96.dp clears the BottomBar
         )
     ) {
@@ -349,7 +350,7 @@ private fun LandscapeNavRail(
                     }
                 },
                 icon     = { Icon(icon, contentDescription = label) },
-                label    = { Text(label, fontSize = 10.sp) },
+                label    = { Text(label, fontSize = 12.sp) },
                 colors   = NavigationRailItemDefaults.colors(
                     selectedIconColor   = selectedColor,
                     selectedTextColor   = selectedColor,
@@ -388,23 +389,9 @@ private fun HeaderSection(
     ) {
         // Left: waving hand icon + greeting text
         Row(modifier = Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
-            Box(
-                modifier = Modifier
-                    .size(56.dp)
-                    .clip(CircleShape)
-                    .background(if (isDark) Color(0xFF052337) else Color(0x1427D17F)),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    Icons.Outlined.WavingHand,
-                    contentDescription = "Greeting",
-                    tint     = Color(0xFF27D17F),
-                    modifier = Modifier.size(28.dp)
-                )
-            }
             Column(modifier = Modifier.padding(start = 14.dp)) {
                 Text("Hi $userName,",           color = titleColor,    fontSize = 22.sp, fontWeight = FontWeight.ExtraBold)
-                Text("Great to see you again!", color = subtitleColor, fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                Text("${greeting()}!", color = subtitleColor, fontSize = 14.sp, fontWeight = FontWeight.Medium)
             }
         }
 
@@ -447,54 +434,116 @@ private fun SectionTitle(title: String, icon: ImageVector, titleColor: Color) {
 }
 
 /**
- * Full-width gradient card promoting the daily quiz.
+ * Recent Quiz card using the same gradient as the old Daily Quiz card.
  *
- * Displays a countdown badge, quiz title, question count, a participant
- * icon and a forward arrow to indicate the card is tappable.
+ * Shows a "RECENT QUIZ" label, topic icon, quiz title on the left,
+ * and an arc score ring on the right.
  *
- * @param gradient Horizontal gradient brush applied to the card background.
- * @param onClick  Called when the card is tapped.
+ * @param gradient          Horizontal gradient brush applied to the card background.
+ * @param onClick           Called when the card is tapped.
+ * @param recentTopic       Title of the most recently attempted quiz.
+ * @param recentTopicIcon   Icon representing the quiz topic.
+ * @param recentScore       Score percentage (0–100) shown in the ring.
  */
 @Composable
-private fun DailyQuizCard(gradient: Brush, onClick: () -> Unit) {
+private fun DailyQuizCard(
+    gradient: Brush,
+    onClick: () -> Unit,
+    recentTopic: String = "A Basic Music Quiz",
+    recentTopicIcon: ImageVector = Icons.Default.MusicNote,
+    recentScore: Int = 65
+) {
     Card(
         modifier  = Modifier.fillMaxWidth().clickable { onClick() },
         shape     = RoundedCornerShape(28.dp),
-        /* Transparent so the gradient Box inside shows through the Card. */
         colors    = CardDefaults.cardColors(containerColor = Color.Transparent),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Box(
             modifier = Modifier
                 .background(gradient)
-                .padding(horizontal = 18.dp, vertical = 20.dp)
+                .padding(horizontal = 18.dp, vertical = 18.dp)
         ) {
-            Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-
-                // Countdown badge showing time until the quiz resets
-                Box(
-                    modifier = Modifier
-                        .size(52.dp)
-                        .clip(CircleShape)
-                        .background(Color.White.copy(alpha = 0.14f)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("3h", color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.Bold)
-                }
-
-                // Quiz title and question count
-                Column(modifier = Modifier.weight(1f).padding(start = 10.dp)) {
-                    Text("Daily Quiz",         color = Color.White,                   fontSize = 18.sp, fontWeight = FontWeight.ExtraBold)
-                    Text("20 mixed questions", color = Color.White.copy(alpha = 0.95f), fontSize = 14.sp, maxLines = 1)
-                }
-
-                // Participant count icon stacked above the navigate arrow
-                Column(horizontalAlignment = Alignment.End) {
+            Row(
+                modifier          = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Left: label + icon row + title
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text          = "RECENT QUIZ",
+                        color         = Color.White.copy(alpha = 0.80f),
+                        fontSize      = 15.sp,
+                        fontWeight    = FontWeight.ExtraBold,
+                        letterSpacing = 1.2.sp
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(Icons.Default.Groups, null, tint = Color.White.copy(alpha = 0.95f), modifier = Modifier.size(16.dp))
+                        // Icon bubble
+                        Box(
+                            modifier         = Modifier
+                                .size(34.dp)
+                                .clip(CircleShape)
+                                .background(Color.White.copy(alpha = 0.18f)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                imageVector        = recentTopicIcon,
+                                contentDescription = null,
+                                tint               = Color.White,
+                                modifier           = Modifier.size(18.dp)
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Text(
+                            text       = recentTopic,
+                            color      = Color.White,
+                            fontSize   = 17.sp,
+                            fontWeight = FontWeight.ExtraBold,
+                            maxLines   = 1,
+                            overflow   = TextOverflow.Ellipsis
+                        )
                     }
-                    Spacer(modifier = Modifier.padding(top = 8.dp))
-                    Icon(Icons.Default.ArrowForwardIos, "Open Daily Quiz", tint = Color.White, modifier = Modifier.size(18.dp))
+                }
+
+                Spacer(modifier = Modifier.width(14.dp))
+
+                // Right: arc score ring
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier         = Modifier.size(62.dp)
+                ) {
+                    androidx.compose.foundation.Canvas(modifier = Modifier.fillMaxSize()) {
+                        val stroke = 7.dp.toPx()
+                        // Track ring
+                        drawArc(
+                            color      = Color.White.copy(alpha = 0.25f),
+                            startAngle = 0f,
+                            sweepAngle = 360f,
+                            useCenter  = false,
+                            style      = androidx.compose.ui.graphics.drawscope.Stroke(
+                                width = stroke,
+                                cap   = androidx.compose.ui.graphics.StrokeCap.Round
+                            )
+                        )
+                        // Progress ring
+                        drawArc(
+                            color      = Color.White,
+                            startAngle = -90f,
+                            sweepAngle = 360f * (recentScore / 100f),
+                            useCenter  = false,
+                            style      = androidx.compose.ui.graphics.drawscope.Stroke(
+                                width = stroke,
+                                cap   = androidx.compose.ui.graphics.StrokeCap.Round
+                            )
+                        )
+                    }
+                    Text(
+                        text       = "$recentScore%",
+                        color      = Color.White,
+                        fontSize   = 13.sp,
+                        fontWeight = FontWeight.ExtraBold
+                    )
                 }
             }
         }
