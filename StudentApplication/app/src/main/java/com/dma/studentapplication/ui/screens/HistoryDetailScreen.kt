@@ -329,7 +329,7 @@ private fun DetailTopBar(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp, vertical = 28.dp),
+            .padding(horizontal = 8.dp, vertical = 40.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(onClick = onBack) {

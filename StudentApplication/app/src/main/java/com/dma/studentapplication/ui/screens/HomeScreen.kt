@@ -159,7 +159,7 @@ private fun ContentColumn(
         modifier = modifier.padding(horizontal = 25.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = PaddingValues(
-            top = 35.dp,
+            top = 40.dp,
             bottom = if (landscape) 16.dp else 96.dp
         )
     ) {
@@ -455,7 +455,7 @@ private fun QuickTopicCard(
             Text(
                 text = topic.title,
                 color = if (isDark) Color.White else Color(0xFF0F172A),
-                fontSize = 13.sp,
+                fontSize = 15.sp,
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.padding(top = 10.dp)
             )

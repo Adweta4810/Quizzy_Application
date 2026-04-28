@@ -100,7 +100,7 @@ fun ResultScreen(
         contentPadding = PaddingValues(
             start = 24.dp,
             end = 24.dp,
-            top = 32.dp,
+            top = 60.dp,
             bottom = 24.dp
         ),
         horizontalAlignment = Alignment.CenterHorizontally,
