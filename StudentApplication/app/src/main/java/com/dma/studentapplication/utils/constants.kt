@@ -2,14 +2,37 @@ package com.dma.studentapplication.utils
 
 import com.dma.studentapplication.model.QuizTopic
 
+/**
+ * App-wide constants and configuration values.
+ *
+ * Centralizing these here means a single edit updates the behavior
+ * everywhere — no magic numbers scattered across the codebase.
+ */
 object constants {
 
-    const val QUESTIONS_PER_QUIZ = 10
-    const val TIMER_SECONDS      = 15
-    const val LOW_TIMER_THRESHOLD = 5    // timer turns red below this
-    const val XP_PER_CORRECT     = 10
-    const val XP_BONUS_FULL      = 20   // bonus for 10/10
+    // ── Quiz rules ────────────────────────────────────────────────────────────
 
+    /** Number of questions shown per quiz session. */
+    const val QUESTIONS_PER_QUIZ = 10
+
+    /** Seconds allowed to answer each question before auto-locking. */
+    const val TIMER_SECONDS = 15
+
+    /** Timer turns red when seconds remaining falls below this value. */
+    const val LOW_TIMER_THRESHOLD = 5
+
+
+    // ── Topic catalogue ───────────────────────────────────────────────────────
+
+    /**
+     * Master list of all available quiz topics.
+     *
+     * Each [QuizTopic] entry maps a topic id to its display name, JSON asset
+     * file, emoji icon, and light/dark accent colors used across the UI.
+     *
+     * Add or remove entries here to update the topic list globally.
+     * The [JsonLoader] uses this list to resolve topic id → filename.
+     */
     val quizTopics = listOf(
         QuizTopic("current_affairs", "Current Affairs", "current_affairs.json", "🌍", "#FEF3C7", "#F97316"),
         QuizTopic("geography",       "Geography",       "geography.json",       "🗺️", "#DCFCE7", "#22C55E"),
@@ -23,18 +46,40 @@ object constants {
         QuizTopic("networking",      "Networking",      "networking.json",      "🌐", "#CCFBF1", "#14B8A6")
     )
 
-    // Dynamic greeting by hour
-    fun greeting(): String = when (java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY)) {
-        in 5..11  -> "Good Morning"
-        in 12..16 -> "Good Afternoon"
-        in 17..20 -> "Good Evening"
-        else      -> "Hey Night Owl"
-    }
+    // ── Greeting ──────────────────────────────────────────────────────────────
 
-    // Mascot messages
-    val idleMessages    = listOf("Let's go! 🚀", "Ready to quiz?", "Pick a topic!")
+    /**
+     * Returns a time-of-day greeting based on the device's current hour.
+     *
+     * Ranges:
+     * - 05:00 – 11:59 → "Good Morning"
+     * - 12:00 – 16:59 → "Good Afternoon"
+     * - 17:00 – 20:59 → "Good Evening"
+     * - 21:00 – 04:59 → "Hey Night Owl"
+     */
+    fun greeting(): String =
+        when (java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY)) {
+            in 5..11  -> "Good Morning"
+            in 12..16 -> "Good Afternoon"
+            in 17..20 -> "Good Evening"
+            else      -> "Hey Night Owl"
+        }
+
+    // ── RoboBuddy mascot messages ─────────────────────────────────────────────
+    // One message is picked at random from each list to vary the mascot's dialogue.
+
+    /** Shown when the mascot is idle (no quiz active). */
+    val idleMessages = listOf("Let's go! 🚀", "Ready to quiz?", "Pick a topic!")
+
+    /** Shown immediately after a correct answer. */
     val correctMessages = listOf("Nice one! 🎯", "You got it!", "Brilliant! ⭐", "Nailed it! 🔥")
-    val wrongMessages   = listOf("Not quite…", "Try again! 💪", "Almost there!", "Keep going!")
+
+    /** Shown immediately after a wrong answer. */
+    val wrongMessages = listOf("Not quite…", "Try again! 💪", "Almost there!", "Keep going!")
+
+    /** Shown when the timer drops below [LOW_TIMER_THRESHOLD]. */
     val lowTimerMessages = listOf("Hurry up! ⏰", "Quick! Quick!", "Time's running out!")
+
+    /** Shown when the user achieves a perfect score. */
     val celebrateMessages = listOf("You crushed it! 🎉", "Legendary! 🏆", "Perfect score!!")
 }

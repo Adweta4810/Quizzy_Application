@@ -44,6 +44,20 @@ import com.dma.studentapplication.ui.theme.StudentApplicationTheme
 import com.dma.studentapplication.viewmodel.QuizViewModel
 import kotlinx.coroutines.delay
 
+// ── Public entry point ────────────────────────────────────────────────────────
+
+/**
+ * ViewModel-connected entry point for the quiz screen.
+ *
+ * Collects the question list from [viewModel] and delegates all UI to
+ * [QuizScreenContent], keeping the ViewModel dependency out of the stateless
+ * composable so it can be previewed and tested independently.
+ *
+ * @param viewModel      Provides the shuffled question list for this quiz session.
+ * @param topicTitle     Display name shown in the top bar (e.g. "Technology Quiz").
+ * @param onBackClick    Called when the user chooses to quit and discard the session.
+ * @param onQuizFinished Called with (score, total, reviewItems) when the quiz ends.
+ */
 @Composable
 fun QuizScreen(
     viewModel: QuizViewModel,
@@ -61,6 +75,27 @@ fun QuizScreen(
     )
 }
 
+// ── Stateless content ─────────────────────────────────────────────────────────
+
+/**
+ * Stateless quiz screen that drives the full question/answer/timer flow.
+ *
+ * All state is held with [rememberSaveable] so it survives configuration changes
+ * (rotation, system font scale, etc.) without needing the ViewModel.
+ *
+ * Flow per question:
+ * 1. Timer counts down from 15 s — auto-locks with "No answer" if it reaches 0.
+ * 2. User taps an option → selection is highlighted but not yet locked.
+ * 3. User taps "Lock Answer" → answer is evaluated, RoboBuddy reacts, correct
+ *    answer is revealed if wrong.
+ * 4. User taps "Next Question" → state resets for the next question.
+ * 5. After the last question, "Finish Quiz" calls [onQuizFinished].
+ *
+ * @param questions      Shuffled list of questions for this session.
+ * @param topicTitle     Display name shown in the top bar.
+ * @param onBackClick    Called when the user quits without finishing.
+ * @param onQuizFinished Called with (score, total, reviewItems) when the quiz ends.
+ */
 @Composable
 internal fun QuizScreenContent(
     questions: List<QuizQuestionUi>,
@@ -71,6 +106,8 @@ internal fun QuizScreenContent(
     val isDark = isSystemInDarkTheme()
     val totalQuestions = questions.size
 
+    // ── Per-question state (all saveable across config changes) ───────────────
+
     var currentQuestionIndex by rememberSaveable { mutableIntStateOf(0) }
     var selectedAnswerIndex by rememberSaveable { mutableStateOf<Int?>(null) }
     var answerLocked by rememberSaveable { mutableStateOf(false) }
@@ -78,6 +115,8 @@ internal fun QuizScreenContent(
     var timeLeft by rememberSaveable { mutableIntStateOf(15) }
     var showQuitDialog by rememberSaveable { mutableStateOf(false) }
 
+    // Review items accumulate as the user answers each question.
+    // A custom listSaver is used because MutableStateList isn't Saveable by default.
     val reviewItems = rememberSaveable(
         saver = listSaver(
             save = { list ->
@@ -105,8 +144,10 @@ internal fun QuizScreenContent(
         mutableStateListOf<ReviewQuestionItem>()
     }
 
+    // Intercept the system back gesture to show the quit dialog instead of navigating away
     BackHandler { showQuitDialog = true }
 
+    // ── Loading guard ─────────────────────────────────────────────────────────
     if (questions.isEmpty()) {
         Box(
             modifier = Modifier.fillMaxSize(),
@@ -117,6 +158,8 @@ internal fun QuizScreenContent(
         return
     }
 
+    // ── Quiz completion guard ─────────────────────────────────────────────────
+    // currentQuestion becomes null when the index goes past the last question
     val currentQuestion = questions.getOrNull(currentQuestionIndex)
 
     if (currentQuestion == null) {
@@ -126,47 +169,51 @@ internal fun QuizScreenContent(
         return
     }
 
+    // Index of the correct option in the (already shuffled) options list
     val correctIndex = currentQuestion.options.indexOf(currentQuestion.correctAnswer)
 
-    val screenBg = if (isDark) Color(0xFF001226) else Color(0xFFF5F8FC)
+    // ── Theme-aware colors ────────────────────────────────────────────────────
+    val screenBg       = if (isDark) Color(0xFF001226) else Color(0xFFF5F8FC)
     val screenBgBottom = if (isDark) Color(0xFF041B38) else Color(0xFFEAF2FB)
-    val surfaceColor = if (isDark) Color(0xFF0B1F3A) else Color.White
-    val cardBorder = if (isDark) Color(0xFF37506F) else Color(0xFFD7E0EA)
-    val titleColor = if (isDark) Color.White else Color(0xFF0F172A)
-    val subtitleColor = if (isDark) Color(0xFFD6E0F5) else Color(0xFF475569)
+    val surfaceColor   = if (isDark) Color(0xFF0B1F3A) else Color.White
+    val cardBorder     = if (isDark) Color(0xFF37506F) else Color(0xFFD7E0EA)
+    val titleColor     = if (isDark) Color.White       else Color(0xFF0F172A)
+    val subtitleColor  = if (isDark) Color(0xFFD6E0F5) else Color(0xFF475569)
 
-    val accentGreen = Color(0xFF22C55E)
-    val darkGreen = Color(0xFF14532D)
-    val accentTeal = Color(0xFF0891B2)
+    val accentGreen  = Color(0xFF22C55E)
+    val darkGreen    = Color(0xFF14532D)
+    val accentTeal   = Color(0xFF0891B2)
     val warningColor = Color(0xFFE58A00)
-    val wrongColor = Color(0xFFDC2626)
+    val wrongColor   = Color(0xFFDC2626)
 
+    // Smooth progress bar animation when moving to the next question
     val animatedProgress by animateFloatAsState(
-        targetValue = (currentQuestionIndex + 1) / totalQuestions.toFloat(),
-        animationSpec = tween(500),
-        label = "progress"
+        targetValue    = (currentQuestionIndex + 1) / totalQuestions.toFloat(),
+        animationSpec  = tween(500),
+        label          = "progress"
     )
 
+    // RoboBuddy reacts to the current answer state
     val roboState = when {
         answerLocked && selectedAnswerIndex == correctIndex -> RoboBuddyState.CORRECT
-        answerLocked && selectedAnswerIndex != null -> RoboBuddyState.INCORRECT
-        answerLocked -> RoboBuddyState.SAD
-        timeLeft <= 5 -> RoboBuddyState.SURPRISED
-        else -> RoboBuddyState.THINKING
+        answerLocked && selectedAnswerIndex != null         -> RoboBuddyState.INCORRECT
+        answerLocked                                        -> RoboBuddyState.SAD       // Timed out
+        timeLeft <= 5                                       -> RoboBuddyState.SURPRISED // Low time
+        else                                                -> RoboBuddyState.THINKING
     }
 
+    // ── Quit dialog ───────────────────────────────────────────────────────────
     if (showQuitDialog) {
         QuitQuizDialog(
-            onDismiss = { },
-            onQuit = {
-                onBackClick()
-            },
-            onEnd = {
-                onQuizFinished(score, totalQuestions, reviewItems.toList())
-            }
+            onDismiss = { /* Dialog stays open — user must choose an option */ },
+            onQuit    = { onBackClick() },
+            onEnd     = { onQuizFinished(score, totalQuestions, reviewItems.toList()) }
         )
     }
 
+    // ── Countdown timer ───────────────────────────────────────────────────────
+    // Restarts whenever the question index changes or the answer is locked.
+    // If time reaches 0 before the user locks an answer, auto-lock with no selection.
     LaunchedEffect(currentQuestionIndex, answerLocked) {
         while (timeLeft > 0 && !answerLocked) {
             delay(1000)
@@ -176,16 +223,17 @@ internal fun QuizScreenContent(
         if (timeLeft == 0 && !answerLocked) {
             reviewItems.add(
                 ReviewQuestionItem(
-                    question = currentQuestion.question,
+                    question       = currentQuestion.question,
                     selectedAnswer = "No answer selected",
-                    correctAnswer = currentQuestion.correctAnswer,
-                    isCorrect = false
+                    correctAnswer  = currentQuestion.correctAnswer,
+                    isCorrect      = false
                 )
             )
             answerLocked = true
         }
     }
 
+    // ── UI ────────────────────────────────────────────────────────────────────
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -193,31 +241,28 @@ internal fun QuizScreenContent(
             .windowInsetsPadding(WindowInsets.safeDrawing)
     ) {
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(
-                start = 20.dp,
-                end = 20.dp,
-                top = 18.dp,
-                bottom = 28.dp
-            ),
+            modifier       = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(start = 20.dp, end = 20.dp, top = 18.dp, bottom = 28.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
+            // ── Top bar: back button, topic title, question counter, score chip ──
             item {
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier          = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    // Back button opens the quit dialog rather than navigating immediately
                     Surface(
                         modifier = Modifier.size(48.dp),
-                        shape = CircleShape,
-                        color = surfaceColor,
-                        border = BorderStroke(1.dp, cardBorder)
+                        shape    = CircleShape,
+                        color    = surfaceColor,
+                        border   = BorderStroke(1.dp, cardBorder)
                     ) {
                         IconButton(onClick = { showQuitDialog = true }) {
                             Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                imageVector        = Icons.AutoMirrored.Filled.ArrowBack,
                                 contentDescription = "Back",
-                                tint = titleColor
+                                tint               = titleColor
                             )
                         }
                     }
@@ -226,18 +271,18 @@ internal fun QuizScreenContent(
 
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = topicTitle,
-                            color = titleColor,
-                            fontSize = 21.sp,
+                            text       = topicTitle,
+                            color      = titleColor,
+                            fontSize   = 21.sp,
                             fontWeight = FontWeight.ExtraBold,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
+                            maxLines   = 1,
+                            overflow   = TextOverflow.Ellipsis
                         )
 
                         Text(
-                            text = "Question ${currentQuestionIndex + 1} of $totalQuestions",
-                            color = subtitleColor,
-                            fontSize = 15.sp,
+                            text       = "Question ${currentQuestionIndex + 1} of $totalQuestions",
+                            color      = subtitleColor,
+                            fontSize   = 15.sp,
                             fontWeight = FontWeight.Medium
                         )
                     }
@@ -246,37 +291,37 @@ internal fun QuizScreenContent(
                 }
             }
 
+            // ── Progress bar + timer chip ─────────────────────────────────────
             item {
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
+                    modifier              = Modifier.fillMaxWidth(),
+                    verticalAlignment     = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     LinearProgressIndicator(
-                        progress = { animatedProgress },
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(9.dp)
-                            .clip(RoundedCornerShape(50.dp)),
-                        color = accentGreen,
+                        progress  = { animatedProgress },
+                        modifier  = Modifier.weight(1f).height(9.dp).clip(RoundedCornerShape(50.dp)),
+                        color      = accentGreen,
                         trackColor = if (isDark) Color(0xFF28415F) else Color(0xFFDDE7F0),
-                        strokeCap = StrokeCap.Round
+                        strokeCap  = StrokeCap.Round
                     )
 
                     TimerChip(
-                        timeLeft = timeLeft,
-                        accentGreen = accentGreen,
+                        timeLeft     = timeLeft,
+                        accentGreen  = accentGreen,
                         warningColor = warningColor,
-                        wrongColor = wrongColor
+                        wrongColor   = wrongColor
                     )
                 }
             }
 
+            // ── RoboBuddy feedback card ───────────────────────────────────────
+            // Shows a dynamic message and mascot that reacts to the current state
             item {
                 Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(26.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+                    modifier  = Modifier.fillMaxWidth(),
+                    shape     = RoundedCornerShape(26.dp),
+                    colors    = CardDefaults.cardColors(containerColor = Color.Transparent),
                     elevation = CardDefaults.cardElevation(0.dp)
                 ) {
                     Row(
@@ -291,37 +336,39 @@ internal fun QuizScreenContent(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         RoboBuddy(
-                            state = roboState,
+                            state    = roboState,
                             modifier = Modifier.size(78.dp)
                         )
 
                         Spacer(modifier = Modifier.width(14.dp))
 
                         Column(modifier = Modifier.weight(1f)) {
+                            // Headline changes based on answer state
                             Text(
                                 text = when {
                                     answerLocked && selectedAnswerIndex == correctIndex -> "Nice one!"
-                                    answerLocked && selectedAnswerIndex != null -> "Oops, not this time"
-                                    answerLocked -> "Time is up!"
-                                    timeLeft <= 5 -> "Hurry up!"
-                                    else -> "Think carefully!"
+                                    answerLocked && selectedAnswerIndex != null         -> "Oops, not this time"
+                                    answerLocked                                        -> "Time is up!"
+                                    timeLeft <= 5                                       -> "Hurry up!"
+                                    else                                                -> "Think carefully!"
                                 },
-                                color = Color.White,
-                                fontSize = 19.sp,
+                                color      = Color.White,
+                                fontSize   = 19.sp,
                                 fontWeight = FontWeight.ExtraBold
                             )
 
                             Spacer(modifier = Modifier.height(4.dp))
 
+                            // Sub-message gives more context beneath the headline
                             Text(
                                 text = when {
                                     answerLocked && selectedAnswerIndex == correctIndex -> "Robo is proud of you!"
-                                    answerLocked && selectedAnswerIndex != null -> "Check the correct answer below."
-                                    answerLocked -> "You ran out of time."
+                                    answerLocked && selectedAnswerIndex != null         -> "Check the correct answer below."
+                                    answerLocked                                        -> "You ran out of time."
                                     else -> "You have ${timeLeft}s for this question."
                                 },
-                                color = Color.White,
-                                fontSize = 15.sp,
+                                color      = Color.White,
+                                fontSize   = 15.sp,
                                 lineHeight = 21.sp,
                                 fontWeight = FontWeight.Medium
                             )
@@ -330,28 +377,29 @@ internal fun QuizScreenContent(
                 }
             }
 
+            // ── Question card ─────────────────────────────────────────────────
             item {
                 Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(24.dp),
-                    colors = CardDefaults.cardColors(containerColor = surfaceColor),
-                    border = BorderStroke(1.dp, cardBorder),
+                    modifier  = Modifier.fillMaxWidth(),
+                    shape     = RoundedCornerShape(24.dp),
+                    colors    = CardDefaults.cardColors(containerColor = surfaceColor),
+                    border    = BorderStroke(1.dp, cardBorder),
                     elevation = CardDefaults.cardElevation(0.dp)
                 ) {
                     Column(modifier = Modifier.padding(20.dp)) {
                         Text(
-                            text = "Question ${currentQuestionIndex + 1}",
-                            color = accentTeal,
-                            fontSize = 13.sp,
+                            text       = "Question ${currentQuestionIndex + 1}",
+                            color      = accentTeal,
+                            fontSize   = 13.sp,
                             fontWeight = FontWeight.ExtraBold
                         )
 
                         Spacer(modifier = Modifier.height(10.dp))
 
                         Text(
-                            text = currentQuestion.question,
-                            color = titleColor,
-                            fontSize = 21.sp,
+                            text       = currentQuestion.question,
+                            color      = titleColor,
+                            fontSize   = 21.sp,
                             lineHeight = 29.sp,
                             fontWeight = FontWeight.Bold
                         )
@@ -359,63 +407,77 @@ internal fun QuizScreenContent(
                 }
             }
 
+            // ── Answer options ────────────────────────────────────────────────
+            // Each option is keyed by question index + option index to force recomposition
+            // when moving to a new question, preventing stale selected/correct states.
             items(
                 items = currentQuestion.options.mapIndexed { index, option -> index to option },
-                key = { (index, _) -> "option_${currentQuestionIndex}_$index" }
+                key   = { (index, _) -> "option_${currentQuestionIndex}_$index" }
             ) { (index, option) ->
                 QuizOptionItem(
-                    optionLabel = ('A' + index).toString(),
-                    optionText = option,
-                    isSelected = selectedAnswerIndex == index,
-                    isCorrect = answerLocked && index == correctIndex,
-                    isWrongSelected = answerLocked && selectedAnswerIndex == index && index != correctIndex,
-                    enabled = !answerLocked,
-                    isDark = isDark,
-                    onClick = {
+                    optionLabel      = ('A' + index).toString(),
+                    optionText       = option,
+                    isSelected       = selectedAnswerIndex == index,
+                    isCorrect        = answerLocked && index == correctIndex,
+                    isWrongSelected  = answerLocked && selectedAnswerIndex == index && index != correctIndex,
+                    enabled          = !answerLocked,
+                    isDark           = isDark,
+                    onClick          = {
+                        // Only allow selection before locking
                         if (!answerLocked) selectedAnswerIndex = index
                     }
                 )
             }
 
+            // ── Correct answer reveal ─────────────────────────────────────────
+            // Only shown after locking when the user got it wrong or timed out
             if (answerLocked && selectedAnswerIndex != correctIndex) {
                 item {
                     CorrectAnswerReveal(
                         correctAnswer = currentQuestion.correctAnswer,
-                        isDark = isDark
+                        isDark        = isDark
                     )
                 }
             }
 
+            // ── Primary action button ─────────────────────────────────────────
+            // Label and behavior change depending on the current answer state:
+            // "Lock Answer" → evaluates selection and locks the question
+            // "Next Question" → advances to the next question and resets state
+            // "Finish Quiz"   → triggers the quiz completion callback
             item {
                 Box(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier         = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.Center
                 ) {
                     Button(
                         onClick = {
                             if (!answerLocked) {
+                                // ── Lock the answer ───────────────────────────
                                 val isCorrect = selectedAnswerIndex == correctIndex
 
                                 if (isCorrect) score++
 
                                 reviewItems.add(
                                     ReviewQuestionItem(
-                                        question = currentQuestion.question,
+                                        question       = currentQuestion.question,
                                         selectedAnswer = selectedAnswerIndex
                                             ?.let { currentQuestion.options[it] }
                                             ?: "No answer selected",
-                                        correctAnswer = currentQuestion.correctAnswer,
-                                        isCorrect = isCorrect
+                                        correctAnswer  = currentQuestion.correctAnswer,
+                                        isCorrect      = isCorrect
                                     )
                                 )
 
                                 answerLocked = true
                             } else {
+                                // ── Advance or finish ─────────────────────────
                                 if (currentQuestionIndex < totalQuestions - 1) {
+                                    // Move to the next question and reset all per-question state
                                     currentQuestionIndex++
                                     selectedAnswerIndex = null
-                                    answerLocked = false
-                                    timeLeft = 15
+                                    answerLocked        = false
+                                    timeLeft            = 15
                                 } else {
                                     onQuizFinished(score, totalQuestions, reviewItems.toList())
                                 }
@@ -425,22 +487,23 @@ internal fun QuizScreenContent(
                             .fillMaxWidth()
                             .widthIn(max = 520.dp)
                             .height(56.dp),
-                        shape = RoundedCornerShape(18.dp),
+                        shape  = RoundedCornerShape(18.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = darkGreen,
-                            contentColor = Color.White,
+                            containerColor         = darkGreen,
+                            contentColor           = Color.White,
                             disabledContainerColor = Color(0xFF334155),
-                            disabledContentColor = Color(0xFFE2E8F0)
+                            disabledContentColor   = Color(0xFFE2E8F0)
                         ),
+                        // Disabled until the user selects an option (or answer is already locked)
                         enabled = selectedAnswerIndex != null || answerLocked
                     ) {
                         Text(
                             text = when {
-                                !answerLocked -> "Lock Answer"
+                                !answerLocked                              -> "Lock Answer"
                                 currentQuestionIndex == totalQuestions - 1 -> "Finish Quiz"
-                                else -> "Next Question"
+                                else                                       -> "Next Question"
                             },
-                            fontSize = 16.sp,
+                            fontSize   = 16.sp,
                             fontWeight = FontWeight.ExtraBold
                         )
                     }
@@ -450,6 +513,16 @@ internal fun QuizScreenContent(
     }
 }
 
+// ── Dialogs ───────────────────────────────────────────────────────────────────
+
+/**
+ * Confirmation dialog shown when the user tries to leave mid-quiz.
+ *
+ * Offers three choices:
+ * - **Keep Going** — dismiss and resume the quiz ([onDismiss])
+ * - **Quit**       — exit without saving any result ([onQuit])
+ * - **End Session** — finish early and navigate to the result screen ([onEnd])
+ */
 @Composable
 private fun QuitQuizDialog(
     onDismiss: () -> Unit,
@@ -459,56 +532,61 @@ private fun QuitQuizDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
-            Text(
-                text = "Quit the quiz?",
-                fontWeight = FontWeight.ExtraBold
-            )
+            Text(text = "Quit the quiz?", fontWeight = FontWeight.ExtraBold)
         },
         text = {
             Text("Do you want to keep going, quit the quiz, or end this session and view your result?")
         },
         confirmButton = {
-            Button(onClick = onEnd) {
-                Text("End Session")
-            }
+            Button(onClick = onEnd) { Text("End Session") }
         },
         dismissButton = {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                TextButton(onClick = onDismiss) {
-                    Text("Keep Going")
-                }
-
-                TextButton(onClick = onQuit) {
-                    Text("Quit")
-                }
+                TextButton(onClick = onDismiss) { Text("Keep Going") }
+                TextButton(onClick = onQuit)    { Text("Quit") }
             }
         }
     )
 }
 
+// ── Chips ─────────────────────────────────────────────────────────────────────
+
+/**
+ * Small pill showing the user's running correct-answer count during the quiz.
+ *
+ * @param score  Number of correct answers so far.
+ * @param isDark Whether dark mode is active (affects background and text colors).
+ */
 @Composable
-private fun ScoreChip(
-    score: Int,
-    isDark: Boolean
-) {
+private fun ScoreChip(score: Int, isDark: Boolean) {
     Surface(
-        shape = RoundedCornerShape(14.dp),
-        color = if (isDark) Color(0xFF064E3B) else Color(0xFFDCFCE7),
-        border = BorderStroke(
-            1.dp,
-            if (isDark) Color(0xFF34D399) else Color(0xFF16A34A)
-        )
+        shape  = RoundedCornerShape(14.dp),
+        color  = if (isDark) Color(0xFF064E3B) else Color(0xFFDCFCE7),
+        border = BorderStroke(1.dp, if (isDark) Color(0xFF34D399) else Color(0xFF16A34A))
     ) {
         Text(
-            text = "Score $score",
+            text     = "Score $score",
             modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp),
-            color = if (isDark) Color.White else Color(0xFF14532D),
+            color    = if (isDark) Color.White else Color(0xFF14532D),
             fontSize = 14.sp,
             fontWeight = FontWeight.ExtraBold
         )
     }
 }
 
+/**
+ * Countdown timer pill that smoothly changes color as time runs low.
+ *
+ * Color thresholds:
+ * - > 5 s  → green  (plenty of time)
+ * - ≤ 5 s  → amber  (warning)
+ * - ≤ 3 s  → red    (critical)
+ *
+ * @param timeLeft     Seconds remaining for the current question.
+ * @param accentGreen  Color used when time is plentiful.
+ * @param warningColor Color used when time is running low.
+ * @param wrongColor   Color used when time is critically low.
+ */
 @Composable
 private fun TimerChip(
     timeLeft: Int,
@@ -517,43 +595,66 @@ private fun TimerChip(
     wrongColor: Color
 ) {
     val timerColor by animateColorAsState(
-        targetValue = when {
+        targetValue   = when {
             timeLeft <= 3 -> wrongColor
             timeLeft <= 5 -> warningColor
-            else -> accentGreen
+            else          -> accentGreen
         },
         animationSpec = tween(300),
-        label = "timerColor"
+        label         = "timerColor"
     )
 
     Surface(
-        shape = RoundedCornerShape(14.dp),
-        color = Color.Transparent,
+        shape  = RoundedCornerShape(14.dp),
+        color  = Color.Transparent,
         border = BorderStroke(1.dp, timerColor)
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+            modifier          = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                imageVector = Icons.Default.Timer,
+                imageVector        = Icons.Default.Timer,
                 contentDescription = "Timer",
-                tint = timerColor,
-                modifier = Modifier.size(17.dp)
+                tint               = timerColor,
+                modifier           = Modifier.size(17.dp)
             )
 
             Spacer(modifier = Modifier.width(5.dp))
 
             Text(
-                text = "${timeLeft}s",
-                color = timerColor,
+                text       = "${timeLeft}s",
+                color      = timerColor,
                 fontWeight = FontWeight.ExtraBold,
-                fontSize = 15.sp
+                fontSize   = 15.sp
             )
         }
     }
 }
 
+// ── Answer options ────────────────────────────────────────────────────────────
+
+/**
+ * Single answer option button with animated color feedback.
+ *
+ * States (mutually exclusive, evaluated in priority order):
+ * - [isCorrect]       — green background/border, checkmark icon
+ * - [isWrongSelected] — red background/border, X icon
+ * - [isSelected]      — teal highlight (pre-lock selection)
+ * - default           — neutral white/dark surface
+ *
+ * Disabled ([enabled] = false) once the answer is locked so the user cannot change it,
+ * but the colors are preserved via [disabledContainerColor] / [disabledContentColor].
+ *
+ * @param optionLabel     Letter label ("A", "B", "C", "D") shown in the leading circle.
+ * @param optionText      The answer text.
+ * @param isSelected      Whether this option is currently selected (pre-lock).
+ * @param isCorrect       Whether this is the correct option and the answer is locked.
+ * @param isWrongSelected Whether the user selected this option, but it is wrong.
+ * @param enabled         False once the answer is locked.
+ * @param isDark          Whether dark mode is active.
+ * @param onClick         Called when the option is tapped.
+ */
 @Composable
 private fun QuizOptionItem(
     optionLabel: String,
@@ -565,65 +666,69 @@ private fun QuizOptionItem(
     isDark: Boolean,
     onClick: () -> Unit
 ) {
+    // Background and border animate smoothly when states change after locking
     val backgroundColor by animateColorAsState(
         targetValue = when {
-            isCorrect -> if (isDark) Color(0xFF064E3B) else Color(0xFFDCFCE7)
+            isCorrect       -> if (isDark) Color(0xFF064E3B) else Color(0xFFDCFCE7)
             isWrongSelected -> if (isDark) Color(0xFF7F1D1D) else Color(0xFFFEE2E2)
-            isSelected -> if (isDark) Color(0xFF164E63) else Color(0xFFE0F2FE)
-            else -> if (isDark) Color(0xFF0B1F3A) else Color.White
+            isSelected      -> if (isDark) Color(0xFF164E63) else Color(0xFFE0F2FE)
+            else            -> if (isDark) Color(0xFF0B1F3A) else Color.White
         },
         animationSpec = tween(200),
-        label = "optionBg"
+        label         = "optionBg"
     )
 
     val borderColor by animateColorAsState(
         targetValue = when {
-            isCorrect -> Color(0xFF22C55E)
+            isCorrect       -> Color(0xFF22C55E)
             isWrongSelected -> Color(0xFFDC2626)
-            isSelected -> Color(0xFF0891B2)
-            else -> if (isDark) Color(0xFF37506F) else Color(0xFFD7E0EA)
+            isSelected      -> Color(0xFF0891B2)
+            else            -> if (isDark) Color(0xFF37506F) else Color(0xFFD7E0EA)
         },
         animationSpec = tween(200),
-        label = "optionBorder"
+        label         = "optionBorder"
     )
 
+    // Text color doesn't animate — changes immediately with state
     val textColor = when {
-        isDark -> Color.White
-        isCorrect -> Color(0xFF14532D)
+        isDark          -> Color.White
+        isCorrect       -> Color(0xFF14532D)
         isWrongSelected -> Color(0xFF7F1D1D)
-        isSelected -> Color(0xFF0C4A6E)
-        else -> Color(0xFF0F172A)
+        isSelected      -> Color(0xFF0C4A6E)
+        else            -> Color(0xFF0F172A)
     }
 
     OutlinedButton(
-        onClick = onClick,
-        enabled = enabled,
+        onClick  = onClick,
+        enabled  = enabled,
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(18.dp),
-        border = BorderStroke(1.5.dp, borderColor),
-        colors = ButtonDefaults.outlinedButtonColors(
-            containerColor = backgroundColor,
-            contentColor = textColor,
+        shape    = RoundedCornerShape(18.dp),
+        border   = BorderStroke(1.5.dp, borderColor),
+        colors   = ButtonDefaults.outlinedButtonColors(
+            containerColor         = backgroundColor,
+            contentColor           = textColor,
+            // Preserve colors when disabled so the feedback remains visible after locking
             disabledContainerColor = backgroundColor,
-            disabledContentColor = textColor
+            disabledContentColor   = textColor
         ),
         contentPadding = PaddingValues(horizontal = 14.dp, vertical = 14.dp)
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier          = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            // Letter badge circle — color matches the border for visual consistency
             Surface(
                 modifier = Modifier.size(36.dp),
-                shape = CircleShape,
-                color = borderColor
+                shape    = CircleShape,
+                color    = borderColor
             ) {
                 Box(contentAlignment = Alignment.Center) {
                     Text(
-                        text = optionLabel,
-                        color = Color.White,
+                        text       = optionLabel,
+                        color      = Color.White,
                         fontWeight = FontWeight.ExtraBold,
-                        fontSize = 14.sp
+                        fontSize   = 14.sp
                     )
                 }
             }
@@ -631,78 +736,82 @@ private fun QuizOptionItem(
             Spacer(modifier = Modifier.width(12.dp))
 
             Text(
-                text = optionText,
-                modifier = Modifier.weight(1f),
-                color = textColor,
-                fontSize = 15.sp,
+                text       = optionText,
+                modifier   = Modifier.weight(1f),
+                color      = textColor,
+                fontSize   = 15.sp,
                 lineHeight = 22.sp,
                 fontWeight = FontWeight.SemiBold,
-                textAlign = TextAlign.Start
+                textAlign  = TextAlign.Start
             )
 
+            // Trailing icon only appears after the answer is locked
             if (isCorrect) {
                 Icon(
-                    imageVector = Icons.Default.CheckCircle,
+                    imageVector        = Icons.Default.CheckCircle,
                     contentDescription = "Correct answer",
-                    tint = Color(0xFF22C55E),
-                    modifier = Modifier.size(20.dp)
+                    tint               = Color(0xFF22C55E),
+                    modifier           = Modifier.size(20.dp)
                 )
             }
 
             if (isWrongSelected) {
                 Icon(
-                    imageVector = Icons.Default.Cancel,
+                    imageVector        = Icons.Default.Cancel,
                     contentDescription = "Wrong answer",
-                    tint = Color(0xFFDC2626),
-                    modifier = Modifier.size(20.dp)
+                    tint               = Color(0xFFDC2626),
+                    modifier           = Modifier.size(20.dp)
                 )
             }
         }
     }
 }
 
+// ── Correct answer reveal ─────────────────────────────────────────────────────
+
+/**
+ * Green banner shown below the options when the user answered incorrectly or timed out.
+ * Explicitly displays the correct answer text so the user can learn from the mistake.
+ *
+ * @param correctAnswer The text of the correct answer option.
+ * @param isDark        Whether dark mode is active.
+ */
 @Composable
-private fun CorrectAnswerReveal(
-    correctAnswer: String,
-    isDark: Boolean
-) {
+private fun CorrectAnswerReveal(correctAnswer: String, isDark: Boolean) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(18.dp),
-        colors = CardDefaults.cardColors(
+        modifier  = Modifier.fillMaxWidth(),
+        shape     = RoundedCornerShape(18.dp),
+        colors    = CardDefaults.cardColors(
             containerColor = if (isDark) Color(0xFF064E3B) else Color(0xFFDCFCE7)
         ),
-        border = BorderStroke(
-            1.dp,
-            if (isDark) Color(0xFF34D399) else Color(0xFF16A34A)
-        ),
+        border    = BorderStroke(1.dp, if (isDark) Color(0xFF34D399) else Color(0xFF16A34A)),
         elevation = CardDefaults.cardElevation(0.dp)
     ) {
         Row(
-            modifier = Modifier.padding(16.dp),
+            modifier          = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                imageVector = Icons.Default.CheckCircle,
+                imageVector        = Icons.Default.CheckCircle,
                 contentDescription = null,
-                tint = if (isDark) Color.White else Color(0xFF14532D),
-                modifier = Modifier.size(22.dp)
+                tint               = if (isDark) Color.White else Color(0xFF14532D),
+                modifier           = Modifier.size(22.dp)
             )
 
             Spacer(modifier = Modifier.width(10.dp))
 
             Column {
                 Text(
-                    text = "Correct Answer",
-                    color = if (isDark) Color.White else Color(0xFF14532D),
-                    fontSize = 13.sp,
+                    text       = "Correct Answer",
+                    color      = if (isDark) Color.White else Color(0xFF14532D),
+                    fontSize   = 13.sp,
                     fontWeight = FontWeight.Bold
                 )
 
                 Text(
-                    text = correctAnswer,
-                    color = if (isDark) Color.White else Color(0xFF14532D),
-                    fontSize = 16.sp,
+                    text       = correctAnswer,
+                    color      = if (isDark) Color.White else Color(0xFF14532D),
+                    fontSize   = 16.sp,
                     fontWeight = FontWeight.ExtraBold
                 )
             }
@@ -710,17 +819,19 @@ private fun CorrectAnswerReveal(
     }
 }
 
+// ── Preview data & previews ───────────────────────────────────────────────────
+
 private val previewQuestions = listOf(
     QuizQuestionUi(
-        id = 1,
-        question = "Which language is preferred for Android development?",
-        options = listOf("Java", "Swift", "Kotlin", "Python"),
+        id            = 1,
+        question      = "Which language is preferred for Android development?",
+        options       = listOf("Java", "Swift", "Kotlin", "Python"),
         correctAnswer = "Kotlin"
     ),
     QuizQuestionUi(
-        id = 2,
-        question = "What does CPU stand for?",
-        options = listOf(
+        id            = 2,
+        question      = "What does CPU stand for?",
+        options       = listOf(
             "Central Processing Unit",
             "Central Program Utility",
             "Control Processing Unit",
@@ -730,36 +841,25 @@ private val previewQuestions = listOf(
     )
 )
 
-@Preview(
-    name = "Quiz Light",
-    showBackground = true,
-    showSystemUi = true,
-    uiMode = Configuration.UI_MODE_NIGHT_NO
-)
+@Preview(name = "Quiz Light", showBackground = true, showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 private fun QuizScreenLightPreview() {
     StudentApplicationTheme(darkTheme = false) {
-        QuizScreenContent(
-            questions = previewQuestions,
-            topicTitle = "Technology Quiz"
-        )
+        QuizScreenContent(questions = previewQuestions, topicTitle = "Technology Quiz")
     }
 }
 
 @Preview(
-    name = "Quiz Dark Landscape",
+    name        = "Quiz Dark Landscape",
     showBackground = true,
-    showSystemUi = true,
-    widthDp = 900,
-    heightDp = 420,
-    uiMode = Configuration.UI_MODE_NIGHT_YES
+    showSystemUi   = true,
+    widthDp        = 900,
+    heightDp       = 420,
+    uiMode         = Configuration.UI_MODE_NIGHT_YES
 )
 @Composable
 private fun QuizScreenDarkLandscapePreview() {
     StudentApplicationTheme(darkTheme = true) {
-        QuizScreenContent(
-            questions = previewQuestions,
-            topicTitle = "Technology Quiz"
-        )
+        QuizScreenContent(questions = previewQuestions, topicTitle = "Technology Quiz")
     }
 }

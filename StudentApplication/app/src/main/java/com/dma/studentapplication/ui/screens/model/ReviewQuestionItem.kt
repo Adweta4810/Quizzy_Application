@@ -1,9 +1,22 @@
 package com.dma.studentapplication.ui.screens.model
 
 import kotlinx.serialization.Serializable
+import com.dma.studentapplication.ui.screens.*
 
-// ─── @Serializable so kotlinx can encode/decode to/from ROOM reviewJson ───────
 
+/**
+ * Represents the result of a single answered question, used to render
+ * the per-question breakdown on [ReviewScreen] and [HistoryDetailScreen].
+ *
+ * Annotated with [@Serializable] so kotlinx. Serialization can encode the
+ * full list to a JSON string for storage in the Room `reviewJson` column,
+ * and decode it back when loading history detail.
+ *
+ * @param question       The original question text.
+ * @param selectedAnswer The answer the user chose, or "No answer selected" if they timed out.
+ * @param correctAnswer  The text of the correct answer option.
+ * @param isCorrect      True if [selectedAnswer] matches [correctAnswer].
+ */
 @Serializable
 data class ReviewQuestionItem(
     val question: String,

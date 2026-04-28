@@ -40,10 +40,10 @@ object JsonLoader {
     }
 
     /**
-     * Returns exactly [Constants.QUESTIONS_PER_QUIZ] shuffled [QuizQuestionUi]
+     * Returns exactly [constants.QUESTIONS_PER_QUIZ] shuffled [QuizQuestionUi]
      * ready for the quiz.
      *
-     * - Topic filename is resolved from [Constants.quizTopics] so there is
+     * - Topic filename is resolved from [constants.quizTopics] so there is
      *   a single source of truth for topic → file mapping.
      * - Both the question pool and each question's options are shuffled so
      *   answers are never in the same position every time.
