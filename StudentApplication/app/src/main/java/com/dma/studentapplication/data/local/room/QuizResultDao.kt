@@ -5,7 +5,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
-import com.dma.studentapplication.ui.screens.*
 
 @Dao
 interface QuizResultDao {
@@ -20,14 +19,14 @@ interface QuizResultDao {
 
     /**
      * Returns all quiz results ordered newest-first as a [Flow] so
-     * [HistoryScreen] updates automatically when new results are saved.
+     * [com.dma.studentapplication.ui.screens.history.HistoryScreen] updates automatically when new results are saved.
      */
     @Query("SELECT * FROM quiz_results ORDER BY id DESC")
     fun getAllResults(): Flow<List<QuizResultEntity>>
 
     /**
-     * Returns a single result by its primary key — used by [ReviewScreen]
-     * and [HistoryDetailScreen] to load per-question breakdown data.
+     * Returns a single result by its primary key — used by [com.dma.studentapplication.ui.screens.review.ReviewScreen]
+     * and [com.dma.studentapplication.ui.screens.history.HistoryDetailScreen] to load per-question breakdown data.
      */
     @Query("SELECT * FROM quiz_results WHERE id = :id")
     suspend fun getById(id: Long): QuizResultEntity?

@@ -1,4 +1,4 @@
-package com.dma.studentapplication.ui.screens
+package com.dma.studentapplication.ui.screens.review
 
 import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
@@ -24,7 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.dma.studentapplication.ui.screens.model.ReviewQuestionItem
+import com.dma.studentapplication.ui.screens.review.ReviewQuestionItem
 
 // ── Main screen ───────────────────────────────────────────────────────────────
 

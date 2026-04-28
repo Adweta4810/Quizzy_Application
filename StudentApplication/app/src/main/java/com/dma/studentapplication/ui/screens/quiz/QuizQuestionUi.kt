@@ -1,10 +1,9 @@
-package com.dma.studentapplication.ui.screens.model
+package com.dma.studentapplication.ui.screens.quiz
 
-import com.dma.studentapplication.utils.*
 /**
  * UI model representing a single quiz question ready for display.
  *
- * Created by [JsonLoader] after shuffling the question pool and randomising
+ * Created by [com.dma.studentapplication.utils.JsonLoader] after shuffling the question pool and randomizing
  * the option order. The correct answer is stored as text rather than an index
  * so it remains valid even after the options list is shuffled.
  *

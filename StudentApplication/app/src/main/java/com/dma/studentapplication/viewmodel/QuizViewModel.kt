@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.dma.studentapplication.data.local.room.QuizResultEntity
 import com.dma.studentapplication.repository.QuizRepository
-import com.dma.studentapplication.ui.screens.model.QuizQuestionUi
-import com.dma.studentapplication.ui.screens.model.ReviewQuestionItem
+import com.dma.studentapplication.ui.screens.quiz.QuizQuestionUi
+import com.dma.studentapplication.ui.screens.review.ReviewQuestionItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted

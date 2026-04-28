@@ -1,8 +1,6 @@
-package com.dma.studentapplication.ui.screens.model
+package com.dma.studentapplication.ui.screens.history
 
-import com.dma.studentapplication.ui.screens.QuizHistoryItem
-import com.dma.studentapplication.ui.screens.*
-
+import com.dma.studentapplication.ui.screens.review.ReviewQuestionItem
 
 /**
  * Full detail model for a completed quiz result shown on [HistoryDetailScreen].

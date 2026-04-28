@@ -1,4 +1,4 @@
-package com.dma.studentapplication.ui.screens
+package com.dma.studentapplication.ui.screens.profile
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
@@ -28,6 +28,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.dma.studentapplication.ui.components.AppBottomNavBar
+import com.dma.studentapplication.ui.screens.history.QuizHistoryItem
 import com.dma.studentapplication.ui.theme.StudentApplicationTheme
 
 // ── Theme colors ──────────────────────────────────────────────────────────────
@@ -138,12 +140,12 @@ fun LeaderboardScreen(
                 )
 
                 AppBottomNavBar(
-                    current        = "profile",
-                    onHomeClick    = onBackHome,
-                    onTopicsClick  = onTopicsClick,
+                    current = "profile",
+                    onHomeClick = onBackHome,
+                    onTopicsClick = onTopicsClick,
                     onHistoryClick = onHistoryClick,
                     onProfileClick = onProfileClick,
-                    isDark         = isDark
+                    isDark = isDark
                 )
             }
         }
@@ -462,8 +464,8 @@ fun LeaderboardPreview() {
         LeaderboardScreen(
             leaderboardItems = listOf(
                 QuizHistoryItem(1, "Technology", "23 Apr", "10/10"),
-                QuizHistoryItem(2, "Science",    "22 Apr", "9/10"),
-                QuizHistoryItem(3, "Math",       "21 Apr", "8/10")
+                QuizHistoryItem(2, "Science", "22 Apr", "9/10"),
+                QuizHistoryItem(3, "Math", "21 Apr", "8/10")
             )
         )
     }
@@ -481,8 +483,8 @@ fun LeaderboardLandscapePreview() {
         LeaderboardScreen(
             leaderboardItems = listOf(
                 QuizHistoryItem(1, "Technology", "23 Apr", "10/10"),
-                QuizHistoryItem(2, "Science",    "22 Apr", "9/10"),
-                QuizHistoryItem(3, "Math",       "21 Apr", "8/10")
+                QuizHistoryItem(2, "Science", "22 Apr", "9/10"),
+                QuizHistoryItem(3, "Math", "21 Apr", "8/10")
             )
         )
     }

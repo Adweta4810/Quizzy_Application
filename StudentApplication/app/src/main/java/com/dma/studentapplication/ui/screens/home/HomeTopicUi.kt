@@ -1,8 +1,7 @@
-package com.dma.studentapplication.ui.screens.model
+package com.dma.studentapplication.ui.screens.home
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.dma.studentapplication.ui.screens.*
 
 /**
  * UI model representing a single topic entry on the Home screen.

@@ -1,4 +1,4 @@
-package com.dma.studentapplication.ui.screens
+package com.dma.studentapplication.ui.screens.topic
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
@@ -37,6 +37,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.dma.studentapplication.ui.components.AppBottomNavBar
 import com.dma.studentapplication.ui.theme.StudentApplicationTheme
 
 // ── Theme colors ──────────────────────────────────────────────────────────────
@@ -166,12 +167,12 @@ fun TopicScreen(
                 )
 
                 AppBottomNavBar(
-                    current        = "topics",
-                    onHomeClick    = onHomeClick,
-                    onTopicsClick  = {}, // Already on topics — no-op
+                    current = "topics",
+                    onHomeClick = onHomeClick,
+                    onTopicsClick = {}, // Already on topics — no-op
                     onHistoryClick = onHistoryClick,
                     onProfileClick = onProfileClick,
-                    isDark         = isDark
+                    isDark = isDark
                 )
             }
         }

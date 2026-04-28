@@ -1,4 +1,4 @@
-package com.dma.studentapplication.ui.screens
+package com.dma.studentapplication.ui.screens.quiz
 
 import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
@@ -38,8 +38,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dma.studentapplication.model.RoboBuddyState
 import com.dma.studentapplication.ui.components.RoboBuddy
-import com.dma.studentapplication.ui.screens.model.QuizQuestionUi
-import com.dma.studentapplication.ui.screens.model.ReviewQuestionItem
+import com.dma.studentapplication.ui.screens.review.ReviewQuestionItem
 import com.dma.studentapplication.ui.theme.StudentApplicationTheme
 import com.dma.studentapplication.viewmodel.QuizViewModel
 import kotlinx.coroutines.delay

@@ -1,4 +1,4 @@
-package com.dma.studentapplication.ui.screens
+package com.dma.studentapplication.ui.screens.home
 
 import android.content.res.Configuration
 import androidx.compose.foundation.*
@@ -24,7 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.dma.studentapplication.ui.components.RoboBuddy
-import com.dma.studentapplication.ui.screens.model.HomeTopicUi
+import com.dma.studentapplication.ui.screens.welcome.NickName
 import com.dma.studentapplication.ui.theme.StudentApplicationTheme
 import com.dma.studentapplication.utils.constants.greeting
 
@@ -578,7 +578,7 @@ private fun HeaderSection(
         ) {
             Column(modifier = Modifier.padding(start = 14.dp)) {
                 Text(
-                    text       = "Hi $userName,",
+                    text       = "Hi, $userName",
                     color      = titleColor,
                     fontSize   = 22.sp,
                     fontWeight = FontWeight.ExtraBold

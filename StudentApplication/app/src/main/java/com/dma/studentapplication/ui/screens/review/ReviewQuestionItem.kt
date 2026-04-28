@@ -1,12 +1,10 @@
-package com.dma.studentapplication.ui.screens.model
+package com.dma.studentapplication.ui.screens.review
 
 import kotlinx.serialization.Serializable
-import com.dma.studentapplication.ui.screens.*
-
 
 /**
  * Represents the result of a single answered question, used to render
- * the per-question breakdown on [ReviewScreen] and [HistoryDetailScreen].
+ * the per-question breakdown on [ReviewScreen] and [com.dma.studentapplication.ui.screens.history.HistoryDetailScreen].
  *
  * Annotated with [@Serializable] so kotlinx. Serialization can encode the
  * full list to a JSON string for storage in the Room `reviewJson` column,

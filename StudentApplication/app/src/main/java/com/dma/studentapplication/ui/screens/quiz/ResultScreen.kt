@@ -1,4 +1,4 @@
-package com.dma.studentapplication.ui.screens
+package com.dma.studentapplication.ui.screens.quiz
 
 import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -321,7 +322,7 @@ private fun ScoreRing(
                 startAngle = 0f,
                 sweepAngle = 360f,
                 useCenter  = false,
-                style      = androidx.compose.ui.graphics.drawscope.Stroke(
+                style      = Stroke(
                     width = strokeWidth,
                     cap   = StrokeCap.Round
                 )
@@ -333,7 +334,7 @@ private fun ScoreRing(
                 startAngle = -90f,
                 sweepAngle = 360f * (percentage / 100f),
                 useCenter  = false,
-                style      = androidx.compose.ui.graphics.drawscope.Stroke(
+                style      = Stroke(
                     width = strokeWidth,
                     cap   = StrokeCap.Round
                 )

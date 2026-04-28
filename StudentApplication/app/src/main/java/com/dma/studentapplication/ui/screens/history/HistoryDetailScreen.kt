@@ -1,4 +1,4 @@
-package com.dma.studentapplication.ui.screens
+package com.dma.studentapplication.ui.screens.history
 
 import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
@@ -8,6 +8,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -53,13 +54,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.dma.studentapplication.ui.screens.model.QuizHistoryDetail
-import com.dma.studentapplication.ui.screens.model.ReviewQuestionItem
+import com.dma.studentapplication.ui.screens.review.ReviewQuestionItem
+import com.dma.studentapplication.ui.screens.review.ReviewQuestionCard
 import com.dma.studentapplication.ui.theme.StudentApplicationTheme
 
 // ── Theme colors ──────────────────────────────────────────────────────────────
@@ -177,7 +179,7 @@ fun HistoryDetailScreen(
                 .fillMaxSize()
                 .background(Brush.verticalGradient(listOf(screenBgTop, screenBgBottom)))
                 .padding(WindowInsets.navigationBars.asPaddingValues()),
-            contentPadding = androidx.compose.foundation.layout.PaddingValues(bottom = 24.dp)
+            contentPadding = PaddingValues(bottom = 24.dp)
         ) {
             // Top bar — back button + topic name/icon
             item {
@@ -291,17 +293,17 @@ fun HistoryDetailScreen(
                         .padding(horizontal = 20.dp, vertical = 6.dp)
                 ) {
                     ReviewQuestionCard(
-                        questionNumber   = index + 1,
-                        item             = item,
-                        isDark           = isDark,
-                        titleColor       = textDark,
-                        subtitleColor    = textMuted,
-                        correctCardBg    = correctCardBg,
-                        wrongCardBg      = wrongCardBg,
-                        correctBorder    = correctBorder,
-                        wrongBorder      = wrongBorder,
+                        questionNumber = index + 1,
+                        item = item,
+                        isDark = isDark,
+                        titleColor = textDark,
+                        subtitleColor = textMuted,
+                        correctCardBg = correctCardBg,
+                        wrongCardBg = wrongCardBg,
+                        correctBorder = correctBorder,
+                        wrongBorder = wrongBorder,
                         correctTextColor = correctTextColor,
-                        wrongTextColor   = wrongTextColor
+                        wrongTextColor = wrongTextColor
                     )
                 }
             }
@@ -459,7 +461,7 @@ private fun DetailScoreRing(
                 startAngle = 0f,
                 sweepAngle = 360f,
                 useCenter = false,
-                style = androidx.compose.ui.graphics.drawscope.Stroke(
+                style = Stroke(
                     width = stroke,
                     cap = StrokeCap.Round
                 )
@@ -471,7 +473,7 @@ private fun DetailScoreRing(
                 startAngle = -90f,
                 sweepAngle = 360f * (percentage / 100f),
                 useCenter = false,
-                style = androidx.compose.ui.graphics.drawscope.Stroke(
+                style = Stroke(
                     width = stroke,
                     cap = StrokeCap.Round
                 )
@@ -584,9 +586,9 @@ private fun DetailStatCard(
 private fun sampleDetail(topic: String = "Programming", scoreText: String = "7/10") =
     QuizHistoryDetail(
         historyItem = QuizHistoryItem(
-            id    = 4,
+            id = 4,
             topic = topic,
-            date  = "20 Apr 2026",
+            date = "20 Apr 2026",
             score = scoreText
         ),
         timeTaken      = "3:14",

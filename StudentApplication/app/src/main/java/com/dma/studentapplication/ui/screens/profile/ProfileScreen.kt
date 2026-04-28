@@ -1,4 +1,4 @@
-package com.dma.studentapplication.ui.screens
+package com.dma.studentapplication.ui.screens.profile
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
@@ -21,6 +21,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.dma.studentapplication.ui.components.AppBottomNavBar
 import com.dma.studentapplication.ui.theme.StudentApplicationTheme
 
 // ── Main screen ───────────────────────────────────────────────────────────────
@@ -122,12 +123,12 @@ fun ProfileScreen(
                 )
 
                 AppBottomNavBar(
-                    current        = "profile",
-                    onHomeClick    = onHomeClick,
-                    onTopicsClick  = onTopicsClick,
+                    current = "profile",
+                    onHomeClick = onHomeClick,
+                    onTopicsClick = onTopicsClick,
                     onHistoryClick = onHistoryClick,
                     onProfileClick = {}, // Already on profile — no-op
-                    isDark         = isDark
+                    isDark = isDark
                 )
             }
         }
@@ -216,7 +217,7 @@ private fun ProfileContent(
             }
         }
 
-        // User name and email centered below the avatar
+        // UserName
         item {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
@@ -224,12 +225,6 @@ private fun ProfileContent(
                     color      = textDark,
                     style      = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.ExtraBold
-                )
-
-                Text(
-                    text  = email,
-                    color = textMuted,
-                    style = MaterialTheme.typography.bodyMedium
                 )
             }
         }

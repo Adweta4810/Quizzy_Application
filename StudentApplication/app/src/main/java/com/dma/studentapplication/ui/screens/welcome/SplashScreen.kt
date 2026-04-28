@@ -1,4 +1,4 @@
-package com.dma.studentapplication.ui.screens
+package com.dma.studentapplication.ui.screens.welcome
 
 import android.content.res.Configuration
 import androidx.compose.animation.core.*

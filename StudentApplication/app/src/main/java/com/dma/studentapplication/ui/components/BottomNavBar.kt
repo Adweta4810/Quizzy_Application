@@ -1,4 +1,4 @@
-package com.dma.studentapplication.ui.screens
+package com.dma.studentapplication.ui.components
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.icons.Icons
