@@ -167,12 +167,12 @@ fun TopicScreen(
                 )
 
                 AppBottomNavBar(
-                    current = "topics",
-                    onHomeClick = onHomeClick,
-                    onTopicsClick = {}, // Already on topics — no-op
+                    current        = "topics",
+                    onHomeClick    = onHomeClick,
+                    onTopicsClick  = {}, // Already on topics — no-op
                     onHistoryClick = onHistoryClick,
                     onProfileClick = onProfileClick,
-                    isDark = isDark
+                    isDark         = isDark
                 )
             }
         }
@@ -404,7 +404,7 @@ fun TopicCard(
                 Text(
                     text       = topic.title,
                     color      = textDark,
-                    style      = MaterialTheme.typography.titleLarge,
+                    style      = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
 

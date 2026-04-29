@@ -208,7 +208,7 @@ private fun ContentColumn(
     onProfileClick: () -> Unit
 ) {
     LazyColumn(
-        modifier            = modifier.padding(horizontal = 25.dp),
+        modifier            = modifier.padding(horizontal = 24.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding      = PaddingValues(
             top    = 40.dp,
@@ -307,16 +307,6 @@ private fun ContentColumn(
                     onClick       = { onTopicClick(topic.id) }
                 )
             }
-        }
-
-        // Summary stats card at the bottom of the list
-        item {
-            SummaryCard(
-                surfaceColor  = surfaceColor,
-                borderColor   = cardBorder,
-                titleColor    = titleColor,
-                subtitleColor = subtitleColor
-            )
         }
     }
 }
@@ -576,7 +566,7 @@ private fun HeaderSection(
             modifier          = Modifier.weight(1f),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column(modifier = Modifier.padding(start = 14.dp)) {
+            Column(modifier = Modifier.padding()) {
                 Text(
                     text       = "Hi, $userName",
                     color      = titleColor,
@@ -750,85 +740,6 @@ private fun TopicProgressCard(
                 modifier           = Modifier.size(18.dp)
             )
         }
-    }
-}
-
-// ── Summary card ──────────────────────────────────────────────────────────────
-
-/**
- * Three-column stats card at the bottom of the screen.
- * Shows quizzes completed, average accuracy, and questions per quiz.
- * Values are currently static — wire up to real data when available.
- */
-@Composable
-private fun SummaryCard(
-    surfaceColor: Color,
-    borderColor: Color,
-    titleColor: Color,
-    subtitleColor: Color
-) {
-    Card(
-        modifier  = Modifier.fillMaxWidth(),
-        shape     = RoundedCornerShape(22.dp),
-        colors    = CardDefaults.cardColors(containerColor = surfaceColor),
-        border    = BorderStroke(1.dp, borderColor),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
-    ) {
-        Row(
-            modifier              = Modifier.fillMaxWidth().padding(horizontal = 10.dp, vertical = 18.dp),
-            verticalAlignment     = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            SummaryItem(Icons.Outlined.CheckCircle, "3",   "Quizzes\nCompleted",  titleColor, subtitleColor, Modifier.weight(1f))
-            Divider(modifier = Modifier.size(width = 1.dp, height = 48.dp), color = borderColor)
-            SummaryItem(Icons.Default.QueryStats,   "80%", "Average\nAccuracy",   titleColor, subtitleColor, Modifier.weight(1f))
-            Divider(modifier = Modifier.size(width = 1.dp, height = 48.dp), color = borderColor)
-            SummaryItem(Icons.Default.School,       "10",  "Questions\nPer Quiz", titleColor, subtitleColor, Modifier.weight(1f))
-        }
-    }
-}
-
-/**
- * Single stat column inside [SummaryCard].
- *
- * @param icon  Icon shown above the value.
- * @param value The primary numeric or text value.
- * @param label Two-line descriptive label below the value.
- */
-@Composable
-private fun SummaryItem(
-    icon: ImageVector,
-    value: String,
-    label: String,
-    titleColor: Color,
-    subtitleColor: Color,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier            = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Icon(
-            imageVector        = icon,
-            contentDescription = null,
-            tint               = Color(0xFF27D17F),
-            modifier           = Modifier.size(22.dp)
-        )
-
-        Text(
-            text       = value,
-            color      = titleColor,
-            fontSize   = 17.sp,
-            fontWeight = FontWeight.ExtraBold,
-            modifier   = Modifier.padding(top = 4.dp)
-        )
-
-        Text(
-            text       = label,
-            color      = subtitleColor,
-            fontSize   = 12.sp,
-            lineHeight = 16.sp
-        )
     }
 }
 

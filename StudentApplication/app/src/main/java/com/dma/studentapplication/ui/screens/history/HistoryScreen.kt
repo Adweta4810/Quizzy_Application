@@ -281,7 +281,7 @@ private fun HistoryContent(
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
                 Row(
-                    modifier          = Modifier.fillMaxWidth().padding(20.dp),
+                    modifier          = Modifier.fillMaxWidth().padding(24.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     // History icon
@@ -361,15 +361,14 @@ private fun HistoryContent(
             }
         }
 
-        // ── Filter chips ──────────────────────────────────────────────────────
+        // ── Filter chips ──────────────────────────────────────────────────────────────
         if (historyItems.isNotEmpty()) {
             item {
-                FlowRow(
-                    modifier              = Modifier.fillMaxWidth(),
+                androidx.compose.foundation.lazy.LazyRow(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalArrangement   = Arrangement.spacedBy(6.dp)
+                    contentPadding        = PaddingValues(horizontal = 2.dp)
                 ) {
-                    filters.forEach { filter ->
+                    items(filters) { filter ->
                         FilterChip(
                             selected = selectedFilter == filter,
                             onClick  = { onFilterChange(filter) },

@@ -19,6 +19,11 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Fix for 16 KB alignment
+        ndk {
+            abiFilters += listOf("arm64-v8a", "x86_64")
+        }
     }
 
     buildTypes {
@@ -43,6 +48,13 @@ android {
     buildFeatures {
         compose = true
     }
+
+    // Fix for 16 KB page alignment
+    packaging {
+        jniLibs {
+            useLegacyPackaging = false
+        }
+    }
 }
 
 dependencies {
@@ -55,7 +67,10 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui.text.google.fonts)
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.firebase.crashlytics.buildtools)
+
+    // Updated Firebase - has 16 KB alignment fix
+    implementation("com.google.firebase:firebase-crashlytics-buildtools:3.0.3")
+
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.navigation.event)
     implementation("androidx.compose.material:material-icons-extended")
@@ -63,7 +78,10 @@ dependencies {
     implementation("androidx.room:room-ktx:2.8.4")
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.appcompat)
-    implementation(libs.play.services.basement)
+
+    // Updated Play Services - has 16 KB alignment fix
+    implementation("com.google.android.gms:play-services-basement:18.5.0")
+
     ksp(libs.androidx.room.compiler)
 
     testImplementation(libs.junit)
