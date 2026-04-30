@@ -178,10 +178,10 @@ private fun LeaderboardContent(
         modifier            = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         contentPadding      = PaddingValues(
-            start  = 20.dp,
-            end    = 20.dp,
-            top    = 18.dp,
-            bottom = 28.dp
+            start  = 24.dp,
+            end    = 24.dp,
+            top    = 24.dp,
+            bottom = 24.dp
         )
     ) {
         // Header — back arrow + trophy icon + title

@@ -268,7 +268,7 @@ private fun HistoryContent(
         contentPadding      = PaddingValues(
             start  = if (isLandscape) 24.dp else 20.dp,
             end    = if (isLandscape) 28.dp else 20.dp,
-            top    = if (isLandscape) 18.dp else 42.dp,
+            top    = if (isLandscape) 25.dp else 42.dp,
             bottom = 24.dp
         )
     ) {

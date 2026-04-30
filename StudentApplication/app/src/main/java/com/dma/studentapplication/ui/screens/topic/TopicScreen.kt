@@ -199,7 +199,7 @@ private fun TopicContent(
         contentPadding = PaddingValues(
             start  = 24.dp,
             end    = 24.dp,
-            top    = 30.dp,
+            top    = 24.dp,
             bottom = 24.dp
         ),
         verticalArrangement = Arrangement.spacedBy(14.dp)

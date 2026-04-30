@@ -86,7 +86,7 @@ fun ReviewScreen(
         contentPadding = PaddingValues(
             start  = 20.dp,
             end    = 20.dp,
-            top    = 34.dp,
+            top    = 24.dp,
             bottom = 28.dp
         ),
         verticalArrangement = Arrangement.spacedBy(16.dp)

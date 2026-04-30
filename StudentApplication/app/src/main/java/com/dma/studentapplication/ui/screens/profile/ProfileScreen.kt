@@ -168,8 +168,8 @@ private fun ProfileContent(
     LazyColumn(
         modifier            = modifier.fillMaxWidth(),
         contentPadding      = PaddingValues(
-            start  = 22.dp,
-            end    = 22.dp,
+            start  = 24.dp,
+            end    = 24.dp,
             top    = 24.dp,
             bottom = 24.dp
         ),

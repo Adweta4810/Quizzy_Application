@@ -179,7 +179,9 @@ fun HistoryDetailScreen(
                 .fillMaxSize()
                 .background(Brush.verticalGradient(listOf(screenBgTop, screenBgBottom)))
                 .padding(WindowInsets.navigationBars.asPaddingValues()),
-            contentPadding = PaddingValues(bottom = 24.dp)
+            contentPadding = PaddingValues(
+                top    = 24.dp,
+                bottom = 24.dp)
         ) {
             // Top bar — back button + topic name/icon
             item {
@@ -377,7 +379,7 @@ private fun DetailTopBar(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp, vertical = 50.dp),
+            .padding(horizontal = 8.dp, vertical = 24.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(onClick = onBack) {
