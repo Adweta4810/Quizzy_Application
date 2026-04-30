@@ -94,7 +94,7 @@ fun SplashScreen(
                     .heightIn(min = screenMinHeight),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Spacer(modifier = Modifier.height(56.dp))
+                Spacer(modifier = Modifier.height(60.dp))
 
                 // Floating mascot with ambient glow and shadow
                 RobotHeroSection(isDark = isDark)
