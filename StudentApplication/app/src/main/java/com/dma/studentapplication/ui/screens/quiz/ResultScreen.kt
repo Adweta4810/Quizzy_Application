@@ -72,8 +72,8 @@ fun ResultScreen(
 
     // ── RoboBuddy state based on performance ──────────────────────────────────
     val roboState = when {
-        percentage >= 80 -> RoboBuddyState.CORRECT  // Great score
-        percentage >= 50 -> RoboBuddyState.THINKING // Average score
+        percentage >= 80 -> RoboBuddyState.CELEBRATE  // Great score
+            percentage >= 50 -> RoboBuddyState.HAPPY // Average score
         else             -> RoboBuddyState.SAD       // Poor score
     }
 
