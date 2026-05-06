@@ -1,0 +1,104 @@
+{
+  "questions": [
+    {
+      "questionText": "Which layer of the OSI model handles error-free delivery?",
+      "options": ["Network Layer", "Transport Layer", "Session Layer", "Physical Layer"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which device operates primarily at the Physical Layer (Layer 1)?",
+      "options": ["Switch", "Router", "Hub", "Gateway"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "What is the standard physical address of a network card called?",
+      "options": ["IP Address", "MAC Address", "Port Number", "Subnet Mask"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which topology uses a single backbone cable for all nodes?",
+      "options": ["Star Topology", "Ring Topology", "Mesh Topology", "Bus Topology"],
+      "correctAnswerIndex": 3
+    },
+    {
+      "questionText": "A device that links two different types of networks is a...",
+      "options": ["Hub", "Gateway", "Repeater", "Bridge"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "What is the default port for HTTP?",
+      "options": ["21", "25", "80", "443"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Which protocol is used to retrieve emails from a server?",
+      "options": ["FTP", "SMTP", "POP3 or IMAP", "DNS"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Which protocol provides reliable, connection-oriented data transfer?",
+      "options": ["UDP", "IP", "ARP", "TCP"],
+      "correctAnswerIndex": 3
+    },
+    {
+      "questionText": "What does DNS stand for?",
+      "options": ["Domain Name System", "Dynamic Network Service", "Digital Naming Standard", "Data Network System"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Which protocol is used for remote terminal access?",
+      "options": ["HTTP", "Telnet or SSH", "SNMP", "DHCP"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "How many bits are in an IPv4 address?",
+      "options": ["16 bits", "32 bits", "64 bits", "128 bits"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which IP class is 192.168.1.1 part of?",
+      "options": ["Class A", "Class B", "Class C", "Class D"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "What protocol is used to find a MAC address from an IP address?",
+      "options": ["RARP", "ARP", "ICMP", "DNS"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "What is the subnet mask for a default Class C network?",
+      "options": ["255.0.0.0", "255.255.0.0", "255.255.255.0", "255.255.255.255"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "What command is used to check the path a packet takes to a destination?",
+      "options": ["Ping", "Ipconfig", "Netstat", "Tracert or Traceroute"],
+      "correctAnswerIndex": 3
+    },
+    {
+      "questionText": "Which device filters incoming and outgoing traffic based on rules?",
+      "options": ["Repeater", "Firewall", "Modem", "Access Point"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "What is the loopback IP address for testing?",
+      "options": ["0.0.0.0", "192.168.0.1", "127.0.0.1", "255.255.255.0"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Which wireless standard is commonly known as Wi-Fi?",
+      "options": ["IEEE 802.3", "IEEE 802.11", "IEEE 802.15", "IEEE 802.16"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "What does NAT stand for?",
+      "options": ["Network Access Transmission", "Node Address Table", "Network Address Translation", "New Address Technology"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Which layer of the OSI model is responsible for routing?",
+      "options": ["Data Link Layer", "Transport Layer", "Application Layer", "Network Layer"],
+      "correctAnswerIndex": 3
+    }
+  ]
+}

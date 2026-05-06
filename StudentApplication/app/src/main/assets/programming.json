@@ -1,0 +1,114 @@
+{
+  "questions": [
+    {
+      "questionText": "Which language is known as the \"mother of all languages\"?",
+      "options": ["Java", "Python", "C", "Kotlin"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "What does OOP stand for?",
+      "options": ["Object-Oriented Programming", "Open Operating Protocol", "Object Order Process", "Only One Program"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "In Java, which keyword is used to inherit a class?",
+      "options": ["implements", "inherits", "extends", "super"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Which memory area stores objects in Java?",
+      "options": ["Stack Memory", "Heap Memory", "Cache Memory", "Register Memory"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "What is the entry point method for a Java program?",
+      "options": [
+        "public void start(String[] args)",
+        "public static void main(String[] args)",
+        "static public main()",
+        "void main()"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which symbol is used for comments in Python?",
+      "options": ["//", "#", "/*", "--"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Is Python a compiled or interpreted language?",
+      "options": ["Compiled", "Assembled", "Interpreted", "Binary"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "What function is used to get the length of a list in Python?",
+      "options": ["size()", "count()", "length()", "len()"],
+      "correctAnswerIndex": 3
+    },
+    {
+      "questionText": "How do you define a function in Python?",
+      "options": ["function keyword", "fun keyword", "def keyword", "method keyword"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Which data structure in Python is immutable?",
+      "options": ["List", "Dictionary", "Set", "Tuple"],
+      "correctAnswerIndex": 3
+    },
+    {
+      "questionText": "Who developed the Kotlin programming language?",
+      "options": ["Google", "Microsoft", "JetBrains", "Oracle"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "How do you declare a read-only variable in Kotlin?",
+      "options": ["var", "const", "let", "val"],
+      "correctAnswerIndex": 3
+    },
+    {
+      "questionText": "Which keyword is used to declare a mutable variable in Kotlin?",
+      "options": ["var", "val", "mut", "change"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "What is Kotlin's primary solution for avoiding NullPointerExceptions?",
+      "options": ["Garbage Collection", "Inheritance", "Null Safety", "Overloading"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Which extension is used for Kotlin files?",
+      "options": [".java", ".py", ".xml", ".kt"],
+      "correctAnswerIndex": 3
+    },
+    {
+      "questionText": "How do you create a function in Kotlin?",
+      "options": ["function keyword", "fun keyword", "def keyword", "method keyword"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which class in Kotlin is used to hold data without boilerplate code?",
+      "options": ["sealed class", "abstract class", "data class", "open class"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Which tag is used to link a JavaScript file in HTML?",
+      "options": ["<style>", "<link>", "<script>", "<js>"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "What does IDE stand for?",
+      "options": [
+        "Integrated Development Environment",
+        "Internal Design Engine",
+        "Internet Development Extension",
+        "Integrated Debugging Editor"
+      ],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Which operator is used for strict equality in JavaScript?",
+      "options": ["==", "=", "===", "!=="],
+      "correctAnswerIndex": 2
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "questions": [
+    {"questionText": "What does 'CPU' stand for?", "options": ["Central Processing Unit", "Computer Power Unit", "Core Program Utility", "Central Program Updater"], "correctAnswerIndex": 0},
+    {"questionText": "Which company developed the Android operating system?", "options": ["Apple", "Microsoft", "Google", "Samsung"], "correctAnswerIndex": 2},
+    {"questionText": "What does 'URL' stand for?", "options": ["Universal Resource Locator", "Uniform Resource Locator", "User Request Link", "Universal Routing Link"], "correctAnswerIndex": 1},
+    {"questionText": "Which storage unit is largest?", "options": ["Megabyte", "Gigabyte", "Terabyte", "Kilobyte"], "correctAnswerIndex": 2},
+    {"questionText": "What does 'RAM' stand for?", "options": ["Read Access Memory", "Random Access Memory", "Rapid Array Module", "Real Application Memory"], "correctAnswerIndex": 1},
+    {"questionText": "Which company makes the iPhone?", "options": ["Samsung", "Sony", "Apple", "Google"], "correctAnswerIndex": 2},
+    {"questionText": "What programming language is used for Android development (officially preferred)?", "options": ["Java only", "Swift", "Kotlin", "Python"], "correctAnswerIndex": 2},
+    {"questionText": "What does 'AI' stand for?", "options": ["Automatic Intelligence", "Artificial Intelligence", "Applied Innovation", "Advanced Interface"], "correctAnswerIndex": 1},
+    {"questionText": "What does 'USB' stand for?", "options": ["Universal Serial Bus", "Ultra Speed Byte", "Unified System Bridge", "User Side Bus"], "correctAnswerIndex": 0},
+    {"questionText": "What is the name of Google's AI assistant?", "options": ["Siri", "Cortana", "Bard / Gemini", "Alexa"], "correctAnswerIndex": 2},
+    {"questionText": "What does 'HTML' stand for?", "options": ["Hyper Text Markup Language", "High Tech Machine Language", "Hyperlink Text Management Layers", "Host Terminal Media Language"], "correctAnswerIndex": 0},
+    {"questionText": "What does 'GPS' stand for?", "options": ["Global Positioning System", "General Proximity Sensor", "Geographic Parking Satellite", "Global Path Signal"], "correctAnswerIndex": 0},
+    {"questionText": "Which of these is NOT an operating system?", "options": ["Windows", "macOS", "Linux", "Python"], "correctAnswerIndex": 3},
+    {"questionText": "What does 'SSD' stand for?", "options": ["Solid State Drive", "Super Speed Disk", "System Storage Device", "Secure Server Data"], "correctAnswerIndex": 0},
+    {"questionText": "Which company owns YouTube?", "options": ["Meta", "Microsoft", "Google", "Amazon"], "correctAnswerIndex": 2},
+    {"questionText": "What does 'Wi-Fi' primarily allow devices to do?", "options": ["Connect to cellular towers", "Connect wirelessly to the internet", "Charge wirelessly", "Sync via Bluetooth"], "correctAnswerIndex": 1},
+    {"questionText": "What is the full form of 'BIOS'?", "options": ["Basic Input Output System", "Binary Integrated Operating Software", "Built-In OS", "Base Interface Output Service"], "correctAnswerIndex": 0},
+    {"questionText": "What does '5G' refer to?", "options": ["5 Gigabyte internet", "5th Generation wireless network", "5 GHz Wi-Fi", "5 Gbps broadband"], "correctAnswerIndex": 1},
+    {"questionText": "Which language is primarily used for iOS app development?", "options": ["Kotlin", "Java", "Swift", "Dart"], "correctAnswerIndex": 2},
+    {"questionText": "What is 'Cloud Computing'?", "options": ["Weather prediction using computers", "Storing and accessing data over the internet", "A type of CPU architecture", "Networking using cloud patterns"], "correctAnswerIndex": 1}
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "questions": [
+    {
+      "questionText": "What is the SI unit of Force?",
+      "options": ["Joule", "Pascal", "Newton", "Watt"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Which mirror is used in car side-view mirrors?",
+      "options": ["Plane Mirror", "Concave Mirror", "Convex Mirror", "Solar Mirror"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "What is the speed of light in a vacuum?",
+      "options": ["150,000 km/s", "300,000 km/s", "450,000 km/s", "600,000 km/s"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which law states that \"For every action, there is an equal and opposite reaction\"?",
+      "options": ["Newton's First Law", "Newton's Second Law", "Newton's Third Law", "Law of Gravitation"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "What device is used to measure electric current?",
+      "options": ["Voltmeter", "Barometer", "Thermometer", "Ammeter"],
+      "correctAnswerIndex": 3
+    },
+    {
+      "questionText": "What is the powerhouse of the solar system?",
+      "options": ["The Moon", "The Earth", "The Sun", "Jupiter"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "What is the chemical formula for common table salt?",
+      "options": ["KCl", "NaCl", "CaCO3", "H2SO4"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which gas is most abundant in Earth's atmosphere?",
+      "options": ["Oxygen", "Carbon Dioxide", "Hydrogen", "Nitrogen"],
+      "correctAnswerIndex": 3
+    },
+    {
+      "questionText": "What is the pH value of pure water?",
+      "options": ["5", "6", "7", "8"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Which metal is liquid at room temperature?",
+      "options": ["Mercury", "Iron", "Aluminium", "Silver"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "What is the hardest natural substance on Earth?",
+      "options": ["Iron", "Gold", "Diamond", "Quartz"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "What gas do plants absorb during photosynthesis?",
+      "options": ["Oxygen", "Nitrogen", "Carbon Dioxide", "Hydrogen"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Which acid is found in lemons?",
+      "options": ["Sulfuric Acid", "Citric Acid", "Hydrochloric Acid", "Acetic Acid"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "What is the basic structural unit of life?",
+      "options": ["Atom", "Molecule", "Tissue", "Cell"],
+      "correctAnswerIndex": 3
+    },
+    {
+      "questionText": "Which organ in the human body filters blood?",
+      "options": ["Liver", "Heart", "Kidneys", "Lungs"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "What is the \"powerhouse of the cell\"?",
+      "options": ["Nucleus", "Mitochondria", "Ribosome", "Chloroplast"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "How many bones are in an adult human body?",
+      "options": ["201", "206", "210", "212"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which pigment gives plants their green color?",
+      "options": ["Hemoglobin", "Melanin", "Chlorophyll", "Keratin"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "What is the largest organ of the human body?",
+      "options": ["Brain", "Liver", "Heart", "Skin"],
+      "correctAnswerIndex": 3
+    },
+    {
+      "questionText": "Which vitamin is produced when skin is exposed to sunlight?",
+      "options": ["Vitamin A", "Vitamin B12", "Vitamin C", "Vitamin D"],
+      "correctAnswerIndex": 3
+    }
+  ]
+}

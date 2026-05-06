@@ -1,0 +1,104 @@
+{
+  "questions": [
+    {
+      "questionText": "Which film dominated the 96th Academy Awards in 2024, winning Best Picture?",
+      "options": ["Barbie", "Oppenheimer", "Poor Things", "Killers of the Flower Moon"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Who won the Oscar for Best Director in 2024?",
+      "options": ["Martin Scorsese", "Christopher Nolan", "Yorgos Lanthimos", "Bradley Cooper"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "What was the first feature-length animated movie ever released?",
+      "options": ["Pinocchio", "Bambi", "Snow White and the Seven Dwarfs", "Fantasia"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "In The Matrix, what color pill does Neo take?",
+      "options": ["Blue", "Green", "Yellow", "Red"],
+      "correctAnswerIndex": 3
+    },
+    {
+      "questionText": "What 1927 musical is known as the first \"talkie\"?",
+      "options": ["The Jazz Singer", "Singin' in the Rain", "Casablanca", "Metropolis"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Which actor plays themselves in the movie Zombieland?",
+      "options": ["Tom Hanks", "Bill Murray", "Will Smith", "Johnny Depp"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "What is the name of the skyscraper in the action classic Die Hard?",
+      "options": ["Empire Tower", "Nakatomi Plaza", "Willis Tower", "Fox Plaza"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which film features the characters Rancho, Farhan, and Raju as university friends?",
+      "options": ["PK", "Dangal", "3 Idiots", "Taare Zameen Par"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Who is widely known as the \"King of Bollywood\"?",
+      "options": ["Salman Khan", "Aamir Khan", "Shah Rukh Khan", "Hrithik Roshan"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "In which film does Aamir Khan play an alien who lands on Earth?",
+      "options": ["PK", "Lagaan", "Dhoom 3", "Ghajini"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Which actress made her Bollywood debut in the film Om Shanti Om?",
+      "options": ["Kareena Kapoor", "Priyanka Chopra", "Deepika Padukone", "Katrina Kaif"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Which movie is about a father training his daughters to become wrestling champions?",
+      "options": ["Dangal", "Sultan", "Mary Kom", "Chak De! India"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Who was the first Indian costume designer to win an Oscar?",
+      "options": ["Bhanu Athaiya", "Manish Malhotra", "Neeta Lulla", "Ritu Kumar"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Which Bollywood movie featured the iconic song \"Chaiyya Chaiyya\" on top of a train?",
+      "options": ["Dil Se", "Kal Ho Naa Ho", "Veer-Zaara", "Kabhi Khushi Kabhie Gham"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "What is widely considered the first Nepali movie made in Nepal?",
+      "options": ["Kusume Rumal", "Aama", "Prem Pinda", "Basudev"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Who is popularly known as the \"Evergreen Hero\" of Nepali cinema?",
+      "options": ["Rajesh Hamal", "Nikhil Upreti", "Bhuwan KC", "Dilip Rayamajhi"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Which actor is recognized as the first actor of Nepal?",
+      "options": ["Shiva Shankar Manandhar", "Hari Bansha Acharya", "Rajesh Hamal", "Bishnu Bhakta Phuyal"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Which Nepali title is most associated with the character \"Balchi Dhurbe\"?",
+      "options": ["Dreams", "Meri Bassai", "Chhakka Panja 3", "Kabaddi"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Who played the lead role in the Nepali movie Dreams?",
+      "options": ["Pradeep Khadka", "Anmol KC", "Dayahang Rai", "Salon Basnet"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which movie was credited as the highest-grossing Nepali film at the time of the record?",
+      "options": ["Kabaddi 4", "Loot", "Chhakka Panja 3", "Dreams"],
+      "correctAnswerIndex": 2
+    }
+  ]
+}
